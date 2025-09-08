@@ -26,9 +26,7 @@ vic_coords <- data.frame(st_coordinates(vic))
 new_coords <- vic_coords
 st_geometry_type(vic, by_geometry = FALSE)
 
-vic |> filter(LGA_NAME == "MELBOURNE") |>
-  get_center() |>
-  data.frame() ->
+vic |> filter(LGA_NAME == "MELBOURNE") ->
   center_coords
 
 
@@ -48,7 +46,9 @@ new_coords |> ggplot() +
   #geom_point(aes(X, Y), color = "grey", size = 0.1) +
   geom_point(aes(X_fisheye, Y_fisheye), color = "red", size = 0.1)
 
+library(fisheye)
 
+fisheye()
 
 nested_list <- new_coords %>%
   group_by(L1, L2, L3) %>%
