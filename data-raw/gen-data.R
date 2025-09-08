@@ -19,3 +19,5 @@ circles <- circles |>
 
 
 ggplot(circles, aes(V1, V2)) + geom_point() + theme(aspect.ratio=1)
+
+write_csv(circles, file="data-raw/circles.csv")
