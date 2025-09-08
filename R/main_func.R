@@ -89,7 +89,7 @@ sf_fisheye_bezel <- function(sf_obj, cx = NULL, cy = NULL,
     # Normalize radial coordinate in bezel zone [0,1]
     u <- pmin(pmax((rho - r_in) / (r_out - r_in), 0), 1)
 
-    # Smooth step function for C1 continuity
+    # Smooth step function for C1 continuity 
     smoothstep <- function(t) t * t * (3 - 2 * t)
     s <- smoothstep(u)
 

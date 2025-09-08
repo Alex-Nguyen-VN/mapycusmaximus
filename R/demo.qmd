@@ -1,0 +1,41 @@
+---
+title: "demo"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(sf)
+library(igraph)
+```
+
+```{r}
+vic <- read_sf(here::here("data/map/LGA_POLYGON.shp")) |>
+  mutate(geometry = st_zm(geometry), drop = TRUE, what = "ZM") |>
+  # convert to GDA2020 to match with census data
+  mutate(geometry = st_transform(geometry, 7844))
+```
+
+```{r}
+vic <- st_simplify(vic, dTolerance = 100) |>
+  st_make_valid() |>
+  mutate(LGA_NAME = toupper(LGA_NAME)) |>
+  select(LGA_NAME, geometry)
+```
+
+```{r}
+melb <- st_crop(vic, c(xmin = 144.5, xmax = 145.5, ymin = -38.2, ymax = -37.3))
+```
+
+```{r}
+vic_fisheye <- sf_fisheye_bezel(vic,r_in = 10000, r_out = 300000, zoom = 1000, bulge = 0.4, cx = 323538, cy = 5819916)
+
+vic_fisheye_plot <- ggplot() +
+  geom_sf(data = vic_fisheye, aes(fill = LGA_NAME), color = "white") +
+  theme_void() +
+  theme(legend.position = "none") +
+  coord_sf()
+
+plotly::ggplotly(vic_fisheye_plot)
+```
