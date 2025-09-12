@@ -1,12 +1,16 @@
 Package: mapycusmaximus
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Applies Focus–Glue–Context Fisheye Transformations for Spatial Visualization
+Version: 0.0.0.1092
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+    person("Alex", "Nguyen", , "thanhcuong10091992@gmail.com", role = c("aut", "cre"))
+Description: 
+I am mapycusmaximus — the Focus + Glue + Context package.
+Mapper of the vast frontiers, master of radial transformations, and loyal servant to the truth of clear data visualization.
+Creator of focus where there was distortion. Defender of detail where there was crowding.
+And I will have my clarity — in this map or the next.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Required: sf, dplyr
+Required: sf, dplyr, ggplot2
