@@ -24,9 +24,10 @@ get_center <- function(sf_obj) {
 vic_original <- st_coordinates(vic)
 vic_coords <- data.frame(st_coordinates(vic))
 new_coords <- vic_coords
-st_geometry_type(vic, by_geometry = FALSE)
 
-vic |> filter(LGA_NAME == "MELBOURNE") ->
+vic |> filter(LGA_NAME == "MELBOURNE") |> 
+  get_center() |> 
+  as.data.frame() ->
   center_coords
 
 
@@ -37,18 +38,16 @@ new_coords <- new_coords |>
   mutate(angle = atan2(Y - center_coords$Y, X - center_coords$X)) |>
   mutate(X_iden = center_coords$X + radius * cos(angle),
          Y_iden = center_coords$Y + radius * sin(angle),
-        X_new = center_coords$X + log(1 + radius) * cos(angle),
-      Y_new = center_coords$Y + log(1 + radius) * sin(angle)) 
+        X_new = center_coords$X + sqrt(radius) * cos(angle),
+      Y_new = center_coords$Y + sqrt(radius) * sin(angle)) 
 
 
 new_coords |> ggplot() +
   geom_point(aes(X_iden, Y_iden), color = "blue", size = 0.1) +
   #geom_point(aes(X, Y), color = "grey", size = 0.1) +
-  geom_point(aes(X_fisheye, Y_fisheye), color = "red", size = 0.1)
+  geom_point(aes(X_new, Y_new), color = "red", size = 0.1)
 
-library(fisheye)
 
-fisheye()
 
 nested_list <- new_coords %>%
   group_by(L1, L2, L3) %>%

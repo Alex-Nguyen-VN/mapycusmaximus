@@ -1,125 +1,168 @@
+#' Create a Regular Test Grid of Coordinates
+#'
+#' @description
+#' Generates a 2D grid of equally spaced points, useful for testing
+#' fisheye transformations and other spatial warping functions.
+#'
+#' @param range Numeric vector of length 2 giving the x and y limits
+#'   of the grid (default = `c(-1, 1)`).
+#' @param spacing Numeric. Distance between adjacent grid points
+#'   along each axis (default = `0.1`).
+#'
+#' @return A numeric matrix with two columns (`x`, `y`) containing
+#'   the coordinates of the grid points.
+#'
+#' @examples
+#' # Create a grid from -1 to 1 with spacing 0.25
+#' grid <- create_test_grid(range = c(-1, 1), spacing = 0.25)
+#' head(grid)
+#'
+#' @seealso [plot_fisheye_fgc()], [fisheye_fgc()] 
+#' @export
 
-prepare_sf <- function(sf_obj) {
-  # Remove empty geometries
-  if (inherits(sf_obj, "sf")) {
-    valid_geoms <- !st_is_empty(sf_obj)
-    sf_obj <- sf_obj[valid_geoms, ]
+create_test_grid <- function(range = c(-1, 1), spacing = 0.1) {
+  x <- seq(range[1], range[2], by = spacing)
+  y <- seq(range[1], range[2], by = spacing)
+  grid <- expand.grid(x = x, y = y)
+  return(as.matrix(grid))
   }
-  # Ensure 2D coordinates only
-  sf_obj <- st_zm(sf_obj, drop = TRUE, what = "ZM")
-  original_crs <- st_crs(sf_obj)
-  bbox <- st_bbox(sf_obj)
-  coords <- st_coordinates(sf_obj)
-  return(list(original_crs = original_crs, bbox = bbox, coords = coords))
+  
+#' Classify Coordinates into Focus, Glue, or Context Zones
+#'
+#' @description
+#' Assigns each point to one of three zones based on its radial
+#' distance from a specified center:
+#' - **focus**: inside the inner radius `r_in`
+#' - **glue**: between `r_in` and `r_out`
+#' - **context**: outside `r_out`
+#'
+#' This is a helper for visualizing and analyzing fisheye
+#' transformations using the Focus–Glue–Context (FGC) model.
+#'
+#' @param coords A numeric matrix or data frame with at least two
+#'   columns representing `(x, y)` coordinates.
+#' @param cx,cy Numeric. The x and y coordinates of the fisheye
+#'   center (default = 0, 0).
+#' @param r_in Numeric. Inner radius of the focus zone
+#'   (default = 0.34).
+#' @param r_out Numeric. Outer radius of the glue zone
+#'   (default = 0.5).
+#'
+#' @return A character vector of the same length as `nrow(coords)`,
+#'   with values `"focus"`, `"glue"`, or `"context"`.
+#'
+#' @examples
+#' # Simple example
+#' pts <- matrix(c(0, 0, 0.2, 0.2, 0.6, 0.6), ncol = 2, byrow = TRUE)
+#' classify_zones(pts, r_in = 0.3, r_out = 0.5)
+#' #> "focus"   "glue"    "context"
+#'
+#' @seealso [fisheye_fgc()], [plot_fisheye_fgc()]
+#' @export
+ 
+
+classify_zones <- function(coords, cx = 0, cy = 0, r_in = 0.34, r_out = 0.5) {
+  dx <- coords[, 1] - cx
+  dy <- coords[, 2] - cy
+  radius <- sqrt(dx^2 + dy^2)
+  
+  ifelse(radius <= r_in, "focus",
+  ifelse(radius <= r_out, "glue", "context"))
+  }
+
+
+#' Visualize Focus–Glue–Context (FGC) Fisheye Transformation
+#'
+#' @description
+#' Creates a side-by-side scatterplot comparing the **original**
+#' and **transformed** coordinates of a dataset under the
+#' Focus–Glue–Context fisheye mapping. Points are colored
+#' according to whether they fall in the *focus*, *glue*, or
+#' *context* zones, and boundary circles are drawn for clarity.
+#'
+#' @param original_coords A matrix or data frame with at least two
+#'   columns representing the original `(x, y)` coordinates.
+#' @param transformed_coords A matrix or data frame with the
+#'   transformed `(x, y)` coordinates (same number of rows as
+#'   `original_coords`).
+#' @param cx,cy Numeric. The x and y coordinates of the fisheye
+#'   center (default = 0, 0).
+#' @param r_in Numeric. Radius of the inner *focus* boundary
+#'   (default = 0.34).
+#' @param r_out Numeric. Radius of the outer *glue* boundary
+#'   (default = 0.5).
+#'
+#' @return A `ggplot2` object showing original vs transformed
+#'   coordinates, colored by zone, with boundary circles
+#'   overlaid.
+#'
+#' @examples
+#' library(ggplot2)
+#'
+#' # Generate test grid and apply fisheye
+#' grid <- create_test_grid(range = c(-1, 1), spacing = 0.1)
+#' warped <- fisheye_fgc(grid, r_in = 0.4, r_out = 0.7)
+#'
+#' # Visualize transformation
+#' plot_fisheye_fgc(grid, warped, r_in = 0.4, r_out = 0.7)
+#'
+#' @seealso [create_test_grid()], [fisheye_fgc()]
+#' @export
+
+plot_fisheye_fgc <- function(original_coords, transformed_coords, 
+  cx = 0, cy = 0, r_in = 0.34, r_out = 0.5) {
+
+# Create data frames for plotting
+zones <- classify_zones(original_coords, cx, cy, r_in, r_out)
+
+original_df <- data.frame(
+x = original_coords[, 1],
+y = original_coords[, 2],
+zone = zones,
+type = "Original"
+)
+
+transformed_df <- data.frame(
+x = transformed_coords[, 1],
+y = transformed_coords[, 2], 
+zone = zones,
+type = "Transformed"
+)
+
+combined_df <- rbind(original_df, transformed_df)
+
+# Create the plot
+p <- ggplot(combined_df, aes(x = x, y = y, color = zone)) +
+geom_point(size = 1.5, alpha = 0.8) +
+scale_color_manual(values = c("focus" = "#663399", 
+     "glue" = "#339999", 
+     "context" = "#FFCC00")) +
+facet_wrap(~type) +
+coord_fixed() +
+theme_minimal() +
+theme(
+panel.grid.minor = element_blank(),
+legend.title = element_blank()
+) +
+labs(title = "Donut Fisheye Transformation",
+subtitle = paste("r_in =", r_in, ", r_out =", r_out))
+
+# Add zone boundary circles
+if (r_in > 0) {
+circle_in <- data.frame(
+x = cx + r_in * cos(seq(0, 2*pi, length.out = 100)),
+y = cy + r_in * sin(seq(0, 2*pi, length.out = 100))
+)
+p <- p + geom_path(data = circle_in, aes(x = x, y = y), 
+color = "red", linetype = "dashed", inherit.aes = FALSE)
 }
 
-prepare_sf(vic)
+circle_out <- data.frame(
+x = cx + r_out * cos(seq(0, 2*pi, length.out = 100)),
+y = cy + r_out * sin(seq(0, 2*pi, length.out = 100))
+)
+p <- p + geom_path(data = circle_out, aes(x = x, y = y), 
+color = "blue", linetype = "dashed", inherit.aes = FALSE)
 
-st_transform_custom <- function(sf_obj, transform_fun) {
-
-  # Ensure polygon closure
-  ensure_closed <- function(coords) {
-    if (nrow(coords) < 3) return(coords)
-
-    # Force closure: last point = first point
-    coords[nrow(coords), ] <- coords[1, ]
-    return(coords)
-  }
-
-  # Process individual geometries
-  transform_single_geom <- function(geom) {
-
-    tryCatch({
-      # Handle different geometry types
-      geom_type <- st_geometry_type(geom)
-
-      if (geom_type == "POINT") {
-        coords <- st_coordinates(geom)[, 1:2, drop = FALSE]
-        if (nrow(coords) == 0) return(st_point())
-
-        new_coords <- transform_fun(coords)
-        return(st_point(c(new_coords[1, 1], new_coords[1, 2])))
-
-      } else if (geom_type == "LINESTRING") {
-        coords <- st_coordinates(geom)[, 1:2, drop = FALSE]
-        if (nrow(coords) == 0) return(st_linestring())
-
-        new_coords <- transform_fun(coords)
-        return(st_linestring(new_coords))
-
-      } else if (geom_type == "POLYGON") {
-        # Get coordinates with ring information
-        coords_full <- st_coordinates(geom)
-        if (nrow(coords_full) == 0) return(st_polygon())
-
-        # Handle multiple rings (exterior + holes)
-        if ("L1" %in% colnames(coords_full)) {
-          # Split by ring
-          ring_list <- split(as.data.frame(coords_full), coords_full[, "L1"])
-
-          transformed_rings <- lapply(ring_list, function(ring_df) {
-            ring_coords <- as.matrix(ring_df[, c("X", "Y")])
-            new_coords <- transform_fun(ring_coords)
-            ensure_closed(new_coords)
-          })
-
-          return(st_polygon(transformed_rings))
-
-        } else {
-          # Single ring polygon
-          coords <- coords_full[, 1:2, drop = FALSE]
-          new_coords <- transform_fun(coords)
-          new_coords <- ensure_closed(new_coords)
-          return(st_polygon(list(new_coords)))
-        }
-
-      } else if (geom_type == "MULTIPOLYGON") {
-        # Handle multipolygons
-        coords_full <- st_coordinates(geom)
-        if (nrow(coords_full) == 0) return(st_multipolygon())
-
-        # Split by polygon (L2) and ring (L1)
-        poly_list <- split(as.data.frame(coords_full), coords_full[, "L2"])
-
-        transformed_polys <- lapply(poly_list, function(poly_df) {
-          if ("L1" %in% colnames(poly_df)) {
-            ring_list <- split(poly_df, poly_df[, "L1"])
-            transformed_rings <- lapply(ring_list, function(ring_df) {
-              ring_coords <- as.matrix(ring_df[, c("X", "Y")])
-              new_coords <- transform_fun(ring_coords)
-              ensure_closed(new_coords)
-            })
-            return(transformed_rings)
-          } else {
-            coords <- as.matrix(poly_df[, c("X", "Y")])
-            new_coords <- transform_fun(coords)
-            return(list(ensure_closed(new_coords)))
-          }
-        })
-
-        return(st_multipolygon(transformed_polys))
-
-      } else {
-        # For other geometry types, return empty
-        return(st_polygon())
-      }
-
-    })
-  }
-
-  # Apply to all geometries
-  if (inherits(sf_obj, "sf")) {
-    geom_col <- attr(sf_obj, "sf_column")
-
-    new_geometries <- lapply(sf_obj[[geom_col]], transform_single_geom)
-    sf_obj[[geom_col]] <- st_sfc(new_geometries, crs = st_crs(sf_obj))
-
-    return(sf_obj)
-
-  } else if (inherits(sf_obj, "sfc")) {
-    new_geometries <- lapply(sf_obj, transform_single_geom)
-    return(st_sfc(new_geometries, crs = st_crs(sf_obj)))
-  }
-  return(sf_obj)
+return(p)
 }
-
