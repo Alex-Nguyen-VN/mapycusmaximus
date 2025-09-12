@@ -84,7 +84,6 @@ fisheye_fgc <- function(coords, cx = 0, cy = 0,
   u <- (radius - r_in) / (r_out - r_in)
 
   # Create fisheye compression curve
-  # This creates the "revolving" effect seen in your image
   u_compressed <- u^(1/squeeze_factor)  # Power function for compression
 
   # Map compressed u back to physical space
