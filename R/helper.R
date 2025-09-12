@@ -107,6 +107,7 @@ classify_zones <- function(coords, cx = 0, cy = 0, r_in = 0.34, r_out = 0.5) {
 #' plot_fisheye_fgc(grid, warped, r_in = 0.4, r_out = 0.7)
 #'
 #' @seealso [create_test_grid()], [fisheye_fgc()]
+#' @importFrom ggplot2 ggplot aes geom_point scale_color_manual facet_wrap coord_fixed theme_minimal theme labs geom_path
 #' @export
 
 plot_fisheye_fgc <- function(original_coords, transformed_coords, 
@@ -144,7 +145,7 @@ theme(
 panel.grid.minor = element_blank(),
 legend.title = element_blank()
 ) +
-labs(title = "Donut Fisheye Transformation",
+labs(title = "Fisheye FGC Transformation",
 subtitle = paste("r_in =", r_in, ", r_out =", r_out))
 
 # Add zone boundary circles

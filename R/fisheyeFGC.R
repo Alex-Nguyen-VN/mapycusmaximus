@@ -8,11 +8,11 @@
 #'
 #' @details
 #' This function operates in three radial zones around a chosen center:
-#' - **Focus zone (`r <= r_in`)**: expands distances from the center using `zoom_factor`,  
+#' - **Focus zone (r <= r_in)**: expands distances from the center using `zoom_factor`,  
 #'   but does not exceed the `r_in` boundary.
-#' - **Glue zone (`r_in < r <= r_out`)**: compresses distances using a power-law defined  
+#' - **Glue zone (r_in < r <= r_out)**: compresses distances using a power-law defined  
 #'   by `squeeze_factor`, then remaps them to smoothly connect focus and context zones.
-#' - **Context zone (`r > r_out`)**: coordinates remain unchanged.
+#' - **Context zone (r > r_out)**: coordinates remain unchanged.
 #'
 #' Optionally, points in the glue zone can be rotated (`revolution`) to emphasize continuity.
 #'
