@@ -40,7 +40,7 @@
 #' transformed <- fisheye_fgc(grid, r_in = 0.34, r_out = 0.5, zoom_factor = 1.3, squeeze_factor = 0.5)
 #'
 #' # Plot original vs transformed
-#' plot_example_fgc(grid, transformed, r_in = 0.34, r_out = 0.5)
+#' plot_fisheye_fgc(grid, transformed, r_in = 0.34, r_out = 0.5)
 #' 
 #' @export
 
@@ -75,21 +75,26 @@ fisheye_fgc <- function(coords, cx = 0, cy = 0,
   expanded_r <- norm_r * zoom_factor
   pmin(expanded_r, 1.0) * r_in  # Don't exceed r_in
   },
-
   ifelse(
   # GLUE ZONE: Squeeze and revolve around focus
   zone == "glue",
   {
-  # Normalize position in glue zone [0,1]
-  u <- (radius - r_in) / (r_out - r_in)
-
-  # Create fisheye compression curve
-  u_compressed <- u^(1/squeeze_factor)  # Power function for compression
-
-  # Map compressed u back to physical space
-  # But make it "hug" the focus zone boundary
-  compressed_width <- (r_out - r_in) * squeeze_factor
-  r_in + u_compressed * compressed_width
+    # Normalize position in glue zone [0,1]
+    u <- (radius - r_in) / (r_out - r_in)
+    
+    # Create bidirectional expansion using vectorized operations
+    # Inner half: expand toward r_in boundary
+    u_inner <- pmin(u * 2, 1)  # Map [0, 0.5] to [0, 1], clamp at 1
+    expansion_factor_inner <- u_inner^(1/squeeze_factor)
+    radius_inner <- r_in + (1 - expansion_factor_inner * squeeze_factor) * (radius - r_in)
+    
+    # Outer half: expand toward r_out boundary  
+    u_outer <- pmax((u - 0.5) * 2, 0)  # Map [0.5, 1] to [0, 1], clamp at 0
+    expansion_factor_outer <- u_outer^(1/squeeze_factor)
+    radius_outer <- radius + expansion_factor_outer * squeeze_factor * (r_out - radius)
+    
+    # Use ifelse to choose between inner and outer transformations
+    ifelse(u <= 0.5, radius_inner, radius_outer)
   },
 
   # CONTEXT ZONE: No change
