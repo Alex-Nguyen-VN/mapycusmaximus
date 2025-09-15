@@ -1,8 +1,5 @@
-library(sf)
-library(dplyr)
-
-# SF Fisheye Bezel Transformation - Robust Version
-sf_fisheye_bezel <- function(sf_obj, cx = 0, cy = 0,
+# SF Fisheye  Transformation - Robust Version
+sf_fisheye <- function(sf_obj, cx = 0, cy = 0,
                              r_in = 0.34, r_out = 0.5,
                              zoom_factor = 1.5, squeeze_factor = 0.35,
                              revolution = 0.0, target_crs = NULL) {
@@ -72,19 +69,3 @@ sf_fisheye_bezel <- function(sf_obj, cx = 0, cy = 0,
   return(result)
 }
 
-# Quick diagnostic function
-diagnose_sf <- function(sf_obj) {
-  cat("🔍 SF Object Diagnosis:\n")
-  cat("   Geometry types:", paste(unique(st_geometry_type(sf_obj)), collapse = ", "), "\n")
-  cat("   CRS:", as.character(st_crs(sf_obj)$input), "\n")
-  cat("   Bounding box:\n")
-  print(st_bbox(sf_obj))
-  cat("   Empty geometries:", sum(st_is_empty(sf_obj)), "/", nrow(sf_obj), "\n")
-  cat("   Valid geometries:", sum(st_is_valid(sf_obj)), "/", nrow(sf_obj), "\n")
-
-  # Check dimensions
-  sample_coords <- st_coordinates(sf_obj[1, ])
-  cat("   Coordinate dimensions:", ncol(sample_coords), "\n")
-  cat("   Sample coordinates (first 3 rows):\n")
-  print(head(sample_coords, 3))
-}
