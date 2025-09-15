@@ -1,4 +1,4 @@
-st_transform_custom <- function(sf_obj, transform_fun) {
+st_transform_custom <- function(sf_obj, transform_fun, args) {
 
   # Ensure polygon closure
   ensure_closed <- function(coords) {
@@ -20,14 +20,14 @@ st_transform_custom <- function(sf_obj, transform_fun) {
         coords <- st_coordinates(geom)[, 1:2, drop = FALSE]
         if (nrow(coords) == 0) return(st_point())
 
-        new_coords <- transform_fun(coords)
+        new_coords <- do.call(transform_fun, c(list(coords), args))
         return(st_point(c(new_coords[1, 1], new_coords[1, 2])))
 
       } else if (geom_type == "LINESTRING") {
         coords <- st_coordinates(geom)[, 1:2, drop = FALSE]
         if (nrow(coords) == 0) return(st_linestring())
 
-        new_coords <- transform_fun(coords)
+        new_coords <- do.call(transform_fun, c(list(coords), args))
         return(st_linestring(new_coords))
 
       } else if (geom_type == "POLYGON") {
@@ -51,7 +51,7 @@ st_transform_custom <- function(sf_obj, transform_fun) {
         } else {
           # Single ring polygon
           coords <- coords_full[, 1:2, drop = FALSE]
-          new_coords <- transform_fun(coords)
+          new_coords <- do.call(transform_fun, c(list(coords), args))
           new_coords <- ensure_closed(new_coords)
           return(st_polygon(list(new_coords)))
         }
@@ -75,7 +75,7 @@ st_transform_custom <- function(sf_obj, transform_fun) {
             return(transformed_rings)
           } else {
             coords <- as.matrix(poly_df[, c("X", "Y")])
-            new_coords <- transform_fun(coords)
+            new_coords <- do.call(transform_fun, c(list(coords), args))
             return(list(ensure_closed(new_coords)))
           }
         })

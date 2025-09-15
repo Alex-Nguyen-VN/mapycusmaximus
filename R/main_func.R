@@ -2,13 +2,13 @@ library(sf)
 library(dplyr)
 
 # SF Fisheye Bezel Transformation - Robust Version
-sf_fisheye_bezel <- function(sf_obj, cx = NULL, cy = NULL,
-                             r_in = 50000, r_out = 100000,
-                             zoom = 2.0, bulge = 0.35,
-                             target_crs = NULL) {
+sf_fisheye_bezel <- function(sf_obj, cx = 0, cy = 0,
+                             r_in = 0.34, r_out = 0.5,
+                             zoom_factor = 1.5, squeeze_factor = 0.35,
+                             revolution = 0.0, target_crs = NULL) {
 
   # Input validation
-  stopifnot(r_out > r_in, zoom > 1)
+  stopifnot(r_out > r_in)
   stopifnot(inherits(sf_obj, c("sf", "sfc")))
 
   # Remove empty geometries
@@ -16,6 +16,11 @@ sf_fisheye_bezel <- function(sf_obj, cx = NULL, cy = NULL,
     valid_geoms <- !st_is_empty(sf_obj)
     sf_obj <- sf_obj[valid_geoms, ]
   }
+
+  args <- list(cx = cx, cy = cy,
+               r_in = r_in, r_out = r_out,
+               zoom_factor = zoom_factor, squeeze_factor = squeeze_factor,
+               revolution = revolution)
 
   # Ensure 2D coordinates only
   sf_obj <- st_zm(sf_obj, drop = TRUE, what = "ZM")
@@ -57,7 +62,7 @@ sf_fisheye_bezel <- function(sf_obj, cx = NULL, cy = NULL,
   if (is.null(cy)) cy <- mean(c(bbox["ymin"], bbox["ymax"]))
 
   # Apply transformation using st_transform with custom function
-  result <- st_transform_custom(sf_obj, fisheye_fgc)
+  result <- st_transform_custom(sf_obj, fisheye_fgc, args)
 
   # Transform back to original CRS if different
   if (!identical(st_crs(result), original_crs)) {
