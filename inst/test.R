@@ -159,3 +159,4 @@ u <- pmin(pmax((rho - r_in) / (r_out - r_in), 0), 1)
 # Smooth step function for C1 continuity
 smoothstep <- function(t) t * t * (3 - 2 * t)
 s <- smoothstep(u)
+
