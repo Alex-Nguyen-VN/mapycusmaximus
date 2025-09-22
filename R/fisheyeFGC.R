@@ -50,6 +50,7 @@ fisheye_fgc <- function(coords, cx = 0, cy = 0,
   r_in = 0.34, r_out = 0.5,
   zoom_factor = 1.5,     # How much focus zone expands
   squeeze_factor = 0.3,  # How much glue zone compresses
+  method = "expand",     # "expand" or "squeeze"
   revolution = 0.0) {    # Optional: add rotation to glue zone
   
   coords <- as.matrix(coords[, 1:2, drop = FALSE])
@@ -79,7 +80,8 @@ fisheye_fgc <- function(coords, cx = 0, cy = 0,
   # GLUE ZONE: Squeeze and revolve around focus
   zone == "glue",
   {
-    # Normalize position in glue zone [0,1]
+    if (method == "expand") {
+          # Normalize position in glue zone [0,1]
     u <- (radius - r_in) / (r_out - r_in)
     
     # Create bidirectional expansion using vectorized operations
@@ -95,6 +97,16 @@ fisheye_fgc <- function(coords, cx = 0, cy = 0,
     
     # Use ifelse to choose between inner and outer transformations
     ifelse(u <= 0.5, radius_inner, radius_outer)
+    } else if (method == "outward") {
+        # Normalize position in glue zone [0,1]
+        u <- (radius - r_in) / (r_out - r_in)
+        # Create fisheye compression curve
+        u_compressed <- u^(1/squeeze_factor)  # Power function for compression
+        # Map compressed u back to physical space
+        # Hugging the OUTER boundary (r_out)
+        compressed_width <- (r_out - r_in) * squeeze_factor
+        r_out - (1 - u_compressed) * compressed_width
+    }
   },
 
   # CONTEXT ZONE: No change

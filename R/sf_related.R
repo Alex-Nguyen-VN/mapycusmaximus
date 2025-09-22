@@ -69,7 +69,7 @@ st_transform_custom <- function(sf_obj, transform_fun, args) {
             ring_list <- split(poly_df, poly_df[, "L1"])
             transformed_rings <- lapply(ring_list, function(ring_df) {
               ring_coords <- as.matrix(ring_df[, c("X", "Y")])
-              new_coords <- transform_fun(ring_coords)
+              new_coords <- do.call(transform_fun, c(list(ring_coords), args))
               ensure_closed(new_coords)
             })
             return(transformed_rings)
