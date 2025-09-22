@@ -38,17 +38,17 @@
 #' coordinates are replaced by the coordinates returned by `transform_fun`.
 #'
 #' @section Expected signature of `transform_fun`:
-#' `transform_fun <- function(coords, ...) {  ## coords: n x 2 matrix (X, Y)
+#' transform_fun <- function(coords, ...) {  ## coords: n x 2 matrix (X, Y)
 #'   ## return an n x 2 matrix with transformed (X, Y)
-#' }`
+#' }
 #'
 #' @examples
 #' library(sf)
 #'
 #' # A simple coordinate transformer: scale and shift
 #' scale_shift <- function(coords, sx = 1, sy = 1, dx = 0, dy = 0) {
-#'   X <- coords[, 1] * sx + dx
-#''  Y <- coords[, 2] * sy + dy
+#'  X <- coords[, 1] * sx + dx
+#'  Y <- coords[, 2] * sy + dy
 #'   cbind(X, Y)
 #' }
 #'
