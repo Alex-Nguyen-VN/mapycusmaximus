@@ -1,3 +1,98 @@
+#' Apply a custom coordinate transform to an sf/sfc object (POINT/LINESTRING/POLYGON/MULTIPOLYGON)
+#'
+#' @description
+#' `st_transform_custom()` walks through each geometry in an `sf`/`sfc` object,
+#' extracts its XY coordinates, applies a user-supplied transformation function
+#' to those coordinates, and rebuilds the geometry. It preserves the input CRS
+#' on the resulting `sfc` column. Polygon rings are re-closed after
+#' transformation so the first and last vertex match.
+#'
+#' @param sf_obj An object of class [`sf`] or [`sfc`]. Supported geometry types:
+#'   `POINT`, `LINESTRING`, `POLYGON`, and `MULTIPOLYGON`.
+#' @param transform_fun A function that accepts a numeric matrix of coordinates
+#'   with two columns `(X, Y)` and returns a transformed numeric matrix with the
+#'   same number of rows and two columns. For example:
+#'   `function(coords, ...) cbind(f(coords[,1], ...), g(coords[,2], ...))`.
+#' @param args A named list of additional arguments to pass to `transform_fun`.
+#'   These are appended after the `coords` matrix via `do.call()`, i.e.
+#'   `do.call(transform_fun, c(list(coords), args))`.
+#'
+#' @details
+#' For `POLYGON`/`MULTIPOLYGON`, the function uses the ring indices returned by
+#' [`sf::st_coordinates()`] (`L1` for rings and `L2` for parts) to transform each
+#' ring independently, and then ensures each ring is explicitly closed
+#' (last vertex equals first vertex).
+#'
+#' Error handling is per-geometry: if a geometry fails to transform, a warning
+#' is emitted and an empty geometry of the same "polygonal family" is returned
+#' to keep list lengths consistent.
+#'
+#' The function **does not** modify or interpret the CRS numerically; it simply
+#' preserves the CRS attribute on the output `sfc`. If your transformation
+#' assumes metres (e.g., radial warps), ensure the input is in an appropriate
+#' projected CRS before calling this function.
+#'
+#' @return
+#' An object of the same top-level class as `sf_obj` (`sf` or `sfc`), with the
+#' same column structure (if `sf`) and the same CRS as the input. Geometry
+#' coordinates are replaced by the coordinates returned by `transform_fun`.
+#'
+#' @section Expected signature of `transform_fun`:
+#' `transform_fun <- function(coords, ...) {  ## coords: n x 2 matrix (X, Y)
+#'   ## return an n x 2 matrix with transformed (X, Y)
+#' }`
+#'
+#' @examples
+#' library(sf)
+#'
+#' # A simple coordinate transformer: scale and shift
+#' scale_shift <- function(coords, sx = 1, sy = 1, dx = 0, dy = 0) {
+#'   X <- coords[, 1] * sx + dx
+#''  Y <- coords[, 2] * sy + dy
+#'   cbind(X, Y)
+#' }
+#'
+#' # POINT example
+#' pt <- st_sfc(st_point(c(0, 0)), crs = 3857)
+#' st_transform_custom(pt, transform_fun = scale_shift,
+#'                     args = list(sx = 2, sy = 2, dx = 1000, dy = -500))
+#'
+#' # LINESTRING example
+#' ln <- st_sfc(st_linestring(rbind(c(0, 0), c(1, 0), c(1, 1))), crs = 3857)
+#' st_transform_custom(ln, transform_fun = scale_shift,
+#'                     args = list(sx = 10, sy = 10))
+#'
+#' # POLYGON example (unit square)
+#' poly <- st_sfc(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1),
+#'                                      c(0,1), c(0,0)))), crs = 3857)
+#' st_transform_custom(poly, transform_fun = scale_shift,
+#'                     args = list(sx = 2, sy = 0.5, dx = 5))
+#'
+#' # MULTIPOLYGON example (two disjoint squares)
+#' mp <- st_sfc(st_multipolygon(list(
+#'   list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))),
+#'   list(rbind(c(2,2), c(3,2), c(3,3), c(2,3), c(2,2)))
+#' )), crs = 3857)
+#' st_transform_custom(mp, transform_fun = scale_shift,
+#'                     args = list(dx = 100, dy = 100))
+#'
+#' # In an sf data frame
+#' sf_df <- st_sf(id = 1:2, geometry = st_sfc(
+#'   st_point(c(10, 10)),
+#'   st_linestring(rbind(c(0,0), c(2,0), c(2,2)))
+#' ), crs = 3857)
+#'
+#' st_transform_custom(sf_df, transform_fun = scale_shift,
+#'                     args = list(sx = 3, sy = 3))
+#'
+#' @seealso
+#' [sf::st_coordinates()], [sf::st_geometry_type()],
+#' [sf::st_sfc()], [sf::st_crs()]
+#'
+#' @importFrom sf st_geometry_type st_coordinates st_point st_linestring
+#' @importFrom sf st_polygon st_multipolygon st_sfc st_crs
+#' @export
+
 st_transform_custom <- function(sf_obj, transform_fun, args) {
 
   # Ensure polygon closure

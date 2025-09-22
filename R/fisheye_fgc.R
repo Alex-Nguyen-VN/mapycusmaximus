@@ -23,6 +23,7 @@
 #' @param zoom_factor Numeric. Expansion factor applied within the focus zone (default = 1.5).
 #' @param squeeze_factor Numeric in (0,1]. Compression factor applied within the glue zone  
 #'   (smaller values = stronger compression, default = 0.3).
+#' @param method Character. "expand" or "squeeze" (default = "expand").
 #' @param revolution Numeric. Optional rotation factor applied in the glue zone. Positive values  
 #'   rotate counter-clockwise, negative values clockwise (default = 0.0).
 #'
