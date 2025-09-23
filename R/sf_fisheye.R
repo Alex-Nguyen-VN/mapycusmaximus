@@ -149,13 +149,17 @@ working_crs <- sf::st_crs(sf_obj)
 bb <- sf::st_bbox(sf_obj)
 sx <- (bb["xmax"] - bb["xmin"])/2; if (sx == 0) sx <- 1
 sy <- (bb["ymax"] - bb["ymin"])/2; if (sy == 0) sy <- 1
-if (preserve_aspect) {
 s <- max(sx, sy)
-norm_fun   <- function(M) cbind((M[,1] - 0)/s, (M[,2] - 0)/s) # center handled separately
-denorm_fun <- function(M, cxy) cbind(cxy[1] + M[,1]*s, cxy[2] + M[,2]*s)
+norm_fun <- if (preserve_aspect) {
+  function(M, cxy) cbind((M[,1] - cxy[1]) / s,  (M[,2] - cxy[2]) / s)
 } else {
-norm_fun   <- function(M, cxy) cbind((M[,1] - cxy[1])/sx, (M[,2] - cxy[2])/sy)
-denorm_fun <- function(M, cxy) cbind(cxy[1] + M[,1]*sx,  cxy[2] + M[,2]*sy)
+  function(M, cxy) cbind((M[,1] - cxy[1]) / sx, (M[,2] - cxy[2]) / sy)
+}
+
+denorm_fun <- if (preserve_aspect) {
+  function(M, cxy) cbind(cxy[1] + M[,1] * s,  cxy[2] + M[,2] * s)
+} else {
+  function(M, cxy) cbind(cxy[1] + M[,1] * sx, cxy[2] + M[,2] * sy)
 }
 
 # --- resolve center precedence ---
@@ -178,7 +182,7 @@ method = method, revolution = revolution)
 if (preserve_aspect) {
 wrapped_fisheye <- function(coords, ...) {
 M <- as.matrix(coords[,1:2, drop = TRUE])
-N <- cbind((M[,1] - cxy[1])/s, (M[,2] - cxy[2])/s)
+N <- norm_fun(M, cxy)
 T <- do.call(fisheye_fgc, c(list(N), base_args))
 denorm_fun(T, cxy)
 }
