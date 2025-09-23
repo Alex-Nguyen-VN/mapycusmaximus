@@ -1,117 +1,158 @@
 # fisheye
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/Alex-Nguyen-VN/mapycusmaximus/workflows/R-CMD-check/badge.svg)](https://github.com/yourusername/fisheye/actions)
+
+[![R-CMD-check](https://github.com/Alex-Nguyen-VN/mapycusmaximus/workflows/R-CMD-check/badge.svg)](https://github.com/Alex-Nguyen-VN/mapycusmaximus/actions)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+
 <!-- badges: end -->
 
 > **Focus–Glue–Context (FGC) Fisheye Transformations for R**
 
-The `fisheye` package provides tools for applying fisheye transformations to 2D coordinate data and spatial vector geometries. It implements the **Focus–Glue–Context (FGC)** model, which creates smooth, radial distortions that magnify areas of interest while preserving context.
+I am `mapycusmaximus` — the Focus + Glue + Context package. Mapper of the vast frontiers, master of radial transformations, and loyal servant to the truth of clear data visualization. Creator of focus where there was distortion. Defender of detail where there was crowding. And I will have my clarity — in this map or the next.
 
-## Features
+---
 
-- 🎯 **Focus–Glue–Context transformation**: Magnify focus regions, smoothly transition through glue zones, preserve context areas
-- 🗺️ **sf integration**: Native support for spatial vector data with automatic CRS handling
-- 🔄 **Flexible parameters**: Control zoom intensity, compression factors, and optional rotation effects
-- 📊 **Visualization tools**: Built-in plotting functions for comparing original and transformed coordinates
-- ⚡ **Performance**: Vectorized operations for efficient processing of large datasets
+## ✨ Features
 
-## Installation
+* 🎯 **FGC transformation**: Focus enlargement, glue compression, context preservation
+* 🗺️ **`sf` integration**: Works directly on spatial geometries with automatic CRS handling
+* 📍 **Flexible center specification**: Choose centers in lon/lat, projected map units, normalized coords, or even from other `sf` objects
+* 🔄 **Customizable parameters**: Control zoom, squeeze, and optional angular twist
+* 📊 **Visualization helpers**: Plot original vs transformed coordinates for quick inspection
+* ⚡ **Efficient implementation**: Vectorized transformations, polygon rings re-closed safely
+
+---
+
+## 📦 Installation
 
 Install the development version from GitHub:
 
 ```r
 # install.packages("devtools")
-devtools::install_github("yourusername/fisheye")
+devtools::install_github("Alex-Nguyen-VN/mapycusmaximus")
 ```
 
-## Quick Start
+---
 
-### Basic Coordinate Transformation
+## 🚀 Quick Start
+
+### Basic coordinate transformation
 
 ```r
 library(fisheye)
 
-# Create a test grid
 grid <- create_test_grid(range = c(-1, 1), spacing = 0.1)
 
-# Apply fisheye transformation
 transformed <- fisheye_fgc(
   coords = grid,
-  r_in = 0.34,        # Focus radius
-  r_out = 0.5,        # Context boundary
-  zoom_factor = 1.5,  # Magnification intensity
-  squeeze_factor = 0.3 # Compression in glue zone
+  r_in = 0.34, r_out = 0.5,
+  zoom_factor = 1.5,
+  squeeze_factor = 0.3
 )
 
-# Visualize the transformation
 plot_fisheye_fgc(grid, transformed, r_in = 0.34, r_out = 0.5)
 ```
 
-### Spatial Data (sf) Integration
+### Spatial data (`sf`) integration
 
 ```r
 library(sf)
 library(fisheye)
 
-# Load your spatial data
-# poly <- st_read("your_shapefile.shp")
-
-# Or create a simple example
 poly <- st_sfc(st_polygon(list(rbind(
-  c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0)
+  c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)
 ))), crs = 3857)
 
-# Apply fisheye transformation
-# Automatically handles CRS projection and normalization
 fisheye_poly <- sf_fisheye(
-  poly, 
-  r_in = 0.3, 
-  r_out = 0.6,
+  poly,
+  r_in = 0.3, r_out = 0.6,
   zoom_factor = 2.0,
   squeeze_factor = 0.25
-) 
+)
 
-# Plot comparison
 library(ggplot2)
-original_plot <- ggplot() + geom_sf(data = poly) + ggtitle("Original")
-fisheye_plot <- ggplot() + geom_sf(data = fisheye_poly) + ggtitle("Fisheye")
-
-gridExtra::grid.arrange(original_plot, fisheye_plot, ncol = 2)
+ggplot() +
+  geom_sf(data = poly, fill = NA, color = "grey") +
+  geom_sf(data = fisheye_poly, fill = NA, color = "red")
 ```
 
-## The Focus–Glue–Context Model
+---
 
-The FGC fisheye transformation divides space into three concentric zones:
+## 🎯 The Focus–Glue–Context model
 
-- **🎯 Focus Zone** (`r ≤ r_in`): Points are magnified using `zoom_factor`, but expansion is constrained to the zone boundary
-- **🔗 Glue Zone** (`r_in < r ≤ r_out`): Smooth transition region with controllable compression via `squeeze_factor`
-- **🌍 Context Zone** (`r > r_out`): Points remain unchanged, preserving spatial context
+The FGC fisheye divides space into three radial zones:
 
-### Key Parameters
+* **Focus zone** (`r ≤ r_in`): Magnified by `zoom_factor`, but clamped to the inner radius
+* **Glue zone** (`r_in < r ≤ r_out`): Smooth transition with compression controlled by `squeeze_factor`
+* **Context zone** (`r > r_out`): Remains unchanged
 
-| Parameter | Description | Default | Range |
-|-----------|-------------|---------|-------|
-| `r_in` | Focus zone radius | 0.34 | > 0 |
-| `r_out` | Context boundary radius | 0.5 | > `r_in` |
-| `zoom_factor` | Focus magnification intensity | 1.5 | > 1.0 |
-| `squeeze_factor` | Glue zone compression | 0.3 | (0, 1] |
-| `method` | Glue zone compression method | outward - toward outher boundary | expand - toward both boundary |
-| `revolution` | Optional rotation in glue zone | 0.0 | any |
+| Parameter        | Meaning                                  | Default    | Range    |
+| ---------------- | ---------------------------------------- | ---------- | -------- |
+| `r_in`           | Focus radius (normalized units)          | 0.34       | > 0      |
+| `r_out`          | Glue radius (normalized units)           | 0.50       | > `r_in` |
+| `zoom_factor`    | Focus magnification                      | 1.5        | > 1      |
+| `squeeze_factor` | Glue compression                         | 0.3        | (0, 1]   |
+| `method`         | Glue strategy (`"expand"` / `"outward"`) | `"expand"` | string   |
+| `revolution`     | Angular twist (radians)                  | 0.0        | any      |
 
-## Advanced Usage
+---
 
-### Custom Transformations
+## 🗺️ Flexible centers & CRS handling
+
+`sf_fisheye()` automatically handles coordinate systems:
+
+* Geographic data → projected to suitable UTM/MGA zone (auto-picked from centroid)
+* Victoria, AU → **EPSG:7855** (GDA2020 / MGA Zone 55)
+* Already projected → left unchanged
+* Manual override → `target_crs`
+
+**Center specification options:**
+
+* `center = c(lon, lat)` with `center_crs = "EPSG:4326"`
+* `center = c(x, y)` already in map units
+* `center = c(nx, ny)` in normalized space (`[-1,1]`), with `normalized_center = TRUE`
+* `center = sf_object` — centroid of any geometry is used (polygon, line, point collection, etc.)
+* Legacy: `cx, cy` numeric in map units
+
+---
+
+## 🔧 Advanced usage
+
+### Use another `sf` object as center
 
 ```r
-# Apply custom coordinate transformation to sf objects
+melb_poly <- suburbs[suburbs$name == "Melbourne", ]
+fisheye_vic <- sf_fisheye(vic, center = melb_poly)
+```
+
+### Normalized center input
+
+```r
+# Center at +0.2, -0.1 relative to bbox, normalized space
+fisheye_vic <- sf_fisheye(vic, center = c(0.2, -0.1), normalized_center = TRUE)
+```
+
+### Geographic lon/lat input
+
+```r
+fisheye_cbd <- sf_fisheye(
+  vic,
+  center = c(144.9631, -37.8136),  # Melbourne CBD
+  center_crs = "EPSG:4326",
+  r_in = 0.2, r_out = 0.5
+)
+```
+
+### Custom coordinate transformation
+
+```r
 shift_and_scale <- function(coords, scale = 2, shift_x = 100) {
   cbind(coords[,1] * scale + shift_x, coords[,2] * scale)
 }
 
-transformed_sf <- st_transform_custom(
-  sf_obj = your_sf_object,
+transformed <- st_transform_custom(
+  sf_obj = vic,
   transform_fun = shift_and_scale,
   args = list(scale = 1.5, shift_x = 500)
 )
@@ -137,6 +178,10 @@ table(zones)
 #>      74      5      21
 ```
 
+
+
+---
+
 ## Supported Geometries
 
 The package supports all major sf geometry types:
@@ -146,22 +191,21 @@ The package supports all major sf geometry types:
 - ✅ `POLYGON` / `MULTIPOLYGON`
 - ✅ Mixed geometry collections
 
-## CRS Handling
+---
 
-`sf_fisheye()` provides intelligent CRS handling:
+## ⚡ Performance tips
 
-- **Geographic data (WGS84)**: Automatically projects to appropriate UTM/MGA zones
-- **Victoria, Australia**: Uses GDA2020 MGA Zone 55 (EPSG:7855)
-- **Other regions**: Selects UTM zones based on centroid location
-- **Projected data**: Uses existing projection as working CRS
-- **Custom CRS**: Override with `target_crs` parameter
+* Use `preserve_aspect = FALSE` if stretching is acceptable (faster)
+* Large datasets: consider chunking / spatial indexing
+* Stronger `squeeze_factor` makes glue computations heavier
 
-## Performance Tips
+---
 
-- Use `preserve_aspect = FALSE` for faster processing when shape distortion is acceptable
-- For large datasets, consider spatial indexing or chunking
-- The `squeeze_factor` parameter has the most impact on computation time in the glue zone
+## 📚 Citation
 
+```r
+citation("mapicusmaximus")
+```
 ## Dependencies
 
 **Required:**
@@ -180,29 +224,17 @@ Contributions are welcome! Please see our [Contributing Guide](CONTRIBUTING.md) 
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+---
 
-## Related Work
+## 📜 License
 
-- **Cartographic fisheye**: Inspired by geographic focus+context visualization techniques
-- **Information visualization**: Related to focus+context approaches in data visualization
-- **Spatial data science**: Complements tools like `sf`, `terra`, and `stars`
-
-## Citation
-
-```r
-citation("fisheye")
-```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- The sf package maintainers for excellent spatial data infrastructure
-- The R spatial community for inspiration and feedback
-- Focus+context visualization research community
+MIT License – see [LICENSE](LICENSE).
 
 ---
 
-**Questions?** Open an [issue](https://github.com/yourusername/fisheye/issues) or start a [discussion](https://github.com/yourusername/fisheye/discussions).
+## 🙏 Acknowledgments
+
+* The **sf** package maintainers for the spatial infrastructure
+* The R spatial community for discussion & feedback
+* Research in **focus+context visualization** for conceptual foundations
+
