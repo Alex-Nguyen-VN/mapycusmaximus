@@ -204,7 +204,7 @@ The package supports all major sf geometry types:
 ## 📚 Citation
 
 ```r
-citation("mapicusmaximus")
+citation("mapycusmaximus")
 ```
 ## Dependencies
 

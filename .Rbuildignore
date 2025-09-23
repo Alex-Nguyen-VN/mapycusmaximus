@@ -1,2 +1,7 @@
 ^mapycusmaximus\.Rproj$
 ^\.Rproj\.user$
+^data-raw$
+^README\.Rmd$
+^README\.md$
+^CONTRIBUTING\.md$
+^LICENSE\.md$
