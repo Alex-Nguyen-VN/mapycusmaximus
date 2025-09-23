@@ -48,10 +48,9 @@ projected CRS before calling this function.
 }
 \section{Expected signature of \code{transform_fun}}{
 
+\preformatted{
 transform_fun <- function(coords, ...) {  ## coords: n x 2 matrix (X, Y)
-\subsection{return an n x 2 matrix with transformed (X, Y)}{
-
-}
+  ## return an n x 2 matrix with transformed (X, Y)}
 }
 }
 

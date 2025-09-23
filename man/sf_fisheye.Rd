@@ -2,10 +2,13 @@
 % Please edit documentation in R/sf_fisheye.R
 \name{sf_fisheye}
 \alias{sf_fisheye}
-\title{Radial fisheye warp for \code{sf}/\code{sfc} objects with auto-CRS handling}
+\title{Radial fisheye warp for \code{sf}/\code{sfc} objects (auto-CRS + flexible centers)}
 \usage{
 sf_fisheye(
   sf_obj,
+  center = NULL,
+  center_crs = NULL,
+  normalized_center = FALSE,
   cx = NULL,
   cy = NULL,
   r_in = 0.34,
@@ -19,113 +22,121 @@ sf_fisheye(
 )
 }
 \arguments{
-\item{sf_obj}{An \code{\link[sf:sf]{sf}} or \code{\link[sf:sfc]{sfc}} object. Geometry
-types \code{POINT}, \code{LINESTRING}, \code{POLYGON}, and \code{MULTIPOLYGON} are supported.
-Empty geometries are dropped before transformation.}
+\item{sf_obj}{An \code{\link[sf:sf]{sf}} or \code{\link[sf:sfc]{sfc}} object. Supports
+\code{POINT}, \code{LINESTRING}, \code{POLYGON}, and \code{MULTIPOLYGON}. Empty geometries
+are removed before processing.}
 
-\item{cx, cy}{Optional numeric coordinates of the fisheye \strong{center} in the
-\emph{working CRS}. If \code{NULL}, the function uses the midpoint of the object
-bounding box after any CRS transform. See Details.}
+\item{center}{Flexible center specification (see \strong{Center selection}):
+\itemize{
+\item numeric length-2 pair interpreted via \code{center_crs} or by lon/lat
+heuristic, or as map units if not lon/lat;
+\item any \code{sf}/\code{sfc} geometry, from which a centroid is derived;
+\item normalized \eqn{[-1,1]} pair when \code{normalized_center = TRUE}.
+}}
 
-\item{r_in, r_out}{Numeric radii (in \strong{normalized units}) defining the inner
-and outer ring of the fisheye. Must satisfy \code{r_out > r_in}. Inside \code{r_in}
-gets enlarged, between \code{r_in} and \code{r_out} blends smoothly to the outside,
-and beyond \code{r_out} remains mostly unchanged. Defaults are tuned for
-normalized space (roughly [-1, 1] per axis).}
+\item{center_crs}{Optional CRS for a numeric \code{center} (e.g., \code{"EPSG:4326"}).
+Ignored if \code{center} is an \code{sf}/\code{sfc} object (its own CRS is used).}
 
-\item{zoom_factor}{Numeric (> 1 to enlarge). Intensity of magnification in
-the focus region (passed to \code{fisheye_fgc()}).}
+\item{normalized_center}{Logical. If \code{TRUE}, \code{center} is treated as a
+normalized \eqn{[-1,1]} coordinate around the bbox midpoint.}
 
-\item{squeeze_factor}{Numeric in [0, 1]. Controls how strongly the glue
-region compresses/squeezes as it blends focus to context (passed to
-\code{fisheye_fgc()}).}
+\item{cx, cy}{Optional center in \strong{working CRS} map units (legacy path,
+ignored when \code{center} is provided).}
 
-\item{method}{Character scalar. The fisheye method name understood by
-\code{fisheye_fgc()} (default \code{"expand"}). See that function for options.}
+\item{r_in, r_out}{Numeric radii (in \strong{normalized units}) defining focus and
+glue boundaries; must satisfy \code{r_out > r_in}.}
 
-\item{revolution}{Numeric (radians). Optional angular twist/rotation applied
-by \code{fisheye_fgc()} (default \code{0}).}
+\item{zoom_factor}{Numeric (> 1 to enlarge). Focus magnification passed to
+\code{fisheye_fgc()}.}
 
-\item{target_crs}{Optional CRS (anything accepted by
-\code{\link[sf:st_crs]{sf::st_crs()}}/\code{\link[sf:st_transform]{sf::st_transform()}}) to use as the \strong{working CRS}.
-If \code{NULL} and \code{sf_obj} is lon/lat, an appropriate projected CRS is chosen
-automatically (see Details). If \code{sf_obj} is already projected, it is used
-as the working CRS.}
+\item{squeeze_factor}{Numeric in [0, 1]. Glue-zone compression strength
+passed to \code{fisheye_fgc()}.}
 
-\item{preserve_aspect}{Logical, default \code{TRUE}. If \code{TRUE}, normalization uses
-a \strong{uniform} scale so shapes are not stretched; if \code{FALSE}, X and Y are
-scaled independently to the bbox half-width/half-height.}
+\item{method}{Character; name understood by \code{fisheye_fgc()} (default \code{"expand"}).}
+
+\item{revolution}{Numeric (radians); optional angular twist for glue zone,
+passed to \code{fisheye_fgc()}.}
+
+\item{target_crs}{Optional working CRS (anything accepted by
+\code{\link[sf:st_crs]{sf::st_crs()}} / \code{\link[sf:st_transform]{sf::st_transform()}}). If \code{NULL}, a projected CRS is
+auto-selected when the input is lon/lat; otherwise the input CRS is used.}
+
+\item{preserve_aspect}{Logical. If \code{TRUE} (default), use uniform scaling; if
+\code{FALSE}, scale axes independently (may stretch shapes).}
 }
 \value{
 An object of the same top-level class as \code{sf_obj} (\code{sf} or \code{sfc}),
-with the original CRS restored. Geometry coordinates are replaced by their
-fisheye-warped counterparts.
+with geometry coordinates warped by the fisheye and the \strong{original CRS}
+restored.
 }
 \description{
-\code{sf_fisheye()} applies a \strong{focus–glue–context} style fisheye transformation
-to vector geometries. It:
-\enumerate{
-\item optionally projects lon/lat data to a suitable projected CRS (or a user
-supplied CRS),
-\item \strong{normalizes} coordinates around a chosen center \verb{(cx, cy)} into a
-unit-ish square while optionally preserving aspect,
-\item applies a radial fisheye mapping (implemented in \code{fisheye_fgc()}),
-\item \strong{denormalizes} back to the working metric space,
-\item and finally reprojects to the original CRS.
-}
-
-This produces local enlargement inside a focus ring, smooth transition
-through a glue ring, and minimal change outside the context ring.
+\code{sf_fisheye()} applies a \strong{focus–glue–context} fisheye to vector data:
+it (1) ensures a sensible projected working CRS, (2) \strong{normalizes}
+coordinates around a chosen center, (3) calls \code{fisheye_fgc()} to warp radii,
+(4) \strong{denormalizes} back to map units, and (5) restores the original CRS.
+Inside the focus ring (\code{r_in}) features enlarge; across the glue ring
+(\code{r_out}) they transition smoothly; outside, they stay nearly unchanged.
 }
 \details{
 \strong{CRS handling.} If \code{target_crs} is \code{NULL} and the input is geographic
-(lon/lat), the function picks a projected CRS based on the data centroid:
+(lon/lat), a projected \strong{working CRS} is chosen from the layer’s centroid:
 \itemize{
-\item For data roughly centered on Victoria, AU (140°E–150°E, 40°S–30°S),
-it uses \strong{EPSG:7855} (GDA2020 / MGA Zone 55).
-\item Otherwise, it chooses UTM: \strong{EPSG:326##} for the northern hemisphere or
-\strong{EPSG:327##} for the southern hemisphere using the standard 6° zone rule.
+\item Victoria, AU region (≈ 140–150°E, 40–30°S): \strong{EPSG:7855} (GDA2020 / MGA55).
+\item Otherwise UTM: \strong{EPSG:326##} (north) or \strong{EPSG:327##} (south).
+}
+You may override with \code{target_crs}. The original CRS is restored on return.
+
+\strong{Center selection.} The fisheye center can be supplied in multiple ways:
+\itemize{
+\item \code{center = c(lon, lat)}, with \code{center_crs = "EPSG:4326"} (recommended
+for WGS84) or another CRS string/object.
+\item \code{center = c(x, y)} already in \strong{working CRS} map units (meters).
+\item \code{center} as any \code{sf}/\code{sfc} geometry (POINT/LINE/POLYGON/etc.): its
+\strong{centroid of the combined geometry} is used, then transformed to the
+working CRS.
+\item \code{center = c(cx, cy)} as \strong{normalized} coordinates in \eqn{[-1,1]}
+when \code{normalized_center = TRUE} (relative to the bbox midpoint and
+scale used for normalization).
+\item Legacy \verb{cx, cy} (map units) are still accepted and used only when
+\code{center} is not supplied.
 }
 
-If you need a specific working CRS (e.g., equal-area), supply \code{target_crs}.
-The original CRS of \code{sf_obj} is restored at the end.
+\strong{Normalization.} Let bbox half-width/height be \code{sx}, \code{sy}. With
+\code{preserve_aspect = TRUE} (default), a uniform scale \code{s = max(sx, sy)} maps
+\eqn{(x, y) \mapsto ((x - cx)/s,\, (y - cy)/s)}, so \code{r_in}/\code{r_out} (e.g.,
+0.34/0.5) are interpreted in a unit-like space. If \code{preserve_aspect = FALSE},
+X and Y are independently scaled by \code{sx} and \code{sy}.
 
-\strong{Normalization.} Let the bbox half-width/half-height be \code{sx}, \code{sy}. When
-\code{preserve_aspect = TRUE}, we use a uniform scale \code{s = max(sx, sy)} and map
-\eqn{(x, y) \mapsto ((x - cx)/s, (y - cy)/s)} so that your chosen \code{r_in} and
-\code{r_out} (e.g., 0.34 and 0.5) are interpreted in a roughly unit-radius space.
-When \code{preserve_aspect = FALSE}, X and Y are scaled separately by \code{sx}, \code{sy}.
-
-\strong{Implementation notes.} The actual coordinate warp is delegated to
-\code{fisheye_fgc()} and applied per-geometry via \code{st_transform_custom()}. Polygon
-rings are re-closed after transformation. Z/M dimensions are dropped.
+\strong{Implementation notes.} Geometry coordinates are transformed by
+\code{st_transform_custom()} which safely re-closes polygon rings and drops Z/M.
+The radial warp itself is delegated to \code{fisheye_fgc()} (which is not modified).
 }
 \examples{
 library(sf)
 
-# A toy square polygon in a projected CRS
+# Toy polygon in a projected CRS
 poly <- st_sfc(st_polygon(list(rbind(
-  c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0)
+  c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)
 ))), crs = 3857)
 
-# Default center at bbox midpoint, gentle magnification
+# Default center (bbox midpoint), gentle magnification
 out1 <- sf_fisheye(poly, r_in = 0.3, r_out = 0.6,
                    zoom_factor = 1.5, squeeze_factor = 0.35)
 
-# Explicit center and stronger focus, preserving aspect
+# Explicit map-unit center, stronger focus
 out2 <- sf_fisheye(poly, cx = 0.5, cy = 0.5,
                    r_in = 0.25, r_out = 0.55,
                    zoom_factor = 2.0, squeeze_factor = 0.25)
 
-# Lon/lat data (auto-project to UTM/MGA), then fisheye
-pt_ll <- st_sfc(st_point(c(144.9631, -37.8136)), crs = 4326) # Melbourne CBD
+# Lon/lat point (auto-project to UTM/MGA), then fisheye around CBD (WGS84)
+pt_ll <- st_sfc(st_point(c(144.9631, -37.8136)), crs = 4326)  # Melbourne CBD
 out3  <- sf_fisheye(pt_ll, r_in = 0.2, r_out = 0.5)
 
-# If your method supports angular twist:
-# out4 <- sf_fisheye(poly, revolution = pi/12, method = "expand")
+# Center supplied as an sf polygon: centroid is used as the warp center
+# out4 <- sf_fisheye(vic_polygon_sf, center = vic_polygon_sf)
 
 }
 \seealso{
 \code{\link[sf:st_transform]{sf::st_transform()}}, \code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}, \code{\link[sf:st_crs]{sf::st_crs()}},
-\code{\link[sf:st_coordinates]{sf::st_coordinates()}}, \code{\link[=st_transform_custom]{st_transform_custom()}}, \code{\link[=fisheye_fgc]{fisheye_fgc()}}
+\code{\link[sf:st_coordinates]{sf::st_coordinates()}}, \code{st_transform_custom()}, \code{fisheye_fgc()}
 }
