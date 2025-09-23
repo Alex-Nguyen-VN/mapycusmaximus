@@ -1,3 +1,6 @@
+# Global variables for ggplot2 aesthetics
+utils::globalVariables(c("x", "y", "zone"))
+
 #' Create a Regular Test Grid of Coordinates
 #'
 #' @description
@@ -107,8 +110,9 @@ classify_zones <- function(coords, cx = 0, cy = 0, r_in = 0.34, r_out = 0.5) {
 #' plot_fisheye_fgc(grid, warped, r_in = 0.4, r_out = 0.7)
 #'
 #' @seealso [create_test_grid()], [fisheye_fgc()]
-#' @importFrom ggplot2 ggplot aes geom_point scale_color_manual facet_wrap coord_fixed theme_minimal theme labs geom_path
+#' @importFrom ggplot2 ggplot aes geom_point scale_color_manual facet_wrap coord_fixed theme_minimal theme labs geom_path element_blank
 #' @export
+
 
 plot_fisheye_fgc <- function(original_coords, transformed_coords, 
   cx = 0, cy = 0, r_in = 0.34, r_out = 0.5) {
@@ -167,3 +171,4 @@ color = "blue", linetype = "dashed", inherit.aes = FALSE)
 
 return(p)
 }
+
