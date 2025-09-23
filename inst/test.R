@@ -1,162 +1,128 @@
-library(tidyverse)
-library(sf)
-library(igraph)
+#' Build FGC rings (inner/outer) as sf for plotting with geom_sf()
+#' - Returns circles if preserve_aspect=TRUE, otherwise ellipses.
+#' - Output is in the ORIGINAL CRS of sf_obj so it overlays your ggplot.
+fisheye_rings_sf <- function(sf_obj,
+  center = NULL, center_crs = NULL, normalized_center = FALSE,
+  r_in = 0.34, r_out = 0.5,
+  target_crs = NULL, preserve_aspect = TRUE,
+  n = 360L,  # resolution for ellipse/polyline
+  ring_as = c("line","polygon")) {
 
-vic <- read_sf(here::here("data/map/LGA_POLYGON.shp")) |>
-  mutate(geometry = st_zm(geometry), drop = TRUE, what = "ZM") |>
-  # convert to GDA2020 to match with census data
-  mutate(geometry = st_transform(geometry, 7844))
+stopifnot(r_out > r_in)
+ring_as <- match.arg(ring_as)
 
-  vic <- st_simplify(vic, dTolerance = 100) |>
-    st_make_valid() |>
-    st_zm(drop = TRUE, what = "ZM") |>
-    mutate(LGA_NAME = toupper(LGA_NAME)) |>
-    select(LGA_NAME, geometry)
+if (inherits(sf_obj, "sf")) sf_obj <- sf_obj[!sf::st_is_empty(sf_obj), ]
+original_crs <- sf::st_crs(sf_obj)
+sf_obj <- sf::st_zm(sf_obj, drop = TRUE, what = "ZM")
 
-plot(st_geometry(vic))
+# ---- choose working projected CRS (same logic as sf_fisheye) ----
+if (!is.null(target_crs)) {
+sf_obj <- sf::st_transform(sf_obj, target_crs)
+} else if (sf::st_is_longlat(sf_obj)) {
+bb <- sf::st_bbox(sf_obj)
+lon_center <- (bb["xmin"] + bb["xmax"])/2
+lat_center <- (bb["ymin"] + bb["ymax"])/2
+if (lon_center > 140 && lon_center < 150 && lat_center > -40 && lat_center < -30) {
+sf_obj <- sf::st_transform(sf_obj, "EPSG:7855")
+} else {
+utm_zone <- floor((lon_center + 180)/6) + 1
+epsg <- if (lat_center >= 0) paste0("EPSG:", 32600 + utm_zone) else paste0("EPSG:", 32700 + utm_zone)
+sf_obj <- sf::st_transform(sf_obj, epsg)
+}
+}
+working_crs <- sf::st_crs(sf_obj)
 
-vic_crs <-  st_crs(vic)
-
-get_center <- function(sf_obj) {
-  st_coordinates(st_centroid(sf_obj))
+# ---- bbox scales & center (same as sf_fisheye) ----
+bb <- sf::st_bbox(sf_obj)
+cx0 <- (bb["xmin"] + bb["xmax"])/2
+cy0 <- (bb["ymin"] + bb["ymax"])/2
+sx <- (bb["xmax"] - bb["xmin"])/2; if (sx == 0) sx <- 1
+sy <- (bb["ymax"] - bb["ymin"])/2; if (sy == 0) sy <- 1
+if (preserve_aspect) {
+s <- max(sx, sy)
 }
 
-vic_original <- st_coordinates(vic)
-vic_coords <- data.frame(st_coordinates(vic))
-new_coords <- vic_coords
+# Use your internal resolver if you have it:
+# cxy <- .resolve_center(center, center_crs, working_crs, bb, preserve_aspect, normalized_center)
 
-vic |> filter(LGA_NAME == "MELBOURNE") |> 
-  get_center() |> 
-  as.data.frame() ->
-  center_coords
+# Minimal inline resolver (lon/lat heuristic + normalized support)
+if (!is.null(center) && inherits(center, c("sf","sfc"))) {
+g <- if (inherits(center, "sf")) sf::st_geometry(center) else center
+if (!all(sf::st_geometry_type(g) %in% c("POINT","MULTIPOINT")) || length(g) > 1) {
+g <- sf::st_centroid(sf::st_combine(g))
+}
+cxy <- as.numeric(sf::st_coordinates(sf::st_transform(g, working_crs))[1,1:2])
+} else if (isTRUE(normalized_center)) {
+stopifnot(is.numeric(center), length(center) == 2)
+if (preserve_aspect) {
+cxy <- c(cx0 + center[1]*s, cy0 + center[2]*s)
+} else {
+cxy <- c(cx0 + center[1]*sx, cy0 + center[2]*sy)
+}
+} else if (!is.null(center)) {
+stopifnot(is.numeric(center), length(center) == 2)
+if (!is.null(center_crs)) {
+pt <- sf::st_sfc(sf::st_point(center), crs = center_crs)
+cxy <- as.numeric(sf::st_coordinates(sf::st_transform(pt, working_crs))[1,1:2])
+} else if (abs(center[1]) <= 180 && abs(center[2]) <= 90) { # looks like lon/lat
+pt <- sf::st_sfc(sf::st_point(center), crs = 4326)
+cxy <- as.numeric(sf::st_coordinates(sf::st_transform(pt, working_crs))[1,1:2])
+} else {
+cxy <- center
+}
+} else {
+cxy <- c(cx0, cy0)
+}
+
+# ---- Build rings in WORKING CRS ----
+if (preserve_aspect) {
+rin  <- r_in  * s
+rout <- r_out * s
+p0   <- sf::st_sfc(sf::st_point(cxy), crs = working_crs)
+ring_in_geom  <- sf::st_buffer(p0, dist = rin)
+ring_out_geom <- sf::st_buffer(p0, dist = rout)
+} else {
+# Ellipses with radii (r*sx, r*sy)
+make_ellipse <- function(rx, ry) {
+t <- seq(0, 2*pi, length.out = n)
+xy <- cbind(cxy[1] + rx*cos(t), cxy[2] + ry*sin(t))
+sf::st_sfc(sf::st_polygon(list(rbind(xy, xy[1,]))), crs = working_crs)
+}
+ring_in_geom  <- make_ellipse(r_in * sx,  r_in * sy)
+ring_out_geom <- make_ellipse(r_out * sx, r_out * sy)
+}
+
+if (ring_as == "line") {
+ring_in_geom  <- sf::st_boundary(ring_in_geom)
+ring_out_geom <- sf::st_boundary(ring_out_geom)
+}
+
+rings <- sf::st_as_sf(data.frame(
+ring = c("r_in","r_out"),
+geometry = sf::st_sfc(ring_in_geom[[1]], ring_out_geom[[1]], crs = working_crs)
+))
+
+# ---- back to ORIGINAL CRS so it overlays your ggplot ----
+if (!identical(working_crs, original_crs)) {
+rings <- sf::st_transform(rings, original_crs)
+}
+rings
+}
 
 
+# 1) Warp your map
+fisheye_vic <- sf_fisheye(vic,
+  center = c(144.9631, -37.8136), center_crs = "EPSG:4326",
+  r_in = 0.34, r_out = 0.50, zoom_factor = 5, squeeze_factor = 0.3)
 
+# 2) Build ring overlays that match the exact center/scales used
+rings <- fisheye_rings_sf(vic,
+  center = c(144.9631, -37.8136), center_crs = "EPSG:4326",
+  r_in = 0.34, r_out = 0.50, preserve_aspect = TRUE, ring_as = "line")
 
-new_coords <- new_coords |>
-  mutate(radius = sqrt((X - center_coords$X)^2 + (Y - center_coords$Y)^2)) |>
-  mutate(angle = atan2(Y - center_coords$Y, X - center_coords$X)) |>
-  mutate(X_iden = center_coords$X + radius * cos(angle),
-         Y_iden = center_coords$Y + radius * sin(angle),
-        X_new = center_coords$X + sqrt(radius) * cos(angle),
-      Y_new = center_coords$Y + sqrt(radius) * sin(angle)) 
-
-
-new_coords |> ggplot() +
-  geom_point(aes(X_iden, Y_iden), color = "blue", size = 0.1) +
-  #geom_point(aes(X, Y), color = "grey", size = 0.1) +
-  geom_point(aes(X_new, Y_new), color = "red", size = 0.1)
-
-
-
-nested_list <- new_coords %>%
-  group_by(L1, L2, L3) %>%
-  summarise(coords = list(cbind(X_new, Y_new)), .groups = "drop") %>%
-  group_by(L1, L2) %>%
-  summarise(L3_list = list(setNames(coords, L3)), .groups = "drop") %>%
-  group_by(L1) %>%
-  summarise(L2_list = list(setNames(L3_list, L2)), .groups = "drop") %>%
-  pull(L2_list) %>%
-  setNames(unique(new_coords$L1))
-
-new_geom <- map(nested_list, ~{
-  # Extract rings for each polygon
-  polygons <- map(.x, ~{
-    rings <- map(.x, ~{
-      coords <- as.matrix(.x)
-      # Ensure ring is closed
-      if(!identical(coords[1,], coords[nrow(coords),])) {
-        coords <- rbind(coords, coords[1,])
-      }
-      coords
-    })
-    st_polygon(rings)
-  })
-  st_multipolygon(polygons)
-})
-new_geom <- st_sfc(new_geom)
-new_geom <- st_set_crs(new_geom, st_crs(vic))
-vic_bbox <- st_bbox(vic)
-attr(vic_bbox, "class") = "bbox"
-attr(new_geom, "bbox") = vic_bbox
-
-# Get original and transformed bounding boxes
-original_bbox <- st_bbox(vic)
-transformed_coords_bbox <- c(
-  xmin = min(new_coords$X_new),
-  ymin = min(new_coords$Y_new),
-  xmax = max(new_coords$X_new),
-  ymax = max(new_coords$Y_new)
-)
-
-# Calculate scaling factors
-scale_x <- (original_bbox["xmax"] - original_bbox["xmin"]) / 
-           (transformed_coords_bbox["xmax"] - transformed_coords_bbox["xmin"])
-scale_y <- (original_bbox["ymax"] - original_bbox["ymin"]) / 
-           (transformed_coords_bbox["ymax"] - transformed_coords_bbox["ymin"])
-
-# Apply scaling and translation to match original bbox
-new_coords <- new_coords |>
-  mutate(
-    # First center at origin
-    X_centered = X_new - mean(c(transformed_coords_bbox["xmin"], transformed_coords_bbox["xmax"])),
-    Y_centered = Y_new - mean(c(transformed_coords_bbox["ymin"], transformed_coords_bbox["ymax"])),
-    # Then scale
-    X_scaled = X_centered * scale_x,
-    Y_scaled = Y_centered * scale_y,
-    # Finally translate to original center
-    X_final = X_scaled + mean(c(original_bbox["xmin"], original_bbox["xmax"])),
-    Y_final = Y_scaled + mean(c(original_bbox["ymin"], original_bbox["ymax"]))
-  )
-
-# Update your nested_list creation to use the scaled coordinates
-nested_list <- new_coords %>%
-  group_by(L1, L2, L3) %>%
-  summarise(coords = list(cbind(X_final, Y_final)), .groups = "drop") %>%
-  group_by(L1, L2) %>%
-  summarise(L3_list = list(setNames(coords, L3)), .groups = "drop") %>%
-  group_by(L1) %>%
-  summarise(L2_list = list(setNames(L3_list, L2)), .groups = "drop") %>%
-  pull(L2_list) %>%
-  setNames(unique(new_coords$L1))
-
-# Create new geometry (same code as before)
-new_geom <- map(nested_list, ~{
-  polygons <- map(.x, ~{
-    rings <- map(.x, ~{
-      coords <- as.matrix(.x)
-      if(!identical(coords[1,], coords[nrow(coords),])) {
-        coords <- rbind(coords, coords[1,])
-      }
-      coords
-    })
-    st_polygon(rings)
-  })
-  st_multipolygon(polygons)
-})
-new_geom <- st_sfc(new_geom)
-new_geom <- st_set_crs(new_geom, st_crs(vic))
-
-# Set the bbox to match original
-attr(new_geom, "bbox") <- original_bbox
-
-# Now plot - they should have the same overall size
+# 3) Plot
+library(ggplot2)
 ggplot() +
-  geom_sf(aes(geometry = vic$geometry)) + 
-  geom_sf(aes(geometry = new_geom), color = "red", fill = NA) +
+  geom_sf(data = fisheye_vic, fill = NA, color = "grey50") +
+  geom_sf(data = rings, aes(linetype = ring), color = "red", linewidth = 0.6) +
   coord_sf()
-
-
-ggplot() +
-  geom_sf(aes(geometry = new_geom), color = "red", fill = NA) +
-  coord_sf()
-
-p = 3
-r_out = 5
-r_in = 2
-u <- pmin(pmax((rho - r_in) / (r_out - r_in), 0), 1)
-
-# Smooth step function for C1 continuity
-smoothstep <- function(t) t * t * (3 - 2 * t)
-s <- smoothstep(u)
-
