@@ -38,10 +38,10 @@
 #' coordinates are replaced by the coordinates returned by `transform_fun`.
 #'
 #' @section Expected signature of `transform_fun`:
+#' \preformatted{
 #' transform_fun <- function(coords, ...) {  ## coords: n x 2 matrix (X, Y)
-#'   ## return an n x 2 matrix with transformed (X, Y)
+#'   ## return an n x 2 matrix with transformed (X, Y)}
 #' }
-#'
 #' @examples
 #' library(sf)
 #'
