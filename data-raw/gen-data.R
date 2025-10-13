@@ -11,7 +11,7 @@ vic <- read_sf(here::here("data-raw/map/LGA_POLYGON.shp")) |>
     mutate(LGA_NAME = toupper(LGA_NAME)) |>
     select(LGA_NAME, geometry)
 
-save(vic, file = here::here("data/vic.rda"))
+save(vic, file = here::here("data/vic.rda"), compress = "xz")
 
 library(sf)
 library(dplyr)
@@ -88,8 +88,8 @@ vic_fish   <- sf_fisheye(vic_proj, center = center_proj,
 conn_fish  <- sf_fisheye(connections_focus_proj, center = center_proj,
                          r_in = 0.428, r_out = 0.429, zoom_factor = 1)
 
-save(vic_fish, file = here::here("data/vic_fish.rda"))
-save(conn_fish, file = here::here("data/conn_fish.rda"))
+save(vic_fish, file = here::here("data/vic_fish.rda"), compress = "xz")
+save(conn_fish, file = here::here("data/conn_fish.rda"), compress = "xz")
 
 # Define zoom sequence
 zoom_seq <- seq(1, 10, by = 0.05)
