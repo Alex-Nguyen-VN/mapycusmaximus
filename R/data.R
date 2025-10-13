@@ -30,6 +30,40 @@
 #' plot(sf::st_geometry(vic), col = "grey90", border = "grey50")
 "vic"
 
+#' Fisheye-Distorted Victoria LGAs (`sf`)
+#'
+#' @description
+#' An example polygon layer of Victoria’s Local Government Areas (LGAs)
+#' after applying a **Focus–Glue–Context (FGC) fisheye transformation**.
+#' This dataset illustrates how local detail can be magnified around a chosen
+#' focus point while maintaining geographic context across the state.
+#'
+#' @format An [`sf`][sf::sf] object with:
+#' \describe{
+#'   \item{LGA_NAME}{Character, name of the LGA (upper case).}
+#'   \item{geometry}{`MULTIPOLYGON` / `POLYGON` geometries in projected CRS (EPSG:3111).}
+#' }
+#'
+#' @details
+#' Built from the base layer `vic` using:
+#' \enumerate{
+#'   \item projection to VicGrid94 (`st_transform(vic, 3111)`),
+#'   \item defining a focus center near Melbourne (`cx = 145.0`, `cy = -37.8`),
+#'   \item applying [`sf_fisheye()`][mapycusmaximus::sf_fisheye] with
+#'         \code{r_in = 0.34}, \code{r_out = 0.5}, and \code{zoom_factor = 1},
+#'   \item preserving topology with `st_make_valid()` where needed.
+#' }
+#' The result is a smoothly warped map emphasizing the metropolitan focus zone.
+#'
+#' @source Prepared in \code{data-raw/gen-data.R} using the original `vic` polygon layer.
+#'
+#' @seealso [`sf_fisheye()`], [`conn_fish`]
+#'
+#' @examples
+#' library(sf)
+#' plot(st_geometry(vic_fish), col = "grey90", border = "grey50")
+"vic_fish"
+
 #' Fisheye-Distorted Hospital–RACF Connections (`sf`)
 #'
 #' @description

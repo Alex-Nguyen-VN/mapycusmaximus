@@ -1,4 +1,4 @@
-# _pkgdown.yml
+url: https://alex-nguyen-vn.github.io/mapycusmaximus/
 
 template:
   bootstrap: 5
@@ -43,22 +43,24 @@ reference:
   - title: "Spatial Transformation Tools"
     contents:
       - st_transform_custom
-  - title: "Helper Functions"
+  - title: "Datasets"
     contents:
-      - focus_glue_context
-      - normalize_coords
-      - denormalize_coords
+      - vic
+      - conn_fish
+      - vic_fish
+  #- title: "Helper Functions"
+    #contents:
+      #- normalize_coords
+      #- denormalize_coords
 
-articles:
-  - title: "Vignettes"
-    navbar: ~
-    contents:
-      - articles/intro_fisheye
-      - articles/spatial_examples
-      - articles/performance_tips
+#articles:
+  #- title: "Vignettes"
+    #navbar: ~
+    #contents:
+      #- intro_fisheye
+      #- spatial_examples
+      #- performance_tips
 
 authors:
   Alex Nguyen:
     href: https://github.com/Alex-Nguyen-VN
-
-url: https://alex-nguyen-vn.github.io/mapycusmaximus/
