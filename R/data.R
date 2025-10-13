@@ -30,51 +30,41 @@
 #' plot(sf::st_geometry(vic), col = "grey90", border = "grey50")
 "vic"
 
-#' Fisheye-Distorted Victoria Map and Connection Lines (`sf`)
+#' Fisheye-Distorted Hospital–RACF Connections (`sf`)
 #'
 #' @description
-#' Example spatial layers illustrating the **Focus–Glue–Context (FGC) fisheye transformation**  
-#' applied to Victoria’s LGA polygons and hospital–RACF transfer connections.
-#' These are used in package demos and tests to showcase local magnification
-#' around a geographic focus point while preserving global context.
+#' An example `LINESTRING` layer showing hospital–RACF transfer routes
+#' after applying a **Focus–Glue–Context (FGC) fisheye warp**.
+#' It demonstrates how line geometries can be spatially distorted in sync
+#' with polygon layers to visualize flow patterns within the magnified focus zone.
 #'
-#' @format
-#' - `vic_fish`: An [`sf`][sf::sf] **polygon layer** of Victoria’s LGAs after fisheye warping.  
-#' - `conn_fish`: An [`sf`][sf::sf] **linestring layer** connecting hospital and RACF pairs,  
-#'   subset to features inside the fisheye focus region and warped with the same parameters.
-#'
-#' Each object includes:
+#' @format An [`sf`][sf::sf] object with:
 #' \describe{
-#'   \item{geometry}{`MULTIPOLYGON` or `LINESTRING` geometries in projected CRS (EPSG:3111).}
-#'   \item{Optional attributes}{such as `LGA_NAME` (for polygons) or transfer metadata (`weight`, `src`, `dst`).}
+#'   \item{weight}{Numeric, representing transfer magnitude or connection strength.}
+#'   \item{geometry}{`LINESTRING` geometries in projected CRS (EPSG:3111).}
 #' }
 #'
 #' @details
-#' Both layers were built in `data-raw/gen-data.R` using:
+#' Built from hospital–RACF coordinate pairs in `data-raw/transfers_coded.csv`
+#' using:
 #' \enumerate{
-#'   \item hospital–RACF coordinates from `data-raw/transfers_coded.csv`,
-#'   \item connection geometries created via `make_connections()`,
-#'   \item filtering to connections within `r_in = 0.34` of the focus center,
-#'   \item projection to GDA94 / Vicgrid94 (`EPSG:3111`),
-#'   \item fisheye transformation using [`sf_fisheye()`][mapycusmaximus::sf_fisheye],
-#'         with parameters \code{r_in = 0.34}, \code{r_out = 0.5},
-#'         and a moderate zoom factor (\code{zoom_factor = 1}).
+#'   \item connection creation via `make_connections()` to form `LINESTRING`s,
+#'   \item projection to VicGrid94 (`EPSG:3111`),
+#'   \item distance-based filtering to keep only sources within \code{r_in = 0.34}
+#'         of the focus point (`cx = 145.0`, `cy = -37.8`),
+#'   \item fisheye transformation using [`sf_fisheye()`][mapycusmaximus::sf_fisheye]
+#'         with \code{r_in = 0.428}, \code{r_out = 0.429}, and \code{zoom_factor = 1}.
 #' }
+#' The resulting object aligns spatially with `vic_fish`, allowing
+#' co-visualization of regional flow intensity within the distorted focus region.
 #'
-#' The resulting objects represent a **smooth local zoom** around the chosen
-#' center point (`cx = 145.0`, `cy = -37.8`), demonstrating how spatial geometries
-#' are reshaped by the fisheye warp while maintaining topological integrity.
+#' @source Prepared in \code{data-raw/gen-data.R} from
+#' `transfers_coded.csv` and the `make_connections()` function.
 #'
-#' @source Prepared in \code{data-raw/gen-data.R} from the
-#' Victorian LGA boundaries (`vic`) and hospital–RACF transfer data (`transfers_coded.csv`).
-#'
-#' @seealso
-#' - [`sf_fisheye()`] for the transformation logic  
-#' - [`vic`] for the unwarped baseline polygon layer
+#' @seealso [`sf_fisheye()`], [`vic_fish`]
 #'
 #' @examples
 #' library(sf)
-#' plot(st_geometry(vic_fish), col = "grey90", border = "grey50")
+#' plot(st_geometry(vic_fish), col = "grey95", border = "grey70")
 #' plot(st_geometry(conn_fish), add = TRUE, col = "black", lwd = 1)
-"vic_fish"
 "conn_fish"
