@@ -1,6 +1,6 @@
 # mapycusmaximus <a href="https://github.com/Alex-Nguyen-VN/mapycusmaximus" class="pkgdown-release">Development Version</a>
 
-[![R-CMD-check](https://github.com/Alex-Nguyen-VN/mapycusmaximus/actions/workflows/R-CMD-check.yaml/badge.svghttps://github.com/Alex-Nguyen-VN/mapycusmaximus/actions/workflows/R-CMD-check.yaml/badge.svghttps://github.com/Alex-Nguyen-VN/mapycusmaximus/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Alex-Nguyen-VN/mapycusmaximus/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check.yaml](https://github.com/Alex-Nguyen-VN/mapycusmaximus/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Alex-Nguyen-VN/mapycusmaximus/actions/workflows/R-CMD-check.yaml)
 
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 

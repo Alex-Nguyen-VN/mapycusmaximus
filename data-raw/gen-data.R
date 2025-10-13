@@ -198,3 +198,13 @@ anim <- animate(
 )
 
 anim_save("fisheye_zoom_gganimate.gif", animation = anim)
+
+
+vic_fish |> ggplot() + 
+  geom_sf(aes(label = LGA_NAME)) -> plot
+
+conn_fish |> 
+  ggplot() +
+  geom_sf(aes(label = source)) -> plot
+
+plot |> plotly::ggplotly()

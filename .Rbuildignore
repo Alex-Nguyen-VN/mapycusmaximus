@@ -9,3 +9,11 @@
 ^docs$
 ^pkgdown$
 ^\.github$
+^slideshow$
+^\.Rhistory$
+^\.RData$
+^\.slideshow$
+^\.fisheye_frames$
+
+
+
