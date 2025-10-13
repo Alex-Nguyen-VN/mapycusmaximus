@@ -8,7 +8,10 @@
 <title>Applies Focus–Glue–Context Fisheye Transformations for Spatial Visualization • mapycusmaximus</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Inter-0.4.10/font.css" rel="stylesheet">
+<link href="deps/Fira_Mono-0.4.10/font.css" rel="stylesheet">
+<link href="deps/IBM_Plex_Sans-0.4.10/font.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Applies Focus–Glue–Context Fisheye Transformations for Spatial Visualization">
 <meta name="description" content="The mapycusmaximus package provides tools for applying fisheye transformations to 2D coordinates and spatial vector geometries. It implements the **Focus–Glue–Context (FGC)** model: a smooth radial distortion that enlarges a focal region, transitions through a glue ring, and preserves outside context.">
@@ -18,7 +21,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="index.html">mapycusmaximus</a>
 
@@ -31,12 +34,13 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
+<li class="active nav-item"><a class="nav-link" href="index.html">Home</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="articles/index.html">Articles</a></li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">News</a></li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><form class="form-inline" role="search">
- <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
-</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Alex-Nguyen-VN/mapycusmaximus"><span class="fa fab fa-github"></span></a></li>
       </ul>
 </div>
 
@@ -45,31 +49,51 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="fisheye">fisheye<a class="anchor" aria-label="anchor" href="#fisheye"></a>
+<div class="page-header"><h1 id="mapycusmaximus-development-version">mapycusmaximus 
+<a class="anchor" aria-label="anchor" href="#mapycusmaximus-development-version"></a>
 </h1></div>
-<!-- badges: start -->
-
-<!-- badges: end -->
-<blockquote>
-<p><strong>Focus–Glue–Context (FGC) Fisheye Transformations for R</strong></p>
-</blockquote>
-<p>I am <code>mapycusmaximus</code> — the Focus + Glue + Context package. Mapper of the vast frontiers, master of radial transformations, and loyal servant to the truth of clear data visualization. Creator of focus where there was distortion. Defender of detail where there was crowding. And I will have my clarity — in this map or the next.</p>
+<p><a href="https://github.com/Alex-Nguyen-VN/mapycusmaximus/actions" class="external-link"><img src="https://github.com/Alex-Nguyen-VN/mapycusmaximus/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a> <a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></p>
 <hr>
 <div class="section level2">
-<h2 id="id_-features">✨ Features<a class="anchor" aria-label="anchor" href="#id_-features"></a>
+<h2 id="focusgluecontext-fgc-fisheye-transformations-for-r">Focus–Glue–Context (FGC) Fisheye Transformations for R<a class="anchor" aria-label="anchor" href="#focusgluecontext-fgc-fisheye-transformations-for-r"></a>
+</h2>
+<p><code>mapycusmaximus</code> provides geometric transformations for spatial and planar data inspired by focus–context visualization principles.<br>
+The package implements the <strong>Focus–Glue–Context (FGC)</strong> model, which enlarges a region of interest (<em>focus</em>), smoothly compresses its surroundings (<em>glue</em>), and preserves the outer region (<em>context</em>).<br>
+These transformations facilitate detailed local inspection while maintaining overall spatial structure.</p>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p>Fisheye transformations are a well-established approach to visualizing dense data without losing context (Furnas 1986; Sarkar &amp; Brown 1992).<br><code>mapycusmaximus</code> extends these principles to modern spatial data workflows in R, integrating seamlessly with the <a href="https://r-spatial.github.io/sf/" class="external-link"><code>sf</code></a> ecosystem and <code>ggplot2</code> visualization grammar.</p>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="main-features">Main Features<a class="anchor" aria-label="anchor" href="#main-features"></a>
 </h2>
 <ul>
-<li>🎯 <strong>FGC transformation</strong>: Focus enlargement, glue compression, context preservation</li>
-<li>🗺️ <strong><code>sf</code> integration</strong>: Works directly on spatial geometries with automatic CRS handling</li>
-<li>📍 <strong>Flexible center specification</strong>: Choose centers in lon/lat, projected map units, normalized coords, or even from other <code>sf</code> objects</li>
-<li>🔄 <strong>Customizable parameters</strong>: Control zoom, squeeze, and optional angular twist</li>
-<li>📊 <strong>Visualization helpers</strong>: Plot original vs transformed coordinates for quick inspection</li>
-<li>⚡ <strong>Efficient implementation</strong>: Vectorized transformations, polygon rings re-closed safely</li>
+<li>
+<strong>Focus–Glue–Context transformation:</strong> smooth magnification, transition, and preservation of spatial zones.<br>
+</li>
+<li>
+<strong>Full integration with <code>sf</code>:</strong> works directly on geometries and automatically manages CRS transformation.<br>
+</li>
+<li>
+<strong>Flexible centers:</strong> numeric, geographic (<code>EPSG:4326</code>), normalized, or centroid-based.<br>
+</li>
+<li>
+<strong>Customizable parameters:</strong> control zoom, squeeze, and optional angular twist (<code>revolution</code>).<br>
+</li>
+<li>
+<strong>Visualization utilities:</strong> compare original and transformed coordinates with <a href="reference/plot_fisheye_fgc.html"><code>plot_fisheye_fgc()</code></a>.<br>
+</li>
+<li>
+<strong>Efficient implementation:</strong> vectorized operations and safe polygon re-closure.</li>
 </ul>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="id_-installation">📦 Installation<a class="anchor" aria-label="anchor" href="#id_-installation"></a>
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>Install the development version from GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -78,13 +102,13 @@
 <hr>
 </div>
 <div class="section level2">
-<h2 id="id_-quick-start">🚀 Quick Start<a class="anchor" aria-label="anchor" href="#id_-quick-start"></a>
+<h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
 <div class="section level3">
 <h3 id="basic-coordinate-transformation">Basic coordinate transformation<a class="anchor" aria-label="anchor" href="#basic-coordinate-transformation"></a>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/riatelab/fisheye" class="external-link">fisheye</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alex-nguyen-vn.github.io/mapycusmaximus/">mapycusmaximus</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/create_test_grid.html">create_test_grid</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, spacing <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
 <span></span>
@@ -98,11 +122,11 @@
 <span><span class="fu"><a href="reference/plot_fisheye_fgc.html">plot_fisheye_fgc</a></span><span class="op">(</span><span class="va">grid</span>, <span class="va">transformed</span>, r_in <span class="op">=</span> <span class="fl">0.34</span>, r_out <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="spatial-data-sf-integration">Spatial data (<code>sf</code>) integration<a class="anchor" aria-label="anchor" href="#spatial-data-sf-integration"></a>
+<h3 id="spatial-data-integration">Spatial data integration<a class="anchor" aria-label="anchor" href="#spatial-data-integration"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/riatelab/fisheye" class="external-link">fisheye</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">poly</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span></span>
@@ -115,56 +139,71 @@
 <span>  squeeze_factor <span class="op">=</span> <span class="fl">0.25</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">poly</span>, fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fisheye_poly</span>, fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">poly</span>, fill <span class="op">=</span> <span class="cn">NA</span>, colour <span class="op">=</span> <span class="st">"grey50"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fisheye_poly</span>, fill <span class="op">=</span> <span class="cn">NA</span>, colour <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
 </div>
 <div class="section level2">
-<h2 id="id_-the-focusgluecontext-model">🎯 The Focus–Glue–Context model<a class="anchor" aria-label="anchor" href="#id_-the-focusgluecontext-model"></a>
+<h2 id="the-focusgluecontext-model">The Focus–Glue–Context Model<a class="anchor" aria-label="anchor" href="#the-focusgluecontext-model"></a>
 </h2>
-<p>The FGC fisheye divides space into three radial zones:</p>
-<ul>
-<li>
-<strong>Focus zone</strong> (<code>r ≤ r_in</code>): Magnified by <code>zoom_factor</code>, but clamped to the inner radius</li>
-<li>
-<strong>Glue zone</strong> (<code>r_in &lt; r ≤ r_out</code>): Smooth transition with compression controlled by <code>squeeze_factor</code>
-</li>
-<li>
-<strong>Context zone</strong> (<code>r &gt; r_out</code>): Remains unchanged</li>
-</ul>
+<p>The transformation divides space into three radial zones:</p>
 <table class="table">
 <colgroup>
-<col width="21%">
-<col width="54%">
-<col width="13%">
-<col width="10%">
+<col width="22%">
+<col width="48%">
+<col width="29%">
 </colgroup>
 <thead><tr class="header">
+<th>Zone</th>
+<th>Definition</th>
+<th>Effect</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Focus</strong></td>
+<td><code>r ≤ r_in</code></td>
+<td>Enlarged by <code>zoom_factor</code>
+</td>
+</tr>
+<tr class="even">
+<td><strong>Glue</strong></td>
+<td><code>r_in &lt; r ≤ r_out</code></td>
+<td>Smooth compression controlled by <code>squeeze_factor</code>
+</td>
+</tr>
+<tr class="odd">
+<td><strong>Context</strong></td>
+<td><code>r &gt; r_out</code></td>
+<td>Retains original geometry</td>
+</tr>
+</tbody>
+</table>
+<table class="table">
+<thead><tr class="header">
 <th>Parameter</th>
-<th>Meaning</th>
+<th>Description</th>
 <th>Default</th>
 <th>Range</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td><code>r_in</code></td>
-<td>Focus radius (normalized units)</td>
+<td>Focus radius</td>
 <td>0.34</td>
 <td>&gt; 0</td>
 </tr>
 <tr class="even">
 <td><code>r_out</code></td>
-<td>Glue radius (normalized units)</td>
+<td>Outer radius</td>
 <td>0.50</td>
 <td>&gt; <code>r_in</code>
 </td>
 </tr>
 <tr class="odd">
 <td><code>zoom_factor</code></td>
-<td>Focus magnification</td>
+<td>Magnification factor</td>
 <td>1.5</td>
 <td>&gt; 1</td>
 </tr>
@@ -176,14 +215,14 @@
 </tr>
 <tr class="odd">
 <td><code>method</code></td>
-<td>Glue strategy (<code>"expand"</code> / <code>"outward"</code>)</td>
+<td>Strategy (<code>"expand"</code> / <code>"outward"</code>)</td>
 <td><code>"expand"</code></td>
 <td>string</td>
 </tr>
 <tr class="even">
 <td><code>revolution</code></td>
 <td>Angular twist (radians)</td>
-<td>0.0</td>
+<td>0</td>
 <td>any</td>
 </tr>
 </tbody>
@@ -191,37 +230,39 @@
 <hr>
 </div>
 <div class="section level2">
-<h2 id="id_️-flexible-centers--crs-handling">🗺️ Flexible centers &amp; CRS handling<a class="anchor" aria-label="anchor" href="#id_%EF%B8%8F-flexible-centers--crs-handling"></a>
+<h2 id="coordinate-system-handling">Coordinate System Handling<a class="anchor" aria-label="anchor" href="#coordinate-system-handling"></a>
 </h2>
-<p><code><a href="reference/sf_fisheye.html">sf_fisheye()</a></code> automatically handles coordinate systems:</p>
+<p><a href="reference/sf_fisheye.html"><code>sf_fisheye()</code></a> automatically manages coordinate reference systems:</p>
 <ul>
-<li>Geographic data → projected to suitable UTM/MGA zone (auto-picked from centroid)</li>
-<li>Victoria, AU → <strong>EPSG:7855</strong> (GDA2020 / MGA Zone 55)</li>
-<li>Already projected → left unchanged</li>
-<li>Manual override → <code>target_crs</code>
+<li>
+<strong>Geographic data:</strong> projected to a suitable UTM/MGA zone (e.g. EPSG:7855 for Victoria, AU).<br>
 </li>
+<li>
+<strong>Projected data:</strong> used directly.<br>
+</li>
+<li>
+<strong>Manual override:</strong> specify <code>target_crs</code>.</li>
 </ul>
-<p><strong>Center specification options:</strong></p>
+<div class="section level3">
+<h3 id="center-specification">Center specification<a class="anchor" aria-label="anchor" href="#center-specification"></a>
+</h3>
 <ul>
-<li>
-<code>center = c(lon, lat)</code> with <code>center_crs = "EPSG:4326"</code>
+<li>Numeric: <code>center = c(x, y)</code> (map units)<br>
 </li>
-<li>
-<code>center = c(x, y)</code> already in map units</li>
-<li>
-<code>center = c(nx, ny)</code> in normalized space (<code>[-1,1]</code>), with <code>normalized_center = TRUE</code>
+<li>Geographic: <code>center_crs = "EPSG:4326"</code><br>
 </li>
-<li>
-<code>center = sf_object</code> — centroid of any geometry is used (polygon, line, point collection, etc.)</li>
-<li>Legacy: <code>cx, cy</code> numeric in map units</li>
+<li>Normalized: <code>center = c(nx, ny)</code>, <code>normalized_center = TRUE</code><br>
+</li>
+<li>Geometry input: <code>center = sf_object</code> (centroid is used)</li>
 </ul>
 <hr>
 </div>
+</div>
 <div class="section level2">
-<h2 id="id_-advanced-usage">🔧 Advanced usage<a class="anchor" aria-label="anchor" href="#id_-advanced-usage"></a>
+<h2 id="advanced-usage">Advanced Usage<a class="anchor" aria-label="anchor" href="#advanced-usage"></a>
 </h2>
 <div class="section level3">
-<h3 id="use-another-sf-object-as-center">Use another <code>sf</code> object as center<a class="anchor" aria-label="anchor" href="#use-another-sf-object-as-center"></a>
+<h3 id="using-an-sf-object-as-the-center">Using an <code>sf</code> object as the center<a class="anchor" aria-label="anchor" href="#using-an-sf-object-as-the-center"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">melb_poly</span> <span class="op">&lt;-</span> <span class="va">suburbs</span><span class="op">[</span><span class="va">suburbs</span><span class="op">$</span><span class="va">name</span> <span class="op">==</span> <span class="st">"Melbourne"</span>, <span class="op">]</span></span>
@@ -231,16 +272,15 @@
 <h3 id="normalized-center-input">Normalized center input<a class="anchor" aria-label="anchor" href="#normalized-center-input"></a>
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Center at +0.2, -0.1 relative to bbox, normalized space</span></span>
-<span><span class="va">fisheye_vic</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="op">-</span><span class="fl">0.1</span><span class="op">)</span>, normalized_center <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fisheye_vic</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="op">-</span><span class="fl">0.1</span><span class="op">)</span>, normalized_center <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="geographic-lonlat-input">Geographic lon/lat input<a class="anchor" aria-label="anchor" href="#geographic-lonlat-input"></a>
+<h3 id="geographic-center">Geographic center<a class="anchor" aria-label="anchor" href="#geographic-center"></a>
 </h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fisheye_cbd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span></span>
 <span>  <span class="va">vic</span>,</span>
-<span>  center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">144.9631</span>, <span class="op">-</span><span class="fl">37.8136</span><span class="op">)</span>,  <span class="co"># Melbourne CBD</span></span>
+<span>  center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">144.9631</span>, <span class="op">-</span><span class="fl">37.8136</span><span class="op">)</span>,</span>
 <span>  center_crs <span class="op">=</span> <span class="st">"EPSG:4326"</span>,</span>
 <span>  r_in <span class="op">=</span> <span class="fl">0.2</span>, r_out <span class="op">=</span> <span class="fl">0.5</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -258,92 +298,107 @@
 <span>  transform_fun <span class="op">=</span> <span class="va">shift_and_scale</span>,</span>
 <span>  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="fl">1.5</span>, shift_x <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="geographic-data-with-auto-projection">Geographic Data with Auto-Projection<a class="anchor" aria-label="anchor" href="#geographic-data-with-auto-projection"></a>
-</h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Automatically projects to appropriate CRS, applies fisheye, returns to WGS84</span></span>
-<span><span class="fu"><a href="reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">vic</span>, cx <span class="op">=</span> <span class="fl">321300</span>, cy <span class="op">=</span> <span class="fl">5812000</span>, r_in <span class="op">=</span> <span class="fl">0.15</span>, r_out <span class="op">=</span> <span class="fl">0.2</span>, zoom_factor <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="zone-classification-and-analysis">Zone Classification and Analysis<a class="anchor" aria-label="anchor" href="#zone-classification-and-analysis"></a>
-</h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Classify points by transformation zone</span></span>
-<span><span class="va">coords</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">200</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">zones</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/classify_zones.html">classify_zones</a></span><span class="op">(</span><span class="va">coords</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">zones</span><span class="op">)</span></span>
-<span><span class="co">#&gt; zones</span></span>
-<span><span class="co">#&gt; context   focus    glue </span></span>
-<span><span class="co">#&gt;      74      5      21</span></span></code></pre></div>
 <hr>
 </div>
 </div>
 <div class="section level2">
 <h2 id="supported-geometries">Supported Geometries<a class="anchor" aria-label="anchor" href="#supported-geometries"></a>
 </h2>
-<p>The package supports all major sf geometry types:</p>
+<p><code>mapycusmaximus</code> supports the following <code>sf</code> geometry types:</p>
 <ul>
-<li>✅ <code>POINT</code> / <code>MULTIPOINT</code>
+<li>
+<code>POINT</code>, <code>MULTIPOINT</code><br>
 </li>
-<li>✅ <code>LINESTRING</code> / <code>MULTILINESTRING</code><br>
+<li>
+<code>LINESTRING</code>, <code>MULTILINESTRING</code><br>
 </li>
-<li>✅ <code>POLYGON</code> / <code>MULTIPOLYGON</code>
+<li>
+<code>POLYGON</code>, <code>MULTIPOLYGON</code><br>
 </li>
-<li>✅ Mixed geometry collections</li>
+<li>Geometry collections</li>
 </ul>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="id_-performance-tips">⚡ Performance tips<a class="anchor" aria-label="anchor" href="#id_-performance-tips"></a>
+<h2 id="performance-notes">Performance Notes<a class="anchor" aria-label="anchor" href="#performance-notes"></a>
 </h2>
 <ul>
-<li>Use <code>preserve_aspect = FALSE</code> if stretching is acceptable (faster)</li>
-<li>Large datasets: consider chunking / spatial indexing</li>
-<li>Stronger <code>squeeze_factor</code> makes glue computations heavier</li>
+<li>Set <code>preserve_aspect = FALSE</code> to allow stretching and improve performance.<br>
+</li>
+<li>For large datasets, apply the transformation in spatial chunks.<br>
+</li>
+<li>Stronger compression (<code>squeeze_factor</code> → small) increases computational cost.</li>
 </ul>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="id_-citation">📚 Citation<a class="anchor" aria-label="anchor" href="#id_-citation"></a>
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<ul>
+<li>Furnas, G. W. (1986). <em>Generalized Fisheye Views</em>. <em>Proceedings CHI’86</em>, 16–23.<br>
+</li>
+<li>Sarkar, M., &amp; Brown, M. H. (1992). <em>Graphical Fisheye Views of Graphs</em>. <em>Proceedings CHI’92</em>, 83–91.<br>
+</li>
+<li>Laa, U., Cook, D., &amp; Lee, S. (2020). <em>Burning Sage: Reversing the Curse of Dimensionality in Visualization</em>. <em>arXiv:2009.10979</em>.</li>
+</ul>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="package-dependencies">Package Dependencies<a class="anchor" aria-label="anchor" href="#package-dependencies"></a>
+</h2>
+<p><strong>Imports</strong></p>
+<ul>
+<li>
+<code>sf</code> (≥ 1.0.0)<br>
+</li>
+<li>
+<code>ggplot2</code> (≥ 3.0.0)<br>
+</li>
+<li><code>dplyr</code></li>
+</ul>
+<p><strong>Suggests</strong></p>
+<ul>
+<li>
+<code>rmapshaper</code>, <code>tmap</code>, <code>testthat</code>, <code>knitr</code>, <code>rmarkdown</code>
+</li>
+</ul>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h2>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"mapycusmaximus"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="dependencies">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies"></a>
-</h2>
-<p><strong>Required:</strong> - R (≥ 3.6.0)</p>
-<p><strong>Suggested:</strong> - sf (≥ 1.0.0) - for spatial data support - ggplot2 (≥ 3.0.0) - for visualization functions</p>
+<hr>
 </div>
 <div class="section level2">
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
 </h2>
-<p>Contributions are welcome! Please see our <a href="CONTRIBUTING.html">Contributing Guide</a> for details.</p>
+<p>Contributions are encouraged. To contribute:</p>
 <ol style="list-style-type: decimal">
-<li>Fork the repository</li>
-<li>Create a feature branch (<code>git checkout -b feature/amazing-feature</code>)</li>
-<li>Commit your changes (<code>git commit -m 'Add amazing feature'</code>)</li>
-<li>Push to the branch (<code>git push origin feature/amazing-feature</code>)</li>
-<li><h2 id="open-a-pull-request">Open a Pull Request</h2></li>
+<li><p>Fork the repository.<br></p></li>
+<li>
+<p>Create a feature branch:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> feature/your-feature</span></code></pre></div>
+</li>
+<li><p>Commit and push changes.<br></p></li>
+<li><p>Submit a pull request with a concise summary.</p></li>
 </ol>
-</div>
-<div class="section level2">
-<h2 id="id_-license">📜 License<a class="anchor" aria-label="anchor" href="#id_-license"></a>
-</h2>
-<p>MIT License – see <a href="LICENSE">LICENSE</a>.</p>
+<p>Please see <a href="CONTRIBUTING.html">CONTRIBUTING.md</a> for details.</p>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="id_-acknowledgments">🙏 Acknowledgments<a class="anchor" aria-label="anchor" href="#id_-acknowledgments"></a>
+<h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
 </h2>
-<ul>
-<li>The <strong>sf</strong> package maintainers for the spatial infrastructure</li>
-<li>The R spatial community for discussion &amp; feedback</li>
-<li>Research in <strong>focus+context visualization</strong> for conceptual foundations</li>
-</ul>
+<p>Licensed under the <strong>MIT License</strong>.<br>
+See <a href="LICENSE">LICENSE</a> for the complete text.</p>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
+</h2>
+<p>We acknowledge the developers of <strong>sf</strong>, <strong>ggplot2</strong>, and the R spatial community for providing the computational and theoretical foundation enabling this work.<br>
+Conceptual inspiration draws from research on focus–context visualization and the <em>burning-sage</em> transformation for reversin</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
@@ -365,24 +420,19 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Alex Nguyen <br><small class="roles"> Author, maintainer </small>   </li>
+<li>
+<a href="https://github.com/Alex-Nguyen-VN" class="external-link">Alex Nguyen</a> <br><small class="roles"> Author, maintainer </small>   </li>
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://github.com/Alex-Nguyen-VN/mapycusmaximus/actions" class="external-link"><img src="https://github.com/Alex-Nguyen-VN/mapycusmaximus/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-</ul>
-</div>
+
 
   </aside>
 </div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Alex Nguyen.</p>
+  <p>Developed by <a href="https://github.com/Alex-Nguyen-VN" class="external-link">Alex Nguyen</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
