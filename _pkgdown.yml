@@ -1,4 +1,64 @@
-url: https://alex-nguyen-vn.github.io/mapycusmaximus/
+# _pkgdown.yml
+
 template:
   bootstrap: 5
+  bslib:
+    primary: "#4B6A9B"
+    base_font: {google: "Inter"}
+    heading_font: {google: "IBM Plex Sans"}
+    code_font: {google: "Fira Mono"}
+  bootswatch: flatly
 
+navbar:
+  structure:
+    left: [home, reference, articles, news]
+    right: [github]
+  components:
+    home:
+      text: "Home"
+      href: index.html
+    reference:
+      text: "Reference"
+      href: reference/index.html
+    articles:
+      text: "Articles"
+      href: articles/index.html
+    news:
+      text: "News"
+      href: news/index.html
+    github:
+      icon: fab fa-github
+      href: https://github.com/Alex-Nguyen-VN/mapycusmaximus
+
+reference:
+  - title: "Core Transformation Functions"
+    contents:
+      - fisheye_fgc
+      - sf_fisheye
+      - classify_zones
+  - title: "Visualization Utilities"
+    contents:
+      - plot_fisheye_fgc
+      - create_test_grid
+  - title: "Spatial Transformation Tools"
+    contents:
+      - st_transform_custom
+  - title: "Helper Functions"
+    contents:
+      - focus_glue_context
+      - normalize_coords
+      - denormalize_coords
+
+articles:
+  - title: "Vignettes"
+    navbar: ~
+    contents:
+      - articles/intro_fisheye
+      - articles/spatial_examples
+      - articles/performance_tips
+
+authors:
+  Alex Nguyen:
+    href: https://github.com/Alex-Nguyen-VN
+
+url: https://alex-nguyen-vn.github.io/mapycusmaximus/

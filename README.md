@@ -1,30 +1,37 @@
-# fisheye
-
-<!-- badges: start -->
+# mapycusmaximus <a href="https://github.com/Alex-Nguyen-VN/mapycusmaximus" class="pkgdown-release">Development Version</a>
 
 [![R-CMD-check](https://github.com/Alex-Nguyen-VN/mapycusmaximus/workflows/R-CMD-check/badge.svg)](https://github.com/Alex-Nguyen-VN/mapycusmaximus/actions)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 
-<!-- badges: end -->
+---
 
-> **Focus–Glue–Context (FGC) Fisheye Transformations for R**
+## Focus–Glue–Context (FGC) Fisheye Transformations for R
 
-I am `mapycusmaximus` — the Focus + Glue + Context package. Mapper of the vast frontiers, master of radial transformations, and loyal servant to the truth of clear data visualization. Creator of focus where there was distortion. Defender of detail where there was crowding. And I will have my clarity — in this map or the next.
+`mapycusmaximus` provides geometric transformations for spatial and planar data inspired by focus–context visualization principles.  
+The package implements the **Focus–Glue–Context (FGC)** model, which enlarges a region of interest (*focus*), smoothly compresses its surroundings (*glue*), and preserves the outer region (*context*).  
+These transformations facilitate detailed local inspection while maintaining overall spatial structure.
 
 ---
 
-## ✨ Features
+## Overview
 
-* 🎯 **FGC transformation**: Focus enlargement, glue compression, context preservation
-* 🗺️ **`sf` integration**: Works directly on spatial geometries with automatic CRS handling
-* 📍 **Flexible center specification**: Choose centers in lon/lat, projected map units, normalized coords, or even from other `sf` objects
-* 🔄 **Customizable parameters**: Control zoom, squeeze, and optional angular twist
-* 📊 **Visualization helpers**: Plot original vs transformed coordinates for quick inspection
-* ⚡ **Efficient implementation**: Vectorized transformations, polygon rings re-closed safely
+Fisheye transformations are a well-established approach to visualizing dense data without losing context (Furnas 1986; Sarkar & Brown 1992).  
+`mapycusmaximus` extends these principles to modern spatial data workflows in R, integrating seamlessly with the [`sf`](https://r-spatial.github.io/sf/) ecosystem and `ggplot2` visualization grammar.
 
 ---
 
-## 📦 Installation
+## Main Features
+
+- **Focus–Glue–Context transformation:** smooth magnification, transition, and preservation of spatial zones.  
+- **Full integration with `sf`:** works directly on geometries and automatically manages CRS transformation.  
+- **Flexible centers:** numeric, geographic (`EPSG:4326`), normalized, or centroid-based.  
+- **Customizable parameters:** control zoom, squeeze, and optional angular twist (`revolution`).  
+- **Visualization utilities:** compare original and transformed coordinates with [`plot_fisheye_fgc()`](reference/plot_fisheye_fgc.html).  
+- **Efficient implementation:** vectorized operations and safe polygon re-closure.
+
+---
+
+## Installation
 
 Install the development version from GitHub:
 
@@ -35,12 +42,12 @@ devtools::install_github("Alex-Nguyen-VN/mapycusmaximus")
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Basic coordinate transformation
 
 ```r
-library(fisheye)
+library(mapycusmaximus)
 
 grid <- create_test_grid(range = c(-1, 1), spacing = 0.1)
 
@@ -54,11 +61,11 @@ transformed <- fisheye_fgc(
 plot_fisheye_fgc(grid, transformed, r_in = 0.34, r_out = 0.5)
 ```
 
-### Spatial data (`sf`) integration
+### Spatial data integration
 
 ```r
 library(sf)
-library(fisheye)
+library(ggplot2)
 
 poly <- st_sfc(st_polygon(list(rbind(
   c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)
@@ -71,55 +78,54 @@ fisheye_poly <- sf_fisheye(
   squeeze_factor = 0.25
 )
 
-library(ggplot2)
 ggplot() +
-  geom_sf(data = poly, fill = NA, color = "grey") +
-  geom_sf(data = fisheye_poly, fill = NA, color = "red")
+  geom_sf(data = poly, fill = NA, colour = "grey50") +
+  geom_sf(data = fisheye_poly, fill = NA, colour = "red")
 ```
 
 ---
 
-## 🎯 The Focus–Glue–Context model
+## The Focus–Glue–Context Model
 
-The FGC fisheye divides space into three radial zones:
+The transformation divides space into three radial zones:
 
-* **Focus zone** (`r ≤ r_in`): Magnified by `zoom_factor`, but clamped to the inner radius
-* **Glue zone** (`r_in < r ≤ r_out`): Smooth transition with compression controlled by `squeeze_factor`
-* **Context zone** (`r > r_out`): Remains unchanged
+| Zone | Definition | Effect |
+|------|-------------|--------|
+| **Focus** | `r ≤ r_in` | Enlarged by `zoom_factor` |
+| **Glue** | `r_in < r ≤ r_out` | Smooth compression controlled by `squeeze_factor` |
+| **Context** | `r > r_out` | Retains original geometry |
 
-| Parameter        | Meaning                                  | Default    | Range    |
-| ---------------- | ---------------------------------------- | ---------- | -------- |
-| `r_in`           | Focus radius (normalized units)          | 0.34       | > 0      |
-| `r_out`          | Glue radius (normalized units)           | 0.50       | > `r_in` |
-| `zoom_factor`    | Focus magnification                      | 1.5        | > 1      |
-| `squeeze_factor` | Glue compression                         | 0.3        | (0, 1]   |
-| `method`         | Glue strategy (`"expand"` / `"outward"`) | `"expand"` | string   |
-| `revolution`     | Angular twist (radians)                  | 0.0        | any      |
-
----
-
-## 🗺️ Flexible centers & CRS handling
-
-`sf_fisheye()` automatically handles coordinate systems:
-
-* Geographic data → projected to suitable UTM/MGA zone (auto-picked from centroid)
-* Victoria, AU → **EPSG:7855** (GDA2020 / MGA Zone 55)
-* Already projected → left unchanged
-* Manual override → `target_crs`
-
-**Center specification options:**
-
-* `center = c(lon, lat)` with `center_crs = "EPSG:4326"`
-* `center = c(x, y)` already in map units
-* `center = c(nx, ny)` in normalized space (`[-1,1]`), with `normalized_center = TRUE`
-* `center = sf_object` — centroid of any geometry is used (polygon, line, point collection, etc.)
-* Legacy: `cx, cy` numeric in map units
+| Parameter | Description | Default | Range |
+|------------|-------------|----------|-------|
+| `r_in` | Focus radius | 0.34 | > 0 |
+| `r_out` | Outer radius | 0.50 | > `r_in` |
+| `zoom_factor` | Magnification factor | 1.5 | > 1 |
+| `squeeze_factor` | Glue compression | 0.3 | (0, 1] |
+| `method` | Strategy (`"expand"` / `"outward"`) | `"expand"` | string |
+| `revolution` | Angular twist (radians) | 0 | any |
 
 ---
 
-## 🔧 Advanced usage
+## Coordinate System Handling
 
-### Use another `sf` object as center
+[`sf_fisheye()`](reference/sf_fisheye.html) automatically manages coordinate reference systems:
+
+- **Geographic data:** projected to a suitable UTM/MGA zone (e.g. EPSG:7855 for Victoria, AU).  
+- **Projected data:** used directly.  
+- **Manual override:** specify `target_crs`.
+
+### Center specification
+
+- Numeric: `center = c(x, y)` (map units)  
+- Geographic: `center_crs = "EPSG:4326"`  
+- Normalized: `center = c(nx, ny)`, `normalized_center = TRUE`  
+- Geometry input: `center = sf_object` (centroid is used)
+
+---
+
+## Advanced Usage
+
+### Using an `sf` object as the center
 
 ```r
 melb_poly <- suburbs[suburbs$name == "Melbourne", ]
@@ -129,16 +135,15 @@ fisheye_vic <- sf_fisheye(vic, center = melb_poly)
 ### Normalized center input
 
 ```r
-# Center at +0.2, -0.1 relative to bbox, normalized space
 fisheye_vic <- sf_fisheye(vic, center = c(0.2, -0.1), normalized_center = TRUE)
 ```
 
-### Geographic lon/lat input
+### Geographic center
 
 ```r
 fisheye_cbd <- sf_fisheye(
   vic,
-  center = c(144.9631, -37.8136),  # Melbourne CBD
+  center = c(144.9631, -37.8136),
   center_crs = "EPSG:4326",
   r_in = 0.2, r_out = 0.5
 )
@@ -158,83 +163,81 @@ transformed <- st_transform_custom(
 )
 ```
 
-### Geographic Data with Auto-Projection
-
-```r
-# Automatically projects to appropriate CRS, applies fisheye, returns to WGS84
-sf_fisheye(vic, cx = 321300, cy = 5812000, r_in = 0.15, r_out = 0.2, zoom_factor = 3) |> ggplot() + geom_sf()
-```
-
-### Zone Classification and Analysis
-
-```r
-# Classify points by transformation zone
-coords <- matrix(runif(200, -1, 1), ncol = 2)
-zones <- classify_zones(coords, r_in = 0.3, r_out = 0.6)
-
-table(zones)
-#> zones
-#> context   focus    glue 
-#>      74      5      21
-```
-
-
-
 ---
 
 ## Supported Geometries
 
-The package supports all major sf geometry types:
+`mapycusmaximus` supports the following `sf` geometry types:
 
-- ✅ `POINT` / `MULTIPOINT`
-- ✅ `LINESTRING` / `MULTILINESTRING`  
-- ✅ `POLYGON` / `MULTIPOLYGON`
-- ✅ Mixed geometry collections
-
----
-
-## ⚡ Performance tips
-
-* Use `preserve_aspect = FALSE` if stretching is acceptable (faster)
-* Large datasets: consider chunking / spatial indexing
-* Stronger `squeeze_factor` makes glue computations heavier
+- `POINT`, `MULTIPOINT`  
+- `LINESTRING`, `MULTILINESTRING`  
+- `POLYGON`, `MULTIPOLYGON`  
+- Geometry collections
 
 ---
 
-## 📚 Citation
+## Performance Notes
+
+- Set `preserve_aspect = FALSE` to allow stretching and improve performance.  
+- For large datasets, apply the transformation in spatial chunks.  
+- Stronger compression (`squeeze_factor` → small) increases computational cost.
+
+---
+
+## References
+
+- Furnas, G. W. (1986). *Generalized Fisheye Views*. *Proceedings CHI’86*, 16–23.  
+- Sarkar, M., & Brown, M. H. (1992). *Graphical Fisheye Views of Graphs*. *Proceedings CHI’92*, 83–91.  
+- Laa, U., Cook, D., & Lee, S. (2020). *Burning Sage: Reversing the Curse of Dimensionality in Visualization*. *arXiv:2009.10979*.
+
+---
+
+## Package Dependencies
+
+**Imports**
+
+- `sf` (≥ 1.0.0)  
+- `ggplot2` (≥ 3.0.0)  
+- `dplyr`
+
+**Suggests**
+
+- `rmapshaper`, `tmap`, `testthat`, `knitr`, `rmarkdown`
+
+---
+
+## Citation
 
 ```r
 citation("mapycusmaximus")
 ```
-## Dependencies
 
-**Required:**
-- R (≥ 3.6.0)
-
-**Suggested:**
-- sf (≥ 1.0.0) - for spatial data support
-- ggplot2 (≥ 3.0.0) - for visualization functions
+---
 
 ## Contributing
 
-Contributions are welcome! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+Contributions are encouraged. To contribute:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. Fork the repository.  
+2. Create a feature branch:  
+   ```bash
+   git checkout -b feature/your-feature
+   ```
+3. Commit and push changes.  
+4. Submit a pull request with a concise summary.
+
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
 ---
 
-## 📜 License
+## License
 
-MIT License – see [LICENSE](LICENSE).
+Licensed under the **MIT License**.  
+See [LICENSE](LICENSE) for the complete text.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgements
 
-* The **sf** package maintainers for the spatial infrastructure
-* The R spatial community for discussion & feedback
-* Research in **focus+context visualization** for conceptual foundations
-
+We acknowledge the developers of **sf**, **ggplot2**, and the R spatial community for providing the computational and theoretical foundation enabling this work.  
+Conceptual inspiration draws from research on focus–context visualization and the *burning-sage* transformation for reversin
