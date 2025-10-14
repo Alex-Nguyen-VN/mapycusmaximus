@@ -109,95 +109,107 @@
 #' @export
 
 
-sf_fisheye <- function(sf_obj,
-  center = NULL,          # accepts c(lon,lat), c(x,y in map units), normalized pair, or sf/sfc POINT
-  center_crs = NULL,      # e.g. "EPSG:4326"; if NULL we auto-guess (lon/lat vs map units)
+sf_fisheye <- function(
+  sf_obj,
+  center = NULL,              # accepts c(lon,lat), c(x,y in map units), normalized pair, or sf/sfc POINT
+  center_crs = NULL,          # e.g. "EPSG:4326"; if NULL we auto-guess (lon/lat vs map units)
   normalized_center = FALSE,  # TRUE if 'center' is in [-1,1] normalized coords
-  cx = NULL, cy = NULL,   # legacy map-unit center still supported; ignored if 'center' given
+  cx = NULL, cy = NULL,       # legacy map-unit center still supported; ignored if 'center' given
   r_in = 0.34, r_out = 0.5,
-  zoom_factor = 1.5, squeeze_factor = 0.35,
+  zoom_factor = 1.5,
+  squeeze_factor = 0.35,
   method = "expand",
   revolution = 0.0,
   target_crs = NULL,
-  preserve_aspect = TRUE) {
+  preserve_aspect = TRUE
+) {
+  stopifnot(r_out > r_in)
+  stopifnot(inherits(sf_obj, c("sf", "sfc")))
 
-stopifnot(r_out > r_in)
-stopifnot(inherits(sf_obj, c("sf", "sfc")))
-if (inherits(sf_obj, "sf")) sf_obj <- sf_obj[!sf::st_is_empty(sf_obj), ]
+  if (inherits(sf_obj, "sf")) {
+    sf_obj <- sf_obj[!sf::st_is_empty(sf_obj), ]
+  }
 
-sf_obj <- sf::st_zm(sf_obj, drop = TRUE, what = "ZM")
+  sf_obj <- sf::st_zm(sf_obj, drop = TRUE, what = "ZM")
 
-# --- choose working CRS (projected) ---
-original_crs <- sf::st_crs(sf_obj)
-if (!is.null(target_crs)) {
-sf_obj <- sf::st_transform(sf_obj, target_crs)
-} else if (sf::st_is_longlat(sf_obj)) {
-bb <- sf::st_bbox(sf_obj)
-lon_center <- (bb["xmin"] + bb["xmax"])/2
-lat_center <- (bb["ymin"] + bb["ymax"])/2
-if (lon_center > 140 && lon_center < 150 && lat_center > -40 && lat_center < -30) {
-sf_obj <- sf::st_transform(sf_obj, "EPSG:7855")  # GDA2020 / MGA Zone 55
-} else {
-utm_zone <- floor((lon_center + 180)/6) + 1
-epsg <- if (lat_center >= 0) paste0("EPSG:", 32600 + utm_zone) else paste0("EPSG:", 32700 + utm_zone)
-sf_obj <- sf::st_transform(sf_obj, epsg)
-}
-}
-working_crs <- sf::st_crs(sf_obj)
+  # --- choose working CRS (projected) ---
+  original_crs <- sf::st_crs(sf_obj)
 
-# --- bbox + scale ---
-bb <- sf::st_bbox(sf_obj)
-sx <- (bb["xmax"] - bb["xmin"])/2; if (sx == 0) sx <- 1
-sy <- (bb["ymax"] - bb["ymin"])/2; if (sy == 0) sy <- 1
-s <- max(sx, sy)
-norm_fun <- if (preserve_aspect) {
-  function(M, cxy) cbind((M[,1] - cxy[1]) / s,  (M[,2] - cxy[2]) / s)
-} else {
-  function(M, cxy) cbind((M[,1] - cxy[1]) / sx, (M[,2] - cxy[2]) / sy)
-}
+  if (!is.null(target_crs)) {
+    sf_obj <- sf::st_transform(sf_obj, target_crs)
 
-denorm_fun <- if (preserve_aspect) {
-  function(M, cxy) cbind(cxy[1] + M[,1] * s,  cxy[2] + M[,2] * s)
-} else {
-  function(M, cxy) cbind(cxy[1] + M[,1] * sx, cxy[2] + M[,2] * sy)
-}
+  } else if (sf::st_is_longlat(sf_obj)) {
+    bb <- sf::st_bbox(sf_obj)
+    lon_center <- (bb["xmin"] + bb["xmax"]) / 2
+    lat_center <- (bb["ymin"] + bb["ymax"]) / 2
 
-# --- resolve center precedence ---
-# 1) center (flexible) > 2) cx,cy (map units) > 3) bbox center
-if (!is.null(center)) {
-cxy <- .resolve_center(center, center_crs, working_crs, bb, preserve_aspect, normalized_center)
-} else {
-if (is.null(cx) || is.null(cy)) {
-cxy <- c((bb["xmin"] + bb["xmax"])/2, (bb["ymin"] + bb["ymax"])/2)
-} else {
-cxy <- c(cx, cy)
-}
-}
+    if (lon_center > 140 && lon_center < 150 && lat_center > -40 && lat_center < -30) {
+      sf_obj <- sf::st_transform(sf_obj, "EPSG:7855")  # GDA2020 / MGA Zone 55
+    } else {
+      utm_zone <- floor((lon_center + 180) / 6) + 1
+      epsg <- if (lat_center >= 0) {
+        paste0("EPSG:", 32600 + utm_zone)
+      } else {
+        paste0("EPSG:", 32700 + utm_zone)
+      }
+      sf_obj <- sf::st_transform(sf_obj, epsg)
+    }
+  }
 
-# --- fisheye wrapper: normalize around cxy -> fisheye -> denormalize
-base_args <- list(cx = 0, cy = 0, r_in = r_in, r_out = r_out,
-zoom_factor = zoom_factor, squeeze_factor = squeeze_factor,
-method = method, revolution = revolution)
+  working_crs <- sf::st_crs(sf_obj)
 
-if (preserve_aspect) {
-wrapped_fisheye <- function(coords, ...) {
-M <- as.matrix(coords[,1:2, drop = TRUE])
-N <- norm_fun(M, cxy)
-T <- do.call(fisheye_fgc, c(list(N), base_args))
-denorm_fun(T, cxy)
-}
-} else {
-wrapped_fisheye <- function(coords, ...) {
-M <- as.matrix(coords[,1:2, drop = TRUE])
-N <- norm_fun(M, cxy)
-T <- do.call(fisheye_fgc, c(list(N), base_args))
-denorm_fun(T, cxy)
-}
-}
+  # --- bbox + scale ---
+  bb <- sf::st_bbox(sf_obj)
+  sx <- (bb["xmax"] - bb["xmin"]) / 2; if (sx == 0) sx <- 1
+  sy <- (bb["ymax"] - bb["ymin"]) / 2; if (sy == 0) sy <- 1
+  s  <- max(sx, sy)
 
-out <- st_transform_custom(sf_obj, transform_fun = wrapped_fisheye, args = list())
-if (!identical(sf::st_crs(out), original_crs)) out <- sf::st_transform(out, original_crs)
-out
+  norm_fun <- if (preserve_aspect) {
+    function(M, cxy) cbind((M[, 1] - cxy[1]) / s,  (M[, 2] - cxy[2]) / s)
+  } else {
+    function(M, cxy) cbind((M[, 1] - cxy[1]) / sx, (M[, 2] - cxy[2]) / sy)
+  }
+
+  denorm_fun <- if (preserve_aspect) {
+    function(M, cxy) cbind(cxy[1] + M[, 1] * s,  cxy[2] + M[, 2] * s)
+  } else {
+    function(M, cxy) cbind(cxy[1] + M[, 1] * sx, cxy[2] + M[, 2] * sy)
+  }
+
+  # --- resolve center precedence ---
+  if (!is.null(center)) {
+    cxy <- .resolve_center(center, center_crs, working_crs, bb,
+                           preserve_aspect, normalized_center)
+  } else {
+    if (is.null(cx) || is.null(cy)) {
+      cxy <- c((bb["xmin"] + bb["xmax"]) / 2, (bb["ymin"] + bb["ymax"]) / 2)
+    } else {
+      cxy <- c(cx, cy)
+    }
+  }
+
+  # --- fisheye wrapper ---
+  base_args <- list(
+    cx = 0, cy = 0,
+    r_in = r_in, r_out = r_out,
+    zoom_factor = zoom_factor,
+    squeeze_factor = squeeze_factor,
+    method = method,
+    revolution = revolution
+  )
+
+  wrapped_fisheye <- function(coords, ...) {
+    M <- as.matrix(coords[, 1:2, drop = FALSE])
+    N <- norm_fun(M, cxy)
+    T <- do.call(fisheye_fgc, c(list(N), base_args))
+    denorm_fun(T, cxy)
+  }
+
+  out <- st_transform_custom(sf_obj, transform_fun = wrapped_fisheye, args = list())
+  if (!identical(sf::st_crs(out), original_crs)) {
+    out <- sf::st_transform(out, original_crs)
+  }
+  out
 }
 
 
@@ -248,62 +260,72 @@ out
 #' @noRd
 
 
-.resolve_center <- function(center, center_crs, working_crs,
-  bbox, preserve_aspect, normalized_center) {
-# Fallback = bbox center
-cx0 <- (bbox["xmin"] + bbox["xmax"])/2
-cy0 <- (bbox["ymin"] + bbox["ymax"])/2
-if (is.null(center)) return(c(cx0, cy0))
+.resolve_center <- function(
+  center,
+  center_crs,
+  working_crs,
+  bbox,
+  preserve_aspect,
+  normalized_center
+) {
+  # Fallback = bbox center
+  cx0 <- (bbox["xmin"] + bbox["xmax"]) / 2
+  cy0 <- (bbox["ymin"] + bbox["ymax"]) / 2
+  if (is.null(center)) return(c(cx0, cy0))
 
-# --- Case 1: center is sf/sfc of ANY geometry type ---
-if (inherits(center, c("sf", "sfc"))) {
-g <- if (inherits(center, "sf")) sf::st_geometry(center) else center
-if (length(g) == 0) return(c(cx0, cy0))
-if (is.na(sf::st_crs(g))) {
-stop("The supplied sf/sfc 'center' has no CRS. Please set it or use center_crs.")
-}
+  # --- Case 1: center is sf/sfc of ANY geometry type ---
+  if (inherits(center, c("sf", "sfc"))) {
+    g <- if (inherits(center, "sf")) sf::st_geometry(center) else center
+    if (length(g) == 0) return(c(cx0, cy0))
 
-# If it's not a single POINT, reduce to a single centroid
-if (!all(sf::st_geometry_type(g) %in% c("POINT", "MULTIPOINT"))) {
-g <- sf::st_centroid(sf::st_combine(g))
-} else if (length(g) > 1) {
-g <- sf::st_centroid(sf::st_combine(g))
-}
+    if (is.na(sf::st_crs(g))) {
+      stop("The supplied sf/sfc 'center' has no CRS. Please set it or use center_crs.")
+    }
 
-g_w <- sf::st_transform(g, working_crs)
-xy  <- as.numeric(sf::st_coordinates(g_w)[1, 1:2])
-return(xy)
-}
+    # If it's not a single POINT, reduce to a single centroid
+    if (!all(sf::st_geometry_type(g) %in% c("POINT", "MULTIPOINT"))) {
+      g <- sf::st_centroid(sf::st_combine(g))
+    } else if (length(g) > 1) {
+      g <- sf::st_centroid(sf::st_combine(g))
+    }
 
-# --- Case 2: normalized [-1,1] pair relative to bbox center/scale ---
-if (isTRUE(normalized_center)) {
-stopifnot(is.numeric(center), length(center) == 2)
-sx <- (bbox["xmax"] - bbox["xmin"])/2; if (sx == 0) sx <- 1
-sy <- (bbox["ymax"] - bbox["ymin"])/2; if (sy == 0) sy <- 1
-if (preserve_aspect) {
-s  <- max(sx, sy)
-return(c(cx0 + center[1]*s, cy0 + center[2]*s))
-} else {
-return(c(cx0 + center[1]*sx, cx0 + center[2]*sy))
-}
-}
+    g_w <- sf::st_transform(g, working_crs)
+    xy  <- as.numeric(sf::st_coordinates(g_w)[1, 1:2])
+    return(xy)
+  }
 
-# --- Case 3: numeric pair; use declared CRS or auto-guess lon/lat vs map-units ---
-stopifnot(is.numeric(center), length(center) == 2)
+  # --- Case 2: normalized [-1,1] pair relative to bbox center/scale ---
+  if (isTRUE(normalized_center)) {
+    stopifnot(is.numeric(center), length(center) == 2)
 
-if (!is.null(center_crs)) {
-pt   <- sf::st_sfc(sf::st_point(center), crs = center_crs)
-pt_w <- sf::st_transform(pt, working_crs)
-return(as.numeric(sf::st_coordinates(pt_w)[1, 1:2]))
-}
+    sx <- (bbox["xmax"] - bbox["xmin"]) / 2; if (sx == 0) sx <- 1
+    sy <- (bbox["ymax"] - bbox["ymin"]) / 2; if (sy == 0) sy <- 1
 
-looks_lonlat <- (abs(center[1]) <= 180 && abs(center[2]) <= 90)
-if (looks_lonlat) {
-pt   <- sf::st_sfc(sf::st_point(center), crs = 4326)
-pt_w <- sf::st_transform(pt, working_crs)
-return(as.numeric(sf::st_coordinates(pt_w)[1, 1:2]))
-}
+    if (preserve_aspect) {
+      s <- max(sx, sy)
+      return(c(cx0 + center[1] * s, cy0 + center[2] * s))
+    } else {
+      return(c(cx0 + center[1] * sx, cy0 + center[2] * sy))
+    }
+  }
 
-# Assume it's already in working CRS units
-center
+  # --- Case 3: numeric pair; use declared CRS or auto-guess lon/lat vs map-units ---
+  stopifnot(is.numeric(center), length(center) == 2)
+
+  if (!is.null(center_crs)) {
+    pt   <- sf::st_sfc(sf::st_point(center), crs = center_crs)
+    pt_w <- sf::st_transform(pt, working_crs)
+    return(as.numeric(sf::st_coordinates(pt_w)[1, 1:2]))
+  }
+
+  looks_lonlat <- (abs(center[1]) <= 180 && abs(center[2]) <= 90)
+
+  if (looks_lonlat) {
+    pt   <- sf::st_sfc(sf::st_point(center), crs = 4326)
+    pt_w <- sf::st_transform(pt, working_crs)
+    return(as.numeric(sf::st_coordinates(pt_w)[1, 1:2]))
+  }
+
+  # Assume it's already in working CRS units
+  center
 }
