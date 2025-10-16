@@ -139,8 +139,8 @@ combined_df <- rbind(original_df, transformed_df)
 # Create the plot
 p <- ggplot(combined_df, aes(x = x, y = y, color = zone)) +
 geom_point(size = 1.5, alpha = 0.8) +
-scale_color_manual(values = c("focus" = "#663399", 
-     "glue" = "#339999", 
+scale_color_manual(values = c("focus" = "#c60000ff", 
+     "glue" = "#141497ff", 
      "context" = "#FFCC00")) +
 facet_wrap(~type) +
 coord_fixed() +
