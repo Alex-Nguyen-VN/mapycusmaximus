@@ -1,4 +1,4 @@
-# mapycusmaximus <a href="https://github.com/Alex-Nguyen-VN/mapycusmaximus" class="pkgdown-release">Development Version</a> <img src="man/figures/logo.png" align="right" height="120" alt="mapycusmaximus" /></a>
+# mapycusmaximus <a href="https://github.com/Alex-Nguyen-VN/mapycusmaximus" class="pkgdown-release">Development Version</a> <img src="man/figures/logo.png?v=2" align="right" height="120" alt="mapycusmaximus" /></a>
 
 [![R-CMD-check.yaml](https://github.com/Alex-Nguyen-VN/mapycusmaximus/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Alex-Nguyen-VN/mapycusmaximus/actions/workflows/R-CMD-check.yaml)
 
