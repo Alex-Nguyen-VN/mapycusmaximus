@@ -1,12 +1,12 @@
 library(sf)
 library(dplyr)
-
+library(ggplot2)
 vic <- read_sf(here::here("data-raw/map/LGA_POLYGON.shp")) |>
   mutate(geometry = st_zm(geometry), drop = TRUE, what = "ZM") |>
   # convert to GDA2020 to match with census data
   mutate(geometry = st_transform(geometry, 7844))
 
-  vic <- st_simplify(vic, dTolerance = 100) |>
+vic <- st_simplify(vic, dTolerance = 100) |>
     st_make_valid() |>
     mutate(LGA_NAME = toupper(LGA_NAME)) |>
     select(LGA_NAME, geometry)
@@ -78,76 +78,27 @@ connections_focus <- connections[as.numeric(distances) <= r_in, ]
 crs_proj <- 3111
 vic_proj <- st_transform(vic, crs_proj)
 connections_proj <- st_transform(connections, 3111)
-center_proj <- st_transform(center_pt, 3111)
+center_pt_proj <- st_transform(center_pt, 3111)
 distances_m <- st_distance(st_line_sample(connections_proj, sample = 0), center_proj)
 distances_norm <- as.numeric(distances_m) / max(as.numeric(distances_m))
 connections_focus_proj <- connections_proj[as.numeric(distances_norm) <= r_in, ]
+connections_focus_proj_sum <- connections_focus_proj |>
+  group_by(source) |>
+  group_by(source) |> 
+  count() |> 
+  arrange(desc(n)) 
 
-vic_fish   <- sf_fisheye(vic_proj, center = center_proj,
+conn_fish_small <- connections_focus_proj |> 
+  filter(source %in% connections_focus_proj_sum$source[1:20])
+
+
+vic_fish   <- sf_fisheye(vic_proj, center = center_pt_proj,
                          r_in = 0.34, r_out = 0.5, zoom_factor = 1)
-conn_fish  <- sf_fisheye(connections_focus_proj, center = center_proj,
+conn_fish  <- sf_fisheye(connections_focus_proj_small, center = center_pt_proj,
                          r_in = 0.428, r_out = 0.429, zoom_factor = 1)
 
 save(vic_fish, file = here::here("data/vic_fish.rda"), compress = "xz")
 save(conn_fish, file = here::here("data/conn_fish.rda"), compress = "xz")
-
-# Define zoom sequence
-zoom_seq <- seq(1, 10, by = 0.05)
-i <- 0
-# Output folder
-dir.create("fisheye_frames", showWarnings = FALSE)
-
-# Loop over zoom factors
-for (z in zoom_seq) {
-  i <- i + 1
-  # Apply fisheye transformation
-  vic_fish <- sf_fisheye(
-    vic_proj,
-    center = center_pt_proj,
-    r_in = 0.34,
-    r_out = 0.5,
-    zoom_factor = z
-  )
-  
-  conn_fish <- sf_fisheye(
-    connections_focus_proj,
-    center = center_pt_proj,
-    r_in = 0.428,
-    r_out = 0.429,
-    zoom_factor = z
-  )
-  
-  # Plot
-  p <- ggplot() +
-    geom_sf(data = conn_fish, aes(alpha = weight), color = "black") +
-    geom_sf(data = vic_fish, fill = NA, color = "grey20") +
-    coord_sf(crs = st_crs(crs_proj)) +
-    labs(title = glue("Fisheye Zoom: {sprintf('%.1f', z)}x")) +
-    theme_minimal(base_size = 14) +
-    theme(
-      legend.position = "none",
-      plot.title = element_text(hjust = 0.5, face = "bold")
-    )
-  
-  # Save each frame
-  frame_file <- glue("fisheye_frames/frame_{sprintf('%04d', i)}.png")
-  ggsave(frame_file, p, width = 8, height = 6, dpi = 200)
-  
-  message("Saved: ", frame_file)
-}
-library(magick)
-
-# Read all frames
-frames <- list.files("fisheye_frames", full.names = TRUE, pattern = "png") |> 
-  lapply(image_read)
-
-# Combine and animate
-animation <- image_join(frames) |> 
-  image_animate(fps = 25)  # frames per second
-
-# Save the GIF
-image_write(animation, "fisheye_zoom.gif")
-
 
 # GGanimate approach
 
@@ -155,17 +106,28 @@ library(sf)
 library(dplyr)
 library(purrr)
 
+
+
+ggplot() +
+  geom_sf(data = sf_fisheye(vic_proj, center = center_pt_proj,
+                          r_in = 0.34, r_out = 0.4, zoom_factor = 3)) +
+  geom_sf(data = sf_fisheye(conn_fish_small, center = center_pt_proj,
+                          r_in = 1.07, r_out = 2, zoom_factor = 3))
+
+zoom_seq <- seq(1, 20, by = 0.1)
+
+
 fisheye_frames <- map_dfr(zoom_seq, function(z) {
   vic_fish  <- sf_fisheye(vic_proj, center = center_pt_proj,
                           r_in = 0.34, r_out = 0.5, zoom_factor = z)
-  conn_fish <- sf_fisheye(connections_focus_proj, center = center_pt_proj,
-                          r_in = 0.428, r_out = 0.429, zoom_factor = z)
+  conn_fish <- sf_fisheye(conn_fish_small, center = center_pt_proj,
+                          r_in = 1.07, r_out = 2, zoom_factor = z)
   
   tibble(
     zoom_factor = z,
     vic = list(vic_fish),
     conn = list(conn_fish)
-  )
+  ) 
 })
 fish_long <- map_dfr(1:nrow(fisheye_frames), function(i) {
   z <- fisheye_frames$zoom_factor[i]
@@ -199,12 +161,57 @@ anim <- animate(
 
 anim_save("fisheye_zoom_gganimate.gif", animation = anim)
 
+library(ggthemes)
 
-vic_fish |> ggplot() + 
-  geom_sf(aes(label = LGA_NAME)) -> plot
+sf_fisheye(vic_fish, center = center_proj,
+            r_in = 0.24, r_out = 0.3, zoom_factor = 5) |>
+   ggplot() +
+   geom_sf() +
+   coord_sf()
 
 conn_fish |> 
   ggplot() +
-  geom_sf(aes(label = source)) -> plot
+  geom_sf(aes(label = source))
 
-plot |> plotly::ggplotly()
+
+
+
+center_proj <- st_transform(center_proj, st_crs(vic))
+center_bbox <- st_bbox(center_proj)
+
+library(ggthemes)
+
+ggplot(data = vic, fill = NA, color = "grey70") + 
+  geom_sf() +
+  geom_sf_label(aes(label = LGA_NAME)) +
+  coord_sf(xlim = center_bbox[c("xmin", "xmax")], ylim = center_bbox[c("ymin", "ymax")]) +
+  theme_map()
+
+
+ggplot() +
+  geom_sf(data = vic_fish, fill = NA, color = "grey80") +
+  geom_sf(data = conn_fish, aes(alpha = weight), color = "black") +
+  labs(title = "Transportation between Hospital and Age Care Facilities in VIC
+during COVID - 19") +
+  theme_map()
+
+
+conn_fish |> group_by(source) |> count() |> arrange(desc(n)) -> conn_fish_summary
+
+
+conn_small <- conn_fish |> 
+  filter(source %in% conn_fish_summary$source[1:20])
+
+center_zoom <- vic_fish |> 
+  filter(LGA_NAME == "MELBOURNE")
+center_point <- st_bbox(center_zoom)
+
+ggplot() +
+  geom_sf(data = vic_fish, fill = NA, color = "grey80") +
+  geom_sf_label(data = vic_fish, aes(label = LGA_NAME)) +
+  geom_sf(data = conn_small, aes(alpha = weight), color = "black") +
+  coord_sf(xlim = center_point[c("xmin", "xmax")], ylim = center_point[c("ymin", "ymax")]) +
+  labs(title = "Transportation between Hospital and Age Care Facilities in VIC
+during COVID - 19") +
+  theme_map()
+

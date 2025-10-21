@@ -1,4 +1,4 @@
-# mapycusmaximus <a href="https://github.com/Alex-Nguyen-VN/mapycusmaximus" class="pkgdown-release">Development Version</a>
+# mapycusmaximus <a href="https://github.com/Alex-Nguyen-VN/mapycusmaximus" class="pkgdown-release">Development Version</a> <img src="man/figures/logo.png" align="right" height="120" alt="mapycusmaximus" /></a>
 
 [![R-CMD-check.yaml](https://github.com/Alex-Nguyen-VN/mapycusmaximus/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Alex-Nguyen-VN/mapycusmaximus/actions/workflows/R-CMD-check.yaml)
 
@@ -241,4 +241,5 @@ See [LICENSE](LICENSE) for the complete text.
 ## Acknowledgements
 
 We acknowledge the developers of **sf**, **ggplot2**, and the R spatial community for providing the computational and theoretical foundation enabling this work.  
-Conceptual inspiration draws from research on focus–context visualization and the *burning-sage* transformation for reversin
+Conceptual inspiration draws from research on focus–context visualization and the *burning-sage* transformation for enhance exploratory clustering and classification problems through reversing the curse of dimensionality.
+
