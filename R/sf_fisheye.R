@@ -219,12 +219,11 @@ sf_fisheye <- function(
   }
 
   out <- st_transform_custom(sf_obj, transform_fun = wrapped_fisheye, args = list())
+  out <- sf::st_make_valid(out)
+
   if (!identical(sf::st_crs(out), original_crs)) {
     out <- sf::st_transform(out, original_crs)
   }
-  out <- st_set_geometry(out,
-    lwgeom::lwgeom_make_valid(st_geometry(out))
-  )
   return(out)
 }
 
