@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Applies Focus–Glue–Context Fisheye Transformations for Spatial Visualization • mapycusmaximus</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" sizes="any" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Inter-0.4.10/font.css" rel="stylesheet">
@@ -14,8 +19,8 @@
 <link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Applies Focus–Glue–Context Fisheye Transformations for Spatial Visualization">
-<meta name="description" content="The mapycusmaximus package provides tools for applying fisheye transformations to 2D coordinates and spatial vector geometries. It implements the **Focus–Glue–Context (FGC)** model: a smooth radial distortion that enlarges a focal region, transitions through a glue ring, and preserves outside context.">
-<meta property="og:description" content="The mapycusmaximus package provides tools for applying fisheye transformations to 2D coordinates and spatial vector geometries. It implements the **Focus–Glue–Context (FGC)** model: a smooth radial distortion that enlarges a focal region, transitions through a glue ring, and preserves outside context.">
+<meta name="description" content="Tools to apply focus-glue-context (FGC) fisheye transformations to two-dimensional coordinates and spatial vector geometries. Implements a smooth radial distortion that enlarges a focal region, transitions through a glue ring, and preserves outside context.">
+<meta property="og:description" content="Tools to apply focus-glue-context (FGC) fisheye transformations to two-dimensional coordinates and spatial vector geometries. Implements a smooth radial distortion that enlarges a focal region, transitions through a glue ring, and preserves outside context.">
 <meta property="og:image" content="https://alex-nguyen-vn.github.io/mapycusmaximus/logo.png">
 </head>
 <body>
@@ -26,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="index.html">mapycusmaximus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.1092</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -310,10 +315,10 @@ These transformations facilitate detailed local inspection while maintaining ove
 <p><code>mapycusmaximus</code> supports the following <code>sf</code> geometry types:</p>
 <ul>
 <li>
-<code>POINT</code>, <code>MULTIPOINT</code><br>
+<code>POINT</code>,<br>
 </li>
 <li>
-<code>LINESTRING</code>, <code>MULTILINESTRING</code><br>
+<code>LINESTRING</code>,<br>
 </li>
 <li>
 <code>POLYGON</code>, <code>MULTIPOLYGON</code><br>
@@ -404,11 +409,19 @@ See <a href="LICENSE">LICENSE</a> for the complete text.</p>
 Conceptual inspiration draws from research on focus–context visualization and the <em>burning-sage</em> transformation for enhance exploratory clustering and classification problems through reversing the curse of dimensionality.</p>
 </div>
 </div>
-  </main><aside class="col-md-3"><div class="license">
+  </main><aside class="col-md-3"><div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/Alex-Nguyen-VN/mapycusmaximus/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/Alex-Nguyen-VN/mapycusmaximus/issues" class="external-link">Report a bug</a></li>
+</ul>
+</div>
+
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small></small></li>
 </ul>
 </div>
 
@@ -439,7 +452,7 @@ Conceptual inspiration draws from research on focus–context visualization and 
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
