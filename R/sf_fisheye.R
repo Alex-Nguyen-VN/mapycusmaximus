@@ -75,7 +75,18 @@
 #'
 #' @return An object of the same top-level class as `sf_obj` (`sf` or `sfc`),
 #'   with geometry coordinates warped by the fisheye and the **original CRS**
-#'   restored.
+#'   restored. 
+#' 
+#' @details
+#' The transformation may introduce self-intersections or other topology
+#' issues due to geometric warping. To ensure the output is suitable for
+#' plotting and spatial operations, the geometry is repaired using
+#' `lwgeom::lwgeom_make_valid()`. Users should be aware that:
+#'
+#' * geometry types may be promoted (e.g., POLYGON → MULTIPOLYGON),
+#' * tiny sliver polygons may be removed,
+#' * invalid rings or bow-tie shapes will be corrected,
+#' * the repair step requires the `{lwgeom}` package.
 #'
 #' @examples
 #' library(sf)
@@ -104,8 +115,9 @@
 #' @seealso
 #' [sf::st_transform()], [sf::st_is_longlat()], [sf::st_crs()],
 #' [sf::st_coordinates()], `st_transform_custom()`, `fisheye_fgc()`
+#' [lwgeom::lwgeom_make_valid()], [sf::st_make_valid()]
 #'
-#' @importFrom sf st_is_empty st_zm st_crs st_bbox st_transform st_is_longlat
+#' @importFrom sf st_is_empty st_zm st_crs st_bbox st_transform st_is_longlat st_set_geometry st_geometry lwgeom lwgeom_make_valid
 #' @export
 
 

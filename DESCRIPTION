@@ -11,6 +11,7 @@ RoxygenNote: 7.3.2
 Imports:
     ggplot2,
     sf,
+    lwgeom
 Suggests: 
     testthat (>= 3.0.0),
     dplyr,
