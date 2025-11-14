@@ -51,7 +51,7 @@ fisheye_fgc <- function(coords, cx = 0, cy = 0,
   r_in = 0.34, r_out = 0.5,
   zoom_factor = 1.5,     # How much focus zone expands
   squeeze_factor = 0.3,  # How much glue zone compresses
-  method = "expand",     # "expand" or "squeeze"
+  method = "expand",     # "expand" or "outward"
   revolution = 0.0) {    # Optional: add rotation to glue zone
   
   coords <- as.matrix(coords[, 1:2, drop = FALSE])

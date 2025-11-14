@@ -170,8 +170,8 @@ transformed <- st_transform_custom(
 
 `mapycusmaximus` supports the following `sf` geometry types:
 
-- `POINT`, `MULTIPOINT`  
-- `LINESTRING`, `MULTILINESTRING`  
+- `POINT`,  
+- `LINESTRING`,  
 - `POLYGON`, `MULTIPOLYGON`  
 - Geometry collections
 

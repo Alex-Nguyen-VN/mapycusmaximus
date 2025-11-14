@@ -1,0 +1,315 @@
+site_name,pub_hosp_ind,current_peer_group,lat,long,cluster
+"Alfred, The [Prahran]",Public,Principal referral hospitals,-37.84600147,144.98264,1
+"Bendigo Hospital, The",Public,Principal referral hospitals,-36.74879208,144.2807498,2
+Bendigo Health - Anne Caudle,Public,Public acute group A hospitals,-36.75109594,144.279911,2
+Austin Hospital,Public,Principal referral hospitals,-37.75656125,145.0586566,3
+Heidelberg Repatriation Hospital,Public,Public acute group C hospitals,-37.7550049,145.0476609,3
+Bairnsdale Regional Health Service,Public,Public acute group C hospitals,-37.83130445,147.6077023,4
+Box Hill Hospital,Public,Public acute group A hospitals,-37.81361455,145.1184053,5
+Hamilton Base Hospital,Public,Public acute group C hospitals,-37.7370741,142.0311163,6
+Penshurst & District Memorial,Public,Very small hospitals,-37.877558,142.28235,6
+Bundoora Extended Care Centre,Public,Public rehabilitation hospitals,-37.70150345,145.0555573,3
+East Grampians Health Service [Ararat],Public,Public acute group C hospitals,-37.2786257,142.9327921,7
+East Grampians Health Service [Willaura],Public,Very small hospitals,-37.54481735,142.7460039,7
+Goulburn Valley Health [Shepparton],Public,Public acute group A hospitals,-36.3634261,145.4046573,8
+Goulburn Valley Health [Tatura],Public,Very small hospitals,-36.4392195,145.2256594,8
+Goulburn Valley Health [Waranga],Public,Very small hospitals,-36.5876304,145.0085595,8
+Colac Area Health,Public,Public acute group C hospitals,-38.3410271,143.582525,9
+Northeast Health Wangaratta,Public,Public acute group A hospitals,-36.35411275,146.3138041,10
+Mercy Hospital for Women,Public,Women's hospitals,-37.7558954,145.0609462,3
+Monash Medical Centre [Clayton],Public,Principal referral hospitals,-37.920885,145.1207155,11
+Footscray Hospital,Public,Public acute group A hospitals,-37.7924601,144.8893744,3
+Royal Childrens Hospital [Parkville],Public,Specialist women's & children's hospitals,-37.79336472,144.9496895,3
+Maroondah Hospital [East Ringwood],Public,Public acute group A hospitals,-37.80710005,145.2544186,5
+Monash Medical Centre [Moorabbin],Public,Public acute group A hospitals,-37.92097205,145.0639104,11
+Royal Womens Parkville,Public,Specialist women's & children's hospitals,-37.79860736,144.9552051,3
+"Royal Victorian Eye & Ear Hospital, The [East Melbourne]",Public,Other acute specialised hospitals,-37.80875178,144.9759826,3
+Rosebud Hospital,Public,Public acute group B hospitals,-38.3629259,144.884897,12
+Kyabram District Health Service,Public,Public acute group C hospitals,-36.31496429,145.0424725,8
+"Northern Hospital, The [Epping]",Public,Public acute group A hospitals,-37.65330274,145.0146336,3
+Tallangatta Health Service,Public,Very small hospitals,-36.213254,147.1835313,10
+Mercy Mental Health Ursula Frayne Centre,Public,Other acute specialised hospitals,-37.79113897,144.8867099,3
+Werribee Mercy Hospital,Public,Public acute group B hospitals,-37.88712815,144.697714,3
+Royal Melbourne Hospital - Royal Park campus,Public,Public rehabilitation hospitals,-37.77798185,144.9478574,3
+Royal Melbourne Hospital Mental Health Services - Orygen Inpatient Unit [Footscray],Public,Other acute specialised hospitals,-37.79104454,144.8870008,3
+Royal Melbourne Hospital - City Campus,Public,Principal referral hospitals,-37.79687877,144.9549136,3
+Heathcote Health,Public,Public acute group D hospitals,-36.92571394,144.7097705,2
+Maryborough District Health Service [Maryborough],Public,Public acute group C hospitals,-37.04482207,143.7383574,7
+Maryborough District Health Service [Dunolly],Public,Very small hospitals,-36.85517373,143.7358427,2
+Sandringham & District Memorial Hospital,Public,Public acute group B hospitals,-37.9608309,145.0180093,1
+Caulfield General Medical Centre,Public,Mixed sub- & non-acute hospitals,-37.88092129,145.011976,1
+Sunshine Hospital,Public,Public acute group B hospitals,-37.75917338,144.8171223,3
+St Vincents Hospital,Public,Principal referral hospitals,-37.80387022,144.9757182,3
+St Vincents on the Park,Public,Private acute group C hospitals,-37.8111881,144.9777173,3
+Williamstown Hospital,Public,Public acute group B hospitals,-37.86338215,144.892151,3
+Kooweerup Regional Health Service,Public,Very small hospitals,-38.2003561,145.4848056,11
+Swan Hill District Health [Swan Hill],Public,Public acute group C hospitals,-35.340599,143.5562698,2
+Swan Hill District Health [Nyah],Public,Very small hospitals,-35.17939671,143.3607245,2
+Peter MacCallum Cancer Institute,Public,Other acute specialised hospitals,-37.8115899,144.9774158,3
+East Wimmera Health Service [Wycheproof],Public,Very small hospitals,-36.07838829,143.234171,2
+Rural Northwest Health [Warracknabeal],Public,Public acute group D hospitals,-36.25241685,142.3818907,7
+Rural Northwest Health [Hopetoun],Public,Very small hospitals,-35.7320094,142.3663984,7
+West Gippsland Healthcare Group [Warragul],Public,Public acute group B hospitals,-38.17265607,145.9279245,4
+Angliss Hospital,Public,Public acute group B hospitals,-37.8989895,145.3144006,5
+Albury Wodonga Health - Wodonga,Public,Public acute group B hospitals,-36.1229019,146.9018962,10
+Bass Coast Health,Public,Public acute group C hospitals,-38.4494653,145.2371716,11
+St Georges Health - Aged Care,Public,Mixed sub- & non-acute hospitals,-37.80684113,145.0441364,3
+Yarram & District Health Service,Public,Public acute group D hospitals,-38.55708255,146.6781973,4
+Yarrawonga District Health Service,Public,Public acute group C hospitals,-36.01147486,146.0066436,10
+Alpine Health [Myrtleford],Public,Public acute group D hospitals,-36.5581734,146.720237,10
+Alpine Health [Bright],Public,Public acute group C hospitals,-36.733032,146.9659501,10
+Alpine Health [Mount Beauty],Public,Public acute group D hospitals,-36.7434433,147.1696635,10
+Tweddle Child & Family Health Centre [Footscray],Public,Early parenting centres,-37.79771051,144.8866625,3
+Ballarat Health Services [Base Campus],Public,Public acute group A hospitals,-37.55848831,143.8475789,7
+Otway Health [Apollo Bay],Public,Very small hospitals,-38.7538618,143.6640055,9
+Kingston Centre [Cheltenham],Public,Public rehabilitation hospitals,-37.9684144,145.0908575,11
+Omeo District Health,Public,Very small hospitals,-37.0983225,147.5971753,4
+University Hospital Geelong,Public,Principal referral hospitals,-38.15207995,144.3656095,9
+Central Gippsland Health Service [Sale],Public,Public acute group A hospitals,-38.1087087,147.0807837,4
+Ballarat Health Services [Queen Elizabeth Campus],Public,Mixed sub- & non-acute hospitals,-37.56388494,143.8433504,7
+Caritas Christi Hospice Ltd [Kew],Public,Mixed sub- & non-acute hospitals,-37.80426689,145.0156356,3
+Casterton Memorial Hospital,Public,Public acute group D hospitals,-37.590451,141.3923575,6
+OConnell Family Centre (Grey Sisters) Inc. [Canterbury],Public,Early parenting centres,-37.81638965,145.0619489,3
+Dandenong Campus,Public,Public acute group A hospitals,-37.9209768,145.4066422,11
+"Peter James Centre, The [East Burwood]",Public,Mixed sub- & non-acute hospitals,-37.85224207,145.1641717,5
+Cohuna District Hospital,Public,Public acute group C hospitals,-35.800084150000004,144.2147561,2
+Coleraine District Health Services,Public,Very small hospitals,-37.59957036,141.6928741,6
+Corryong Health,Public,Public acute group D hospitals,-36.1987616,147.9030593,10
+South West Healthcare [Warrnambool],Public,Public acute group A hospitals,-38.3793695,142.4730481,6
+Wimmera Base Hospital [Horsham],Public,Public acute group C hospitals,-36.7126078,142.208892,7
+Dimboola District Hospital,Public,Public acute group D hospitals,-36.44965216,142.0243441,7
+Echuca Regional Health,Public,Public acute group C hospitals,-36.1383559,144.7475593,2
+Seymour Health,Public,Public acute group C hospitals,-37.01842405,145.1386762,3
+Frankston Hospital,Public,Public acute group A hospitals,-38.15078965,145.1281521,12
+Beaufort & Skipton Health Service [Skipton],Public,Very small hospitals,-37.66736254,143.3668472,7
+Kerang District Health,Public,Public acute group C hospitals,-35.72381215,143.9180826,2
+Korumburra Hospital,Public,Public acute group C hospitals,-38.43021616,145.8277962,4
+Leongatha Memorial Hospital,Public,Public acute group C hospitals,-38.4873513,145.9503864,4
+Stawell Regional Health,Public,Public acute group C hospitals,-37.05923414,142.7816181,7
+Womens Sandringham,Public,Women's hospitals,-37.96082458,145.017661,1
+Mildura Base Public Hospital,Public,Public acute group A hospitals,-34.18624035,142.1430567,13
+Wantirna Health,Public,Mixed sub- & non-acute hospitals,-37.8486179,145.2255928,5
+Heywood Rural Health,Public,Very small hospitals,-38.1379457,141.624074,6
+Timboon & District Healthcare Service,Public,Public acute group D hospitals,-38.4860745,142.9764969,6
+West Wimmera Health Service [Jeparit],Public,Very small hospitals,-36.14096005,141.9848672,7
+West Wimmera Health Service [Kaniva],Public,Very small hospitals,-36.38096953,141.2460931,7
+West Wimmera Health Service [Nhill],Public,Public acute group C hospitals,-36.33411525,141.6558138,7
+West Wimmera Health Service [Rainbow],Public,Very small hospitals,-35.90364295,141.9950018,7
+West Wimmera Health Service [Rupanyup],Public,Very small hospitals,-36.62114665,142.638768,7
+Mallee Track - Ouyen,Public,Very small hospitals,-35.0742293,142.3126046,13
+Latrobe Regional Hospital [Traralgon],Public,Public acute group A hospitals,-38.21952195,146.471782,4
+Moyne Health Services [Port Fairy],Public,Public acute group D hospitals,-38.38097971,142.2275277,6
+Portland District Health,Public,Public acute group C hospitals,-38.34092558,141.6051362,6
+East Wimmera Health Service [St Arnaud],Public,Public acute group C hospitals,-36.6087135,143.2461778,7
+Lorne Community Hospital,Public,Public acute group D hospitals,-38.5454422,143.9804248,9
+Central Gippsland Health Service [Maffra],Public,Public acute group D hospitals,-37.960975,146.9837447,4
+Maldon Hospital,Public,Very small hospitals,-36.992834,144.063668,2
+Cranbourne Int Care Centre,Public,Mixed day procedure hospitals,-38.11293721,145.282204,11
+Mansfield District Hospital,Public,Public acute group C hospitals,-37.0576258,146.0861109,10
+Sunbury Day Hospital,Public,Mixed day procedure hospitals,-37.5766775,144.7326897,3
+Broadmeadows Health Service,Public,Public acute group C hospitals,-37.68468774,144.9122892,3
+Alexandra District Health,Public,Public acute group C hospitals,-37.19516675,145.7166907,5
+Djerriwarrh Health Service [Bacchus Marsh],Public,Public acute group C hospitals,-37.67780567,144.4345456,3
+Numurkah & District Health Service,Public,Public acute group D hospitals,-36.09985425,145.4432969,8
+Grace McKellar Centre [Geelong],Public,Public rehabilitation hospitals,-38.12167335,144.3361889,9
+Calvary Health Care Bethlehem,Public,Mixed sub- & non-acute hospitals,-37.89669111,145.0134593,1
+Boort District Health,Public,Public acute group D hospitals,-36.1117788,143.7273499,2
+South West Healthcare [Camperdown],Public,Public acute group C hospitals,-38.2373623,143.1381853,6
+Queen Elizabeth Centre [Noble Park],Public,Early parenting centres,-37.97216795,145.1778855,11
+Beaufort & Skipton Health Service [Beaufort],Public,Very small hospitals,-37.41528222,143.4169724,7
+Robinvale District Health Services,Public,Public acute group D hospitals,-34.5841317,142.7814972,13
+Manangatang & District Hospital,Public,Very small hospitals,-35.0511403,142.8808925,2
+Rochester & Elmore District Health Service,Public,Public acute group D hospitals,-36.36672545,144.6975712,2
+East Wimmera Health Service [Donald],Public,Public acute group D hospitals,-36.36661,142.9764019,7
+Royal Talbot Rehabilitation Centre [Kew],Public,Public rehabilitation hospitals,-37.789659,145.0232113,3
+Edenhope & District Hospital,Public,Public acute group D hospitals,-37.0353016,141.2891656,7
+Healesville and District Hospital,Public,Public acute group C hospitals,-37.64680755,145.5291129,5
+Terang & Mortlake Health Service [Terang],Public,Public acute group D hospitals,-38.2393865,142.9020584,6
+Inglewood & District Health Service,Public,Public acute group D hospitals,-36.57209629,143.8740955,2
+Kilmore District Health,Public,Public acute group C hospitals,-37.30215775,144.9584008,3
+Yea & District Memorial Hospital,Public,Public acute group D hospitals,-37.2134424,145.430706,5
+Casey Hospital,Public,Public acute group B hospitals,-38.04496465,145.347666,11
+Craigieburn Health Service,Public,Mixed day procedure hospitals,-37.5956969,144.9196467,3
+Melton Health,Public,Unpeered hospitals,-37.6874637,144.5582263,3
+Yarra Ranges Health,Public,Mixed day procedure hospitals,-37.7565429,145.351376,5
+Nathalia District Hospital,Public,Very small hospitals,-36.05486165,145.2047542,8
+Benalla Health,Public,Public acute group C hospitals,-36.55516279,145.9950897,10
+Golf Links Road Rehabilitation and PCU,Public,Mixed sub- & non-acute hospitals,-38.17320791,145.1505166,12
+The Mornington Centre,Public,Public rehabilitation hospitals,-38.23015688,145.0411664,12
+East Wimmera Health Service [Birchip],Public,Very small hospitals,-35.98027305,142.915865,7
+East Wimmera Health Service [Charlton],Public,Very small hospitals,-36.26844455,143.3524943,2
+Kyneton Health,Public,Public acute group C hospitals,-37.2547283,144.4701376,2
+Daylesford Health,Public,Public acute group D hospitals,-37.33721252,144.1455518,7
+Creswick Health,Public,Very small hospitals,-37.42380658,143.8946238,7
+South Gippsland Hospital [Foster],Public,Public acute group C hospitals,-38.6591277,146.206412,4
+Beechworth Health Service,Public,Public acute group D hospitals,-36.3490283,146.6916113,10
+Castlemaine Health,Public,Public acute group C hospitals,-37.0525494,144.2122479,2
+Orbost Regional Health,Public,Public acute group C hospitals,-37.70209765,148.4654222,4
+Royal Dental Hospital [Melbourne],Public,Unpeered hospitals,-37.79944525,144.9647617,3
+Cobram District Health,Public,Public acute group D hospitals,-35.915853,145.6513531,8
+Epping Private Hospital,Private,Private acute group C hospitals,-37.6495386,145.0092467,3
+La Trobe Private Hospital,Private,Private acute group D hospitals,-37.71596445,145.0447695,3
+St John of God Bendigo Hospital,Private,Private acute group B hospitals,-36.7617702,144.2635489,2
+Ballan & District Soldiers Memorial Bush Nursing Hospital & Hostel Inc.,Private,Unpeered hospitals,-37.59955817,144.2225888,7
+St John of God Berwick Hospital,Private,Private acute group C hospitals,-38.04568515,145.3448091,11
+St John of God Berwick Day Oncology Centre,Private,Haematology & oncology clinics,-38.04490242,145.3449741,11
+St John of God Warrnambool Hospital,Private,Private acute group D hospitals,-38.3714579,142.4791674,6
+Hampton Park Womens Health Centre,Private,Women's hospitals,-38.03140195,145.2689607,11
+Chelsea Heights Day Procedure Centre,Private,Endoscopy centres,-38.03362236,145.1349634,11
+Dr Scope,Private,Endoscopy centres,-37.77755293,144.8324066,3
+Euroa Health Inc,Private,Private acute group D hospitals,-36.75926024,145.5707159,8
+Essendon Day Procedure Centre,Private,Oral & maxillofacial surgery centres,-37.76555701,144.923728,3
+"Valley Private Hospital, The [Mulgrave]",Private,Private acute group A hospitals,-37.93842875,145.2127073,11
+"Avenue Private Hospital, The [Windsor]",Private,Private acute group C hospitals,-37.8547623,144.9986206,1
+Brunswick Private Hospital,Private,Private rehabilitation hospitals,-37.7568145,144.9717135,3
+The Victoria Clinic,Private,Private acute psychiatric hospitals,-37.84743899,144.9974684,14
+Berwick Surgicentre,Private,Eye surgery centres,-38.03344151,145.3469925,11
+Toorak Cosmetic Surgery Day Centre,Private,Mixed day procedure hospitals,-37.84123539,145.0080934,3
+"Bays Hospital, The [Mornington]",Private,Private acute group C hospitals,-38.22362814,145.0422198,12
+"Bays Hospital, The [Hastings]",Private,Unpeered hospitals,-38.29657117,145.1918735,11
+Essendon Private Hospital Victoria,Private,Private acute group D hospitals,-37.7485656,144.8853991,3
+Melbourne Endoscopy Monash Day Hospital [Clayton],Private,Endoscopy centres,-37.92124419,145.1201834,11
+Monash Surgical Private Hospital [Clayton],Private,Gynaecology day hospitals,-37.9215323,145.1193962,1
+Nagambie Hospital Inc.,Private,Very small hospitals,-36.78070049,145.1505552,8
+Neerim District Soldiers Memorial Hospital Inc.,Private,Unpeered hospitals,-38.02237822,145.9540786,4
+Monash House Private Hospital,Private,Private acute group B hospitals,-37.92062267,145.1201838,1
+Vermont Private Hospital,Private,Private acute group A hospitals,-37.85819315,145.1996379,5
+Skin Cancer Day Surgery,Private,Plastic & reconstructive surgery centres,-37.86791506,145.1052132,1
+Diaverum North Melbourne Dialysis Clinic,Private,Dialysis clinics,-37.78854125,144.9402709,3
+Knox Private Hospital [Wantirna],Private,Private acute group A hospitals,-37.84947235,145.2278565,5
+Ivanhoe Endoscopy and Day Procedure Centre,Private,Endoscopy centres,-37.76680142,145.0451984,3
+Malvern Private Hospital [East Malvern],Private,Drug & alcohol hospitals,-37.8669432,145.0607248,1
+Marie Stopes International East St Kilda,Private,Reproductive health centres,-37.87301104,144.9820578,3
+Holmesglen Private Hospital,Private,Private acute group A hospitals,-37.93592045,145.0508777,1
+St Vincents Private Hospital East Melbourne,Private,Private acute group C hospitals,-37.811877,144.9842499,3
+Epworth Freemasons,Private,Private acute group A hospitals,-37.80943865,144.9823367,3
+Epworth Geelong,Private,Private acute group A hospitals,-38.193294,144.3048977,9
+Epworth Hospital [Richmond],Private,Private acute group A hospitals,-37.8171095,144.9930389,3
+Beleura Private Hospital [Mornington],Private,Private acute group A hospitals,-38.22458175,145.0493078,12
+Cabrini Health Elsternwick Rehabilitation Service,Private,Private rehabilitation hospitals,-37.88555012,145.0094052,1
+Cabrini Malvern,Private,Private acute group A hospitals,-37.86180335,145.0335038,1
+Cabrini Prahran,Private,Private acute group A hospitals,-37.85404868,145.0089127,1
+Cabrini Brighton,Private,Private acute group C hospitals,-37.911664,144.9911825,1
+Cabrini Hopetoun,Private,Private rehabilitation hospitals,-37.8847658,145.0104015,1
+St John of God Ballarat Hospital,Private,Private acute group B hospitals,-37.55761185,143.8461822,7
+"Geelong Clinic, The",Private,Private acute psychiatric hospitals,-38.18206824,144.3933796,9
+St John of God Geelong Hospital,Private,Private acute group B hospitals,-38.15178895,144.3575613,9
+Murray Valley Private Hospital [Wodonga],Private,Other acute specialised hospitals,-36.13871325,146.876982,10
+Waverley Private Hospital [Mt Waverley],Private,Private acute group C hospitals,-37.8843792,145.1455722,1
+Reservoir Private Hospital Day Procedure Centre,Private,Endoscopy centres,-37.71738537,144.9978706,3
+St Vincents Private Hospital Fitzroy,Private,Private acute group B hospitals,-37.80778615,144.9760562,3
+Bellbird Private Hospital [Blackburn],Private,Private acute group D hospitals,-37.8331942,145.1558553,5
+Rosebud Day Hospital,Private,Mixed day procedure hospitals,-38.36194063,144.8901488,12
+Noble Park Endoscopy Centre,Private,Endoscopy centres,-37.9671017,145.1896656,11
+Bayside Endoscopy Day Hospital,Private,Endoscopy centres,-38.14328096,145.1322883,1
+St Vincents Private Hospital Werribee,Private,Private acute group B hospitals,-37.88773612,144.7016297,3
+Epworth Rehabilitation Camberwell,Private,Private rehabilitation hospitals,-37.84584611,145.0541048,3
+Epworth Hawthorn,Private,Private rehabilitation hospitals,-37.82185315,145.0225925,3
+Epworth Cliveden,Private,Private acute group D hospitals,-37.8156804,144.9874795,3
+Wangaratta Private Hospital,Private,Private acute group D hospitals,-36.34890755,146.3125361,10
+"Melbourne Private Hospital, The [Parkville]",Private,Private acute group A hospitals,-37.7982178,144.9574519,3
+Peninsula Private Hospital [Frankston],Private,Private acute group B hospitals,-38.15786435,145.1691421,12
+Western Private Hospital [Footscray],Private,Private acute group C hospitals,-37.79319115,144.8858742,3
+Dorset Private Hospital (Pascoe Vale),Private,Private rehabilitation hospitals,-37.72324985,144.9477123,3
+Epworth Rehabilitation Brighton,Private,Private rehabilitation hospitals,-37.91345226,145.002935,1
+Linacre Private Hospital,Private,Private acute group D hospitals,-37.9426807,145.0033437,1
+St Vincents Private Hospital Kew,Private,Other acute specialised hospitals,-37.80628431,145.0240182,3
+Springvale Endoscopy Services,Private,Endoscopy centres,-37.94930729,145.1499368,11
+Warringal Private Hospital [Heidelberg],Private,Private acute group B hospitals,-37.75485435,145.0609061,3
+Sir John Monash Private Hospital [Clayton],Private,Private acute group B hospitals,-37.9186257,145.1214718,11
+"Albert Road Clinic, The [South Melbourne]",Private,Private acute psychiatric hospitals,-37.83357268,144.9713994,1
+Melbourne Endoscopy Group Day Procedure Centre,Private,Endoscopy centres,-37.84437759,144.979384,1
+"Melbourne Eastern Private Hospital, The",Private,Private acute group D hospitals,-37.85524252,145.2686593,5
+Melbourne Day Surgery,Private,Eye surgery centres,-37.73045045,145.060268,1
+New Age Dental,Private,Unpeered hospitals,-37.68309521,145.0731473,3
+Kew Endoscopy Centre,Private,Endoscopy centres,-37.79446728,145.0625981,3
+Vision Day Surgery Eastern,Private,Eye surgery centres,-37.81755384,145.1195096,5
+Windsor Avenue Day Surgery,Private,Mixed day procedure hospitals,-37.95116753,145.149338,11
+Mornington Endoscopy,Private,Endoscopy centres,-38.22750741,145.0440901,12
+North Eastern Rehabilitation Centre,Private,Private rehabilitation hospitals,-37.7635299,145.0310362,3
+Maryvale Private Hospital [Morwell],Private,Private acute group D hospitals,-38.21584495,146.4186925,4
+Donvale Rehabilitation Hospital,Private,Private rehabilitation hospitals,-37.7897195,145.1715324,5
+St Kilda Day Hospital,Private,Mixed day procedure hospitals,-37.87294515,144.9820435,3
+Manningham Private Hospital,Private,Mixed day procedure hospitals,-37.7873942,145.13282040000001,3
+East Melbourne Day Procedure Centre (Fertility Control Clinic),Private,Fertility clinics,-37.81590298,144.9862254,3
+St Albans Endoscopy Centre,Private,Endoscopy centres,-37.74383224,144.7796058,3
+South Yarra Medical Clinic,Private,Unpeered hospitals,-37.9299711,145.3583811,3
+Hampton Day Hospital,Private,Mixed day procedure hospitals,-37.93281309,145.0327921,1
+Heyfield Hospital Inc,Private,Very small hospitals,-37.97617364,146.784063,4
+Clinic of Cosmetic Medicine,Private,Unpeered hospitals,-37.7046916,144.9168072,3
+Goonawarra Day Hospital,Private,Mixed day procedure hospitals,-37.57975367,144.7499602,3
+Stonnington Day Surgery,Private,Plastic & reconstructive surgery centres,-37.86342489,145.0394976,1
+Mallee Track - Sea Lake,Public,Very small hospitals,-35.50075156,142.8575977,2
+St John of God Frankson Rehabilitation Hospital,Private,Private rehabilitation hospitals,-38.15273111,145.1557154,12
+"Melbourne Clinic Private Hospital, The [Richmond]",Private,Private acute psychiatric hospitals,-37.81451069,144.998943,14
+Wyndham Clinic,Private,Very small hospitals,-37.86241425,144.710365,3
+Bayside Day Procedure and Specialist Centre,Private,Endoscopy centres,-38.1479404,145.1433602,12
+Nunyara Centre,Private,Private acute psychiatric hospitals,-38.05995113,145.4113204,11
+Hyperbaric Health Bundoora,Private,Hyperbaric health centres,-37.71615841,145.0444085,3
+South Eastern Private Hospital [Noble Park],Private,Endoscopy centres,-37.9663045,145.1920296,11
+Eastside Endoscopy Centre,Private,Private acute group B hospitals,-37.81957442,145.2276566,5
+Epworth Eastern Hospital,Private,Dialysis clinics,-37.81106574,145.1209863,5
+Diaverum Diamond Valley Dialysis Clinic,Private,Dialysis clinics,-37.70539929,145.1077739,3
+Northpark Private Hospital [Bundoora],Private,Private acute group C hospitals,-37.6914319,145.0619596,3
+Heidelberg Endoscopy and Day Surgery Centre,Private,Endoscopy centres,-37.73041396,145.0604045,3
+Fresenius Medical Care Sunshine Dialysis Clinic,Private,Endoscopy centres,-37.760919,144.8161774,3
+The Hader Clinic,Private,Unpeered hospitals,-37.74078322,144.8993523,3
+Greensborough Day Surgery,Private,Mixed day procedure hospitals,-37.70380697,145.1061867,3
+Arrow Health,Private,Unpeered hospitals,-37.85590922,145.0209544,3
+DayHab,Private,Unpeered hospitals,-37.90040282,145.1440741,3
+Habitat Therapeutics,Private,Unpeered hospitals,-38.17074102,144.3996074,9
+Darebin Endoscopy Services,Private,Endoscopy centres,-37.78086522,145.0173983,3
+Westpoint Endoscopy Day Hospital,Private,Endoscopy centres,-37.8773573,144.6797334,3
+Bundoora Endoscopy,Private,Endoscopy centres,-37.6922061,145.0618813,3
+Toorak-Malvern Day Surgery Centre,Private,Mixed day procedure hospitals,-37.86346724,145.0393581,3
+Marie Stopes International Maroondah,Private,Reproductive health centres,-37.80887769,145.2886811,5
+Frances Perry Private Hospital [Carlton],Private,Women's hospitals,-37.79876014,144.9549263,3
+Rosebud Surgicentre,Private,Eye surgery centres,-38.36179693,144.8890266,12
+Vision Day Surgery Camberwell,Private,Eye surgery centres,-37.83219318,145.0555356,5
+Dandenong Eye Clinic,Private,Endoscopy centres,-37.9623228,145.1533309,11
+Digestive Health Centre,Private,Endoscopy centres,-37.977369,145.2164418,11
+Keilor Private,Private,Private acute group D hospitals,-37.7411023,144.863827,3
+Ringwood Private Hospital,Private,Private acute group D hospitals,-37.8114079,145.2437099,5
+Werribee Endoscopy,Private,Private acute group C hospitals,-37.87727302,144.6796276,3
+Shepparton Private Hospital,Private,Private acute group C hospitals,-36.35913925,145.4109224,8
+Chesterville Day Hospital [Cheltenham],Private,Mixed day procedure hospitals,-37.9604882,145.056943,1
+"Victorian Rehabilitation Centre, The [Glen Waverley]",Private,Private rehabilitation hospitals,-37.89815878,145.1621191,5
+Waverley Endoscopy Suites [Mt Waverley],Private,Endoscopy centres,-37.87891932,145.1460686,1
+Corymbia House,Private,Plastic & reconstructive surgery centres,-37.97704592,145.2169958,11
+Frankston Private Hospital,Private,Mixed day procedure hospitals,-38.15473595,145.132998,12
+Masada Private Hospital [East St Kilda],Private,Private acute group D hospitals,-37.869627,145.0032964,1
+Mildura Private Hospital,Private,Private acute group D hospitals,-34.18483415,142.1457014,13
+Specialist Centre Docklands,Private,Mixed day procedure hospitals,-37.81441383,144.941251,3
+Jolimont Endoscopy [East Melbourne],Private,Endoscopy centres,-37.81135556,144.9839362,3
+Delmont Private Hospital [Burwood],Private,Private acute psychiatric hospitals,-37.85680868,145.0939584,3
+Forest Hill Dialysis Centre,Private,Dialysis clinics,-37.83596677,145.1664975,5
+Bayswater Day Procedure Centre,Private,Endoscopy centres,-37.84373682,145.2488469,5
+Western Gastroenterology Services [Footscray],Private,Mixed day procedure hospitals,-37.79188829,144.8851776,3
+Imaging@Olympic Park,Private,Unpeered hospitals,-37.82471598,144.9847188,1
+Altona Endoscopy,Private,Endoscopy centres,-37.8691739,144.8287598,3
+East Melbourne Specialist Day Hospital,Private,Fertility clinics,-37.809648,144.9832448,3
+Sydenham Endoscopy and Day Surgery,Private,Endoscopy centres,-37.69303767,144.758528,3
+PANCH Day Surgery Centre,Private,Mixed day procedure hospitals,-37.74652412,145.0083248,3
+The Glen Endoscopy,Private,Endoscopy centres,-37.8846595,145.1651723,5
+Ballarat Surgicentre,Private,Mixed day procedure hospitals,-37.54263337,143.8518411,7
+Melbourne Medibrain and Medisleep Centre,Private,Unpeered hospitals,-37.86902951,145.0187543,3
+Ballarat Day Procedure Centre,Private,Mixed day procedure hospitals,-37.54067777,143.8321867,7
+Mitcham Private Hospital,Private,Private acute group C hospitals,-37.81030805,145.1947482,5
+Casey Day Procedure Centre,Private,Mixed day procedure hospitals,-38.01103253,145.3163539,11
+Glen Eira Day Surgery,Private,Mixed day procedure hospitals,-37.90029852,145.0192569,1
+Coburg Endoscopy Centre,Private,Endoscopy centres,-37.7450487,144.9649021,3
+John Fawkner - Moreland Private Hospital,Private,Private acute group A hospitals,-37.7547397,144.9588406,3
+"Southern Eye Centre, Day Surgery & Laser Clinic [Frankston]",Private,Eye surgery centres,-38.14599804,145.1321239,12
+Glenferrie Private Hospital,Private,Other acute specialised hospitals,-37.81921309,145.0314709,1
+Vision Day Surgery Footscray,Private,Eye surgery centres,-37.80046848,144.8949371,3
+Windsor Private Hospital,Private,Private acute group B hospitals,-37.8558187,144.9980782,3
+Northwest Day Hospital,Private,Endoscopy centres,-37.77085719,144.9093353,3
+Victoria Parade Surgery Centre,Private,Eye surgery centres,-37.8084973,144.9749205,3
+Sunshine Private Day Surgery,Private,Mixed day procedure hospitals,-37.76148636,144.8157167,3
+Jessie McPherson Private Hospital [Clayton],Private,Private acute group B hospitals,-37.9208228,145.1224428,11
+Glen Iris Private,Private,Endoscopy centres,-37.8568969,145.0940058,1
+Peninsula Oncology Centre,Private,Haematology & oncology clinics,-38.15450768,145.1328989,12
+Specialist Surgicentre Geelong,Private,Oral & maxillofacial surgery centres,-38.14892705,144.3666437,9
+Bentleigh Surgicentre,Private,Plastic & reconstructive surgery centres,-37.92000899,145.0412484,1
+Bendigo Day Surgery,Private,Mixed day procedure hospitals,-36.76220435,144.2615466,2
+Malvern Dialysis Centre,Private,Dialysis clinics,-37.85122747,145.0307669,1

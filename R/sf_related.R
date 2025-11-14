@@ -179,6 +179,7 @@ st_transform_custom <- function(sf_obj, transform_fun, args) {
 
       } else {
         # For other geometry types, return empty
+        warning("Unsupported geometry type: ", geom_type)
         return(st_polygon())
       }
 
