@@ -222,7 +222,7 @@ sf_fisheye <- function(
   if (!identical(sf::st_crs(out), original_crs)) {
     out <- sf::st_transform(out, original_crs)
   }
-  out <- st_set_geometry(
+  out <- st_set_geometry(out,
     lwgeom::lwgeom_make_valid(st_geometry(out))
   )
   return(out)
