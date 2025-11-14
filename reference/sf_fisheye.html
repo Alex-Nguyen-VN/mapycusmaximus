@@ -170,11 +170,19 @@ X and Y are independently scaled by <code>sx</code> and <code>sy</code>.</p>
 <p><strong>Implementation notes.</strong> Geometry coordinates are transformed by
 <code><a href="st_transform_custom.html">st_transform_custom()</a></code> which safely re-closes polygon rings and drops Z/M.
 The radial warp itself is delegated to <code><a href="fisheye_fgc.html">fisheye_fgc()</a></code> (which is not modified).</p>
-    </div>
+<p>The transformation may introduce self-intersections or other topology
+issues due to geometric warping. To ensure the output is suitable for
+plotting and spatial operations, the geometry is repaired using
+<code><a href="https://r-spatial.github.io/lwgeom/reference/lwgeom_make_valid.html" class="external-link">lwgeom::lwgeom_make_valid()</a></code>. Users should be aware that:</p><ul><li><p>geometry types may be promoted (e.g., POLYGON → MULTIPOLYGON),</p></li>
+<li><p>tiny sliver polygons may be removed,</p></li>
+<li><p>invalid rings or bow-tie shapes will be corrected,</p></li>
+<li><p>the repair step requires the <code>{lwgeom}</code> package.</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">sf::st_transform()</a></code>, <code><a href="https://r-spatial.github.io/sf/reference/st_is_longlat.html" class="external-link">sf::st_is_longlat()</a></code>, <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs()</a></code>,
-<code><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">sf::st_coordinates()</a></code>, <code><a href="st_transform_custom.html">st_transform_custom()</a></code>, <code><a href="fisheye_fgc.html">fisheye_fgc()</a></code></p></div>
+<code><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">sf::st_coordinates()</a></code>, <code><a href="st_transform_custom.html">st_transform_custom()</a></code>, <code><a href="fisheye_fgc.html">fisheye_fgc()</a></code>
+<code><a href="https://r-spatial.github.io/lwgeom/reference/lwgeom_make_valid.html" class="external-link">lwgeom::lwgeom_make_valid()</a></code>, <code><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">sf::st_make_valid()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -189,15 +197,18 @@ The radial warp itself is delegated to <code><a href="fisheye_fgc.html">fisheye_
 <span class="r-in"><span><span class="co"># Default center (bbox midpoint), gentle magnification</span></span></span>
 <span class="r-in"><span><span class="va">out1</span> <span class="op">&lt;-</span> <span class="fu">sf_fisheye</span><span class="op">(</span><span class="va">poly</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.6</span>,</span></span>
 <span class="r-in"><span>                   zoom_factor <span class="op">=</span> <span class="fl">1.5</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in UseMethod("st_geometry&lt;-"):</span> no applicable method for 'st_geometry&lt;-' applied to an object of class "c('sfc_POLYGON', 'sfc')"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Explicit map-unit center, stronger focus</span></span></span>
 <span class="r-in"><span><span class="va">out2</span> <span class="op">&lt;-</span> <span class="fu">sf_fisheye</span><span class="op">(</span><span class="va">poly</span>, cx <span class="op">=</span> <span class="fl">0.5</span>, cy <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
 <span class="r-in"><span>                   r_in <span class="op">=</span> <span class="fl">0.25</span>, r_out <span class="op">=</span> <span class="fl">0.55</span>,</span></span>
 <span class="r-in"><span>                   zoom_factor <span class="op">=</span> <span class="fl">2.0</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in UseMethod("st_geometry&lt;-"):</span> no applicable method for 'st_geometry&lt;-' applied to an object of class "c('sfc_POLYGON', 'sfc')"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Lon/lat point (auto-project to UTM/MGA), then fisheye around CBD (WGS84)</span></span></span>
 <span class="r-in"><span><span class="va">pt_ll</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">144.9631</span>, <span class="op">-</span><span class="fl">37.8136</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>  <span class="co"># Melbourne CBD</span></span></span>
 <span class="r-in"><span><span class="va">out3</span>  <span class="op">&lt;-</span> <span class="fu">sf_fisheye</span><span class="op">(</span><span class="va">pt_ll</span>, r_in <span class="op">=</span> <span class="fl">0.2</span>, r_out <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in UseMethod("st_geometry&lt;-"):</span> no applicable method for 'st_geometry&lt;-' applied to an object of class "c('sfc_POINT', 'sfc')"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Center supplied as an sf polygon: centroid is used as the warp center</span></span></span>
 <span class="r-in"><span><span class="co"># out4 &lt;- sf_fisheye(vic_polygon_sf, center = vic_polygon_sf)</span></span></span>

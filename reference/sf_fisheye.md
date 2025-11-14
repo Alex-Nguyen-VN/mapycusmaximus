@@ -158,6 +158,20 @@ itself is delegated to
 [`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
 (which is not modified).
 
+The transformation may introduce self-intersections or other topology
+issues due to geometric warping. To ensure the output is suitable for
+plotting and spatial operations, the geometry is repaired using
+[`lwgeom::lwgeom_make_valid()`](https://r-spatial.github.io/lwgeom/reference/lwgeom_make_valid.html).
+Users should be aware that:
+
+- geometry types may be promoted (e.g., POLYGON → MULTIPOLYGON),
+
+- tiny sliver polygons may be removed,
+
+- invalid rings or bow-tie shapes will be corrected,
+
+- the repair step requires the `{lwgeom}` package.
+
 ## See also
 
 [`sf::st_transform()`](https://r-spatial.github.io/sf/reference/st_transform.html),
@@ -166,6 +180,8 @@ itself is delegated to
 [`sf::st_coordinates()`](https://r-spatial.github.io/sf/reference/st_coordinates.html),
 [`st_transform_custom()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/st_transform_custom.md),
 [`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
+[`lwgeom::lwgeom_make_valid()`](https://r-spatial.github.io/lwgeom/reference/lwgeom_make_valid.html),
+[`sf::st_make_valid()`](https://r-spatial.github.io/sf/reference/valid.html)
 
 ## Examples
 
@@ -180,15 +196,18 @@ poly <- st_sfc(st_polygon(list(rbind(
 # Default center (bbox midpoint), gentle magnification
 out1 <- sf_fisheye(poly, r_in = 0.3, r_out = 0.6,
                    zoom_factor = 1.5, squeeze_factor = 0.35)
+#> Error in UseMethod("st_geometry<-"): no applicable method for 'st_geometry<-' applied to an object of class "c('sfc_POLYGON', 'sfc')"
 
 # Explicit map-unit center, stronger focus
 out2 <- sf_fisheye(poly, cx = 0.5, cy = 0.5,
                    r_in = 0.25, r_out = 0.55,
                    zoom_factor = 2.0, squeeze_factor = 0.25)
+#> Error in UseMethod("st_geometry<-"): no applicable method for 'st_geometry<-' applied to an object of class "c('sfc_POLYGON', 'sfc')"
 
 # Lon/lat point (auto-project to UTM/MGA), then fisheye around CBD (WGS84)
 pt_ll <- st_sfc(st_point(c(144.9631, -37.8136)), crs = 4326)  # Melbourne CBD
 out3  <- sf_fisheye(pt_ll, r_in = 0.2, r_out = 0.5)
+#> Error in UseMethod("st_geometry<-"): no applicable method for 'st_geometry<-' applied to an object of class "c('sfc_POINT', 'sfc')"
 
 # Center supplied as an sf polygon: centroid is used as the warp center
 # out4 <- sf_fisheye(vic_polygon_sf, center = vic_polygon_sf)
