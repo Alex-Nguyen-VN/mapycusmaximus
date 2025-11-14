@@ -117,7 +117,8 @@
 #' [sf::st_coordinates()], `st_transform_custom()`, `fisheye_fgc()`
 #' [lwgeom::lwgeom_make_valid()], [sf::st_make_valid()]
 #'
-#' @importFrom sf st_is_empty st_zm st_crs st_bbox st_transform st_is_longlat st_set_geometry st_geometry lwgeom lwgeom_make_valid
+#' @importFrom sf st_is_empty st_zm st_crs st_bbox st_transform st_is_longlat st_set_geometry st_geometry
+#' @importFrom lwgeom lwgeom_make_valid
 #' @export
 
 
