@@ -196,18 +196,15 @@ poly <- st_sfc(st_polygon(list(rbind(
 # Default center (bbox midpoint), gentle magnification
 out1 <- sf_fisheye(poly, r_in = 0.3, r_out = 0.6,
                    zoom_factor = 1.5, squeeze_factor = 0.35)
-#> Error in UseMethod("st_geometry<-"): no applicable method for 'st_geometry<-' applied to an object of class "c('sfc_POLYGON', 'sfc')"
 
 # Explicit map-unit center, stronger focus
 out2 <- sf_fisheye(poly, cx = 0.5, cy = 0.5,
                    r_in = 0.25, r_out = 0.55,
                    zoom_factor = 2.0, squeeze_factor = 0.25)
-#> Error in UseMethod("st_geometry<-"): no applicable method for 'st_geometry<-' applied to an object of class "c('sfc_POLYGON', 'sfc')"
 
 # Lon/lat point (auto-project to UTM/MGA), then fisheye around CBD (WGS84)
 pt_ll <- st_sfc(st_point(c(144.9631, -37.8136)), crs = 4326)  # Melbourne CBD
 out3  <- sf_fisheye(pt_ll, r_in = 0.2, r_out = 0.5)
-#> Error in UseMethod("st_geometry<-"): no applicable method for 'st_geometry<-' applied to an object of class "c('sfc_POINT', 'sfc')"
 
 # Center supplied as an sf polygon: centroid is used as the warp center
 # out4 <- sf_fisheye(vic_polygon_sf, center = vic_polygon_sf)
