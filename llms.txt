@@ -324,3 +324,8 @@ curse of dimensionality.
 
   Fisheye-Distorted Victoria LGAs (`sf`)
 
+# Articles
+
+### All vignettes
+
+- [Mapycus](https://alex-nguyen-vn.github.io/mapycusmaximus/articles/Mapycus.md):
