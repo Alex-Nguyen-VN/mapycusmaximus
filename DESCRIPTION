@@ -3,8 +3,7 @@ Title: Applies Focus–Glue–Context Fisheye Transformations for Spatial Visual
 Version: 0.0.0.1092
 Authors@R: 
     person("Alex", "Nguyen", , "thanhcuong10091992@gmail.com", role = c("aut", "cre"))
-Description: The mapycusmaximus package provides tools for applying fisheye transformations to 2D coordinates and spatial vector geometries. It implements the **Focus–Glue–Context (FGC)** model: a smooth radial distortion that enlarges a focal region, transitions through a glue ring, and preserves outside context.
-License: MIT + file LICENSE
+Description: Tools to apply focus-glue-context (FGC) fisheye transformations to two-dimensional coordinates and spatial vector geometries. Implements a smooth radial distortion that enlarges a focal region, transitions through a glue ring, and preserves outside context.
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
@@ -13,7 +12,10 @@ Imports:
     ggplot2,
     sf
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
 Config/testthat/edition: 3
 Depends: 
     R (>= 3.5)
