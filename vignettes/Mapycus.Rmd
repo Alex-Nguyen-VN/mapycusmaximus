@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+tune parameters, and align m```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -20,7 +20,7 @@ mapycusmaximus implements a projection-aware, vector-geometry fisheye based on t
 - `fisheye_fgc()` — numeric coordinates (matrix) with diagnostics
 - `sf_fisheye()` — `sf`/`sfc` objects with CRS handling and normalization
 
-This vignette shows how to apply the fisheye to common `sf` layers, tune parameters, and align multiple layers for a single figure.
+This vignette shows how to apply the fisheye to common `sf` layers, ultiple layers for a single figure.
 
 ## Setup
 
@@ -49,7 +49,7 @@ vic_fisheye_demo <- sf_fisheye(
   vic,
   center = melbourne,      # accept sf/sfc; centroid is used in working CRS
   r_in = 0.34, r_out = 0.60,
-  zoom_factor = 1.6,
+  zoom_factor = 15,
   squeeze_factor = 0.35,
   method = "expand",
   revolution = 0
@@ -77,48 +77,12 @@ vic_cbd <- sf_fisheye(
   center = c(144.9631, -37.8136),
   center_crs = "EPSG:4326",
   r_in = 0.30, r_out = 0.55,
-  zoom_factor = 1.5, squeeze_factor = 0.30
+  zoom_factor = 15, squeeze_factor = 0.30
 )
 
 ggplot(vic_cbd) +
   geom_sf(fill = "grey92", color = "white", linewidth = 0.2) +
   ggtitle("Center supplied as lon/lat (WGS84)")
-```
-
-## Tuning parameters
-
-Guidelines for common choices (with `preserve_aspect = TRUE`):
-
-- Radii: `r_in` ≈ 0.25-0.35, `r_out` ≈ 0.55-0.70
-- Magnification: `zoom_factor` 1.5-2.0
-- Glue compression: `squeeze_factor` 0.25-0.40
-- Method: `"expand"` (default) or `"outward"` (stabilizes the outer boundary)
-- Revolution: 0 for publication; ≤ 0.2 for demonstrations
-
-```{r parameter-sweep, fig.height=3.5}
-params <- expand.grid(
-  r_in = c(0.30, 0.34), r_out = c(0.60, 0.70),
-  zoom_factor = c(1.4, 1.8), squeeze_factor = c(0.30, 0.40),
-  KEEP.OUT.ATTRS = FALSE
-)
-
-examples <- lapply(seq_len(nrow(params)), function(i) {
-  p <- params[i, ]
-  out <- sf_fisheye(vic, center = melbourne,
-                    r_in = p$r_in, r_out = p$r_out,
-                    zoom_factor = p$zoom_factor,
-                    squeeze_factor = p$squeeze_factor)
-  out$label <- sprintf("r_in=%.2f r_out=%.2f\nzoom=%.1f squeeze=%.2f",
-                       p$r_in, p$r_out, p$zoom_factor, p$squeeze_factor)
-  out
-})
-
-examples <- do.call(rbind, examples)
-
-ggplot(examples) +
-  geom_sf(fill = "grey92", color = "white", linewidth = 0.15) +
-  facet_wrap(~ label, ncol = 2) +
-  ggtitle("Parameter effects: radii, magnification, glue compression")
 ```
 
 ## Aligning multiple layers
@@ -134,7 +98,7 @@ both <- rbind(vic[, c("LGA_NAME", "geometry", "layer")],
 
 both_fish <- sf_fisheye(both, center = melbourne,
                         r_in = 0.34, r_out = 0.60,
-                        zoom_factor = 1.6, squeeze_factor = 0.35)
+                        zoom_factor = 15, squeeze_factor = 0.35)
 
 ggplot() +
   geom_sf(data = both_fish[both_fish$layer == "polygon", ],

@@ -15,11 +15,13 @@
 ^\.slideshow$
 ^\.fisheye_frames$
 ^fisheye_frames$
-^\.inst$
-^inst$
 ^\.codex$
 ^codex$
 ^\.comments$
 ^.comments$
 ^\.fisheye_frames_small$
 ^fisheye_frames_small$
+^\.trial$
+^trial$
+^doc$
+^Meta$
