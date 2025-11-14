@@ -7,10 +7,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-tune parameters, and align m```{r, include = FALSE}
+```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
+)
+knitr::opts_chunk$set(
+  fig.width = 7,
+  fig.height = 5,
+  fig.align = "center"
 )
 ```
 ## Overview
@@ -20,7 +25,7 @@ mapycusmaximus implements a projection-aware, vector-geometry fisheye based on t
 - `fisheye_fgc()` — numeric coordinates (matrix) with diagnostics
 - `sf_fisheye()` — `sf`/`sfc` objects with CRS handling and normalization
 
-This vignette shows how to apply the fisheye to common `sf` layers, ultiple layers for a single figure.
+This vignette shows how to apply the fisheye to common `sf` layers, tune parameters, and align multiple layers for a single figure.
 
 ## Setup
 
