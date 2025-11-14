@@ -4,6 +4,7 @@ Version: 0.1.0
 Authors@R: 
     person("Alex", "Nguyen", , "thanhcuong10091992@gmail.com", role = c("aut", "cre"))
 Description: Tools to apply focus-glue-context (FGC) fisheye transformations to two-dimensional coordinates and spatial vector geometries. Implements a smooth radial distortion that enlarges a focal region, transitions through a glue ring, and preserves outside context.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
