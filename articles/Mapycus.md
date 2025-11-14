@@ -1,8 +1,6 @@
 # Mapycus
 
-tune parameters, and align
-m`{r, include = FALSE} knitr::opts_chunk$set( collapse = TRUE, comment = "#>" )`
-\## Overview
+## Overview
 
 mapycusmaximus implements a projection-aware, vector-geometry fisheye
 based on the Focus-Glue-Context (FGC) model. The transform magnifies a
@@ -15,18 +13,14 @@ levels:
 - [`sf_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/sf_fisheye.md)
   — `sf`/`sfc` objects with CRS handling and normalization
 
-This vignette shows how to apply the fisheye to common `sf` layers,
-ultiple layers for a single figure.
+This vignette shows how to apply the fisheye to common `sf` layers, tune
+parameters, and align multiple layers for a single figure.
 
 ## Setup
 
 ``` r
 library(sf)
-```
-
-    ## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
-
-``` r
+#> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 library(ggplot2)
 library(mapycusmaximus)
 theme_set(ggplot2::theme_minimal())
@@ -105,11 +99,7 @@ for plotting; this guarantees a common bounding box for normalization.
 
 ``` r
 centroids <- st_centroid(vic)
-```
-
-    ## Warning: st_centroid assumes attributes are constant over geometries
-
-``` r
+#> Warning: st_centroid assumes attributes are constant over geometries
 vic$layer <- "polygon"
 centroids$layer <- "centroid"
 both <- rbind(vic[, c("LGA_NAME", "geometry", "layer")],

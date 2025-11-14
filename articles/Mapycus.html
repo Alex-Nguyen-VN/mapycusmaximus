@@ -65,9 +65,9 @@
 
     
     
-<p>tune parameters, and align
-m<code>{r, include = FALSE} knitr::opts_chunk$set(   collapse = TRUE,   comment = "#&gt;" )</code>
-## Overview</p>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
 <p>mapycusmaximus implements a projection-aware, vector-geometry fisheye
 based on the Focus-Glue-Context (FGC) model. The transform magnifies a
 chosen focus (inner radius <code>r_in</code>), transitions smoothly
@@ -82,15 +82,16 @@ diagnostics</li>
 with CRS handling and normalization</li>
 </ul>
 <p>This vignette shows how to apply the fisheye to common
-<code>sf</code> layers, ultiple layers for a single figure.</p>
+<code>sf</code> layers, tune parameters, and align multiple layers for a
+single figure.</p>
+</div>
 <div class="section level2">
 <h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span></code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alex-nguyen-vn.github.io/mapycusmaximus/">mapycusmaximus</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/get_theme.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The package ships example data:</p>
@@ -112,7 +113,7 @@ data preparation)</li>
 and normalizes coordinates around a center. With
 <code>preserve_aspect = TRUE</code> (default), radii are interpreted in
 unit-like space (≈ fraction of the layer’s half-span).</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Focus near a supplied geometry: use the centroid of the combined Melbourne polygon</span></span>
 <span><span class="va">melbourne</span> <span class="op">&lt;-</span> <span class="va">vic</span><span class="op">[</span><span class="va">vic</span><span class="op">$</span><span class="va">LGA_NAME</span> <span class="op">==</span> <span class="st">"MELBOURNE"</span>, <span class="op">]</span></span>
 <span></span>
@@ -130,7 +131,7 @@ unit-like space (≈ fraction of the layer’s half-span).</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">vic_fisheye_demo</span>, fill <span class="op">=</span> <span class="st">"grey92"</span>, color <span class="op">=</span> <span class="st">"white"</span>, linewidth <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">melbourne</span>, fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="st">"tomato"</span>, linewidth <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"FGC fisheye: Melbourne focus within Victoria"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Mapycus_files/figure-html/quick-start-1.png" class="r-plt" width="700"></p>
+<p><img src="Mapycus_files/figure-html/quick-start-1.png" class="r-plt" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="choosing-a-center">Choosing a center<a class="anchor" aria-label="anchor" href="#choosing-a-center"></a>
@@ -148,7 +149,7 @@ combined geometry)</li>
 <code>normalized_center = TRUE</code>
 </li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example: WGS84 center (Melbourne CBD), auto-project to a working CRS</span></span>
 <span><span class="va">vic_cbd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span></span>
 <span>  <span class="va">vic</span>,</span>
@@ -161,7 +162,7 @@ combined geometry)</li>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">vic_cbd</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"grey92"</span>, color <span class="op">=</span> <span class="st">"white"</span>, linewidth <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Center supplied as lon/lat (WGS84)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Mapycus_files/figure-html/centers-1.png" class="r-plt" width="700"></p>
+<p><img src="Mapycus_files/figure-html/centers-1.png" class="r-plt" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="aligning-multiple-layers">Aligning multiple layers<a class="anchor" aria-label="anchor" href="#aligning-multiple-layers"></a>
@@ -171,11 +172,10 @@ each layer and ensure they share the same working CRS and normalization.
 A robust pattern is to bind layers together, transform once, then split
 for plotting; this guarantees a common bounding box for
 normalization.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">centroids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="va">vic</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: st_centroid assumes attributes are constant over geometries</span></span></code></pre>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vic</span><span class="op">$</span><span class="va">layer</span> <span class="op">&lt;-</span> <span class="st">"polygon"</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">centroids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="va">vic</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: st_centroid assumes attributes are constant over geometries</span></span>
+<span><span class="va">vic</span><span class="op">$</span><span class="va">layer</span> <span class="op">&lt;-</span> <span class="st">"polygon"</span></span>
 <span><span class="va">centroids</span><span class="op">$</span><span class="va">layer</span> <span class="op">&lt;-</span> <span class="st">"centroid"</span></span>
 <span><span class="va">both</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">vic</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LGA_NAME"</span>, <span class="st">"geometry"</span>, <span class="st">"layer"</span><span class="op">)</span><span class="op">]</span>,</span>
 <span>              <span class="va">centroids</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LGA_NAME"</span>, <span class="st">"geometry"</span>, <span class="st">"layer"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
@@ -190,12 +190,12 @@ normalization.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">both_fish</span><span class="op">[</span><span class="va">both_fish</span><span class="op">$</span><span class="va">layer</span> <span class="op">==</span> <span class="st">"centroid"</span>, <span class="op">]</span>,</span>
 <span>          color <span class="op">=</span> <span class="st">"#2b6cb0"</span>, size <span class="op">=</span> <span class="fl">0.6</span>, alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Aligned overlays: transform layers together, plot separately"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Mapycus_files/figure-html/multi-layer-1.png" class="r-plt" width="700"></p>
+<p><img src="Mapycus_files/figure-html/multi-layer-1.png" class="r-plt" width="672" style="display: block; margin: auto;"></p>
 <p>If layers must be transformed separately, current per-layer
 normalization can lead to slight radius mismatches. A practical
 workaround is to compute a scale factor from a reference layer’s bbox
 and multiply <code>r_in</code>/<code>r_out</code> accordingly, e.g.:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all_points</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">all_points</span>, center <span class="op">=</span> <span class="va">melbourne</span>,</span>
 <span>                         zoom_factor <span class="op">=</span> <span class="fl">1.8</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.30</span><span class="op">)</span></span>
 <span><span class="va">scale_radii</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="op">(</span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">vic</span><span class="op">)</span><span class="op">[</span><span class="st">"xmax"</span><span class="op">]</span> <span class="op">-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">vic</span><span class="op">)</span><span class="op">[</span><span class="st">"xmin"</span><span class="op">]</span><span class="op">)</span>  <span class="op">-</span></span>
@@ -215,12 +215,12 @@ normalization and radii without manual scaling.</p>
 <p>Use <code><a href="../reference/create_test_grid.html">create_test_grid()</a></code> and
 <code><a href="../reference/plot_fisheye_fgc.html">plot_fisheye_fgc()</a></code> to understand the mapping in isolation
 from GIS workflows.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_test_grid.html">create_test_grid</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, spacing <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
 <span><span class="va">warp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">grid</span>, r_in <span class="op">=</span> <span class="fl">0.34</span>, r_out <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>                    zoom_factor <span class="op">=</span> <span class="fl">1.3</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_fisheye_fgc.html">plot_fisheye_fgc</a></span><span class="op">(</span><span class="va">grid</span>, <span class="va">warp</span>, r_in <span class="op">=</span> <span class="fl">0.34</span>, r_out <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Mapycus_files/figure-html/diagnostics-1.png" class="r-plt" width="700"></p>
+<p><img src="Mapycus_files/figure-html/diagnostics-1.png" class="r-plt" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="crs-and-reproducibility-tips">CRS and reproducibility tips<a class="anchor" aria-label="anchor" href="#crs-and-reproducibility-tips"></a>
