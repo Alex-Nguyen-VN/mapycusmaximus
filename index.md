@@ -50,7 +50,13 @@ visualization grammar.
 
 ## Installation
 
-Install the development version from GitHub:
+Install the stable version from CRAN:
+
+``` r
+install.packages("mapycusmaximus")
+```
+
+or install the development version from GitHub:
 
 ``` r
 # install.packages("devtools")
