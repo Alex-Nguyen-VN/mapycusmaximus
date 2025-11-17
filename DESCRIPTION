@@ -1,5 +1,5 @@
 Package: mapycusmaximus
-Title: Applies Focus-Glue-Context Fisheye Transformations for Spatial Visualization
+Title: Focus-Glue-Context Fisheye Transformations for Spatial Visualization
 Version: 0.1.0
 Authors@R: c(
     person("Alex", "Nguyen", , "thanhcuong10091992@gmail.com", role = c("aut", "cre", "cph")),
