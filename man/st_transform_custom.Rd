@@ -7,7 +7,8 @@
 st_transform_custom(sf_obj, transform_fun, args)
 }
 \arguments{
-\item{sf_obj}{An object of class \code{\link{sf}} or \code{\link{sfc}}. Supported geometry types:
+\item{sf_obj}{An object of class \code{sf} or \code{sfc}.
+Supported geometry types:
 \code{POINT}, \code{LINESTRING}, \code{POLYGON}, and \code{MULTIPOLYGON}.}
 
 \item{transform_fun}{A function that accepts a numeric matrix of coordinates

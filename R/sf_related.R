@@ -7,7 +7,8 @@
 #' on the resulting `sfc` column. Polygon rings are re-closed after
 #' transformation so the first and last vertex match.
 #'
-#' @param sf_obj An object of class [`sf`] or [`sfc`]. Supported geometry types:
+#' @param sf_obj An object of class `sf` or `sfc`. 
+#' Supported geometry types:
 #'   `POINT`, `LINESTRING`, `POLYGON`, and `MULTIPOLYGON`.
 #' @param transform_fun A function that accepts a numeric matrix of coordinates
 #'   with two columns `(X, Y)` and returns a transformed numeric matrix with the
