@@ -16,10 +16,8 @@ st_transform_custom(sf_obj, transform_fun, args)
 
 - sf_obj:
 
-  An object of class
-  [`sf`](https://r-spatial.github.io/sf/reference/sf.html) or
-  [`sfc`](https://r-spatial.github.io/sf/reference/sfc.html). Supported
-  geometry types: `POINT`, `LINESTRING`, `POLYGON`, and `MULTIPOLYGON`.
+  An object of class `sf` or `sfc`. Supported geometry types: `POINT`,
+  `LINESTRING`, `POLYGON`, and `MULTIPOLYGON`.
 
 - transform_fun:
 
