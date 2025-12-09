@@ -38,7 +38,8 @@ The package ships example data:
 [`sf_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/sf_fisheye.md)
 chooses a sensible projected working CRS and normalizes coordinates
 around a center. With `preserve_aspect = TRUE` (default), radii are
-interpreted in unit-like space (≈ fraction of the layer’s half-span).
+interpreted in unit-like space (approx fraction of the layer’s
+half-span).
 
 ``` r
 # Focus near a supplied geometry: use the centroid of the combined Melbourne polygon

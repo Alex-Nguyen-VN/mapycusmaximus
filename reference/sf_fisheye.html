@@ -148,7 +148,7 @@ restored.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><strong>CRS handling.</strong> If <code>target_crs</code> is <code>NULL</code> and the input is geographic
-(lon/lat), a projected <strong>working CRS</strong> is chosen from the layer’s centroid:</p><ul><li><p>Victoria, AU region (≈ 140–150°E, 40–30°S): <strong>EPSG:7855</strong> (GDA2020 / MGA55).</p></li>
+(lon/lat), a projected <strong>working CRS</strong> is chosen from the layer’s centroid:</p><ul><li><p>Victoria, AU region (approximate 140–150°E, 40–30°S): <strong>EPSG:7855</strong> (GDA2020 / MGA55).</p></li>
 <li><p>Otherwise UTM: <strong>EPSG:326##</strong> (north) or <strong>EPSG:327##</strong> (south).</p></li>
 </ul><p>You may override with <code>target_crs</code>. The original CRS is restored on return.</p>
 <p><strong>Center selection.</strong> The fisheye center can be supplied in multiple ways:</p><ul><li><p><code>center = c(lon, lat)</code>, with <code>center_crs = "EPSG:4326"</code> (recommended

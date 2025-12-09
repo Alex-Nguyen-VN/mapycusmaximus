@@ -117,8 +117,8 @@ restored.
 (lon/lat), a projected **working CRS** is chosen from the layer’s
 centroid:
 
-- Victoria, AU region (≈ 140–150°E, 40–30°S): **EPSG:7855** (GDA2020 /
-  MGA55).
+- Victoria, AU region (approximate 140–150°E, 40–30°S): **EPSG:7855**
+  (GDA2020 / MGA55).
 
 - Otherwise UTM: **EPSG:326##** (north) or **EPSG:327##** (south).
 
