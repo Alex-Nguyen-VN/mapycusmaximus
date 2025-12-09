@@ -17,13 +17,13 @@ Source:
 
 Nguyen A, Cook D, Lydeamore M (2025). *mapycusmaximus:
 Focus-Glue-Context Fisheye Transformations for Spatial Visualization*. R
-package version 0.1.0,
+package version 1.0.0,
 <https://alex-nguyen-vn.github.io/mapycusmaximus/>.
 
     @Manual{,
       title = {mapycusmaximus: Focus-Glue-Context Fisheye Transformations for Spatial Visualization},
       author = {Alex Nguyen and Dianne Cook and Michael Lydeamore},
       year = {2025},
-      note = {R package version 0.1.0},
+      note = {R package version 1.0.0},
       url = {https://alex-nguyen-vn.github.io/mapycusmaximus/},
     }
