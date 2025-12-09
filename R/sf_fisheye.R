@@ -12,7 +12,7 @@
 #' **CRS handling.** If `target_crs` is `NULL` and the input is geographic
 #' (lon/lat), a projected **working CRS** is chosen from the layer’s centroid:
 #' \itemize{
-#'   \item Victoria, AU region (≈ 140–150°E, 40–30°S): **EPSG:7855** (GDA2020 / MGA55).
+#'   \item Victoria, AU region (approximate 140–150°E, 40–30°S): **EPSG:7855** (GDA2020 / MGA55).
 #'   \item Otherwise UTM: **EPSG:326##** (north) or **EPSG:327##** (south).
 #' }
 #' You may override with `target_crs`. The original CRS is restored on return.

@@ -81,7 +81,7 @@ Inside the focus ring (\code{r_in}) features enlarge; across the glue ring
 \strong{CRS handling.} If \code{target_crs} is \code{NULL} and the input is geographic
 (lon/lat), a projected \strong{working CRS} is chosen from the layer’s centroid:
 \itemize{
-\item Victoria, AU region (≈ 140–150°E, 40–30°S): \strong{EPSG:7855} (GDA2020 / MGA55).
+\item Victoria, AU region (approximate 140–150°E, 40–30°S): \strong{EPSG:7855} (GDA2020 / MGA55).
 \item Otherwise UTM: \strong{EPSG:326##} (north) or \strong{EPSG:327##} (south).
 }
 You may override with \code{target_crs}. The original CRS is restored on return.

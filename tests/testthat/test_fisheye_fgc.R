@@ -57,9 +57,9 @@ test_that("fisheye_fgc validates input parameters", {
 
 test_that("fisheye_fgc zone classification is correct", {
   coords <- matrix(c(0, 0,      # should be focus
-                    0.2, 0.2,   # should be focus (r ≈ 0.28 < 0.34)
+                    0.2, 0.2,   # should be focus (r approx 0.28 < 0.34)
                     0.4, 0,     # should be glue (r = 0.4, between 0.34 and 0.5)
-                    0.6, 0.6),  # should be context (r ≈ 0.85 > 0.5)
+                    0.6, 0.6),  # should be context (r approx 0.85 > 0.5)
                    ncol = 2, byrow = TRUE)
   
   result <- fisheye_fgc(coords, r_in = 0.34, r_out = 0.5)

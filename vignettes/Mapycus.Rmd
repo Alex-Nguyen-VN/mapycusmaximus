@@ -44,7 +44,7 @@ The package ships example data:
 
 ## Quick start: warp a polygon layer
 
-`sf_fisheye()` chooses a sensible projected working CRS and normalizes coordinates around a center. With `preserve_aspect = TRUE` (default), radii are interpreted in unit-like space (≈ fraction of the layer's half-span).
+`sf_fisheye()` chooses a sensible projected working CRS and normalizes coordinates around a center. With `preserve_aspect = TRUE` (default), radii are interpreted in unit-like space (approx fraction of the layer's half-span).
 
 ```{r quick-start}
 # Focus near a supplied geometry: use the centroid of the combined Melbourne polygon

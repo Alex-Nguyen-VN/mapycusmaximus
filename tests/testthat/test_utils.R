@@ -44,7 +44,7 @@ test_that("classify_zones correctly classifies points", {
 test_that("classify_zones handles different centers", {
   coords <- matrix(c(1, 1), ncol = 2)  # Point at (1, 1)
   
-  # Center at origin: distance = sqrt(2) ≈ 1.41
+  # Center at origin: distance = sqrt(2) approx 1.41
   zones1 <- classify_zones(coords, cx = 0, cy = 0, r_in = 1, r_out = 2)
   expect_equal(zones1, "glue")
   
