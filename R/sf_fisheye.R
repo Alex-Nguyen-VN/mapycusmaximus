@@ -110,7 +110,7 @@
 #' out3  <- sf_fisheye(pt_ll, r_in = 0.2, r_out = 0.5)
 #'
 #' # Center supplied as an sf polygon: centroid is used as the warp center
-#' # out4 <- sf_fisheye(vic_polygon_sf, center = vic_polygon_sf)
+#' out4 <- sf_fisheye(poly, center = poly)
 #'
 #' @seealso
 #' [sf::st_transform()], [sf::st_is_longlat()], [sf::st_crs()],

@@ -7,7 +7,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-3813-7155")),
     person("Michael", "Lydeamore", , "michael.lydeamore@monash.edu", role = "aut",
            comment = c(ORCID = "0000-0001-6515-827X")))
-Description: Focus-glue-context (FGC) fisheye transformations to two-dimensional coordinates and spatial vector geometries. Implements a smooth radial distortion that enlarges a focal region, transitions through a glue ring, and preserves outside context.
+Description: Focus-glue-context (FGC) fisheye transformations to two-dimensional coordinates and spatial vector geometries. Implements a smooth radial distortion that enlarges a focal region, transitions through a glue ring, and preserves outside context. Methods build on generalized fisheye views and focus+context mapping. For more details see Furnas (1986) <doi:10.1145/22339.22342>, Furnas (2006) <doi:10.1145/1124772.1124921> and Yamamoto et al. (2009) <doi:10.1145/1653771.1653788>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
