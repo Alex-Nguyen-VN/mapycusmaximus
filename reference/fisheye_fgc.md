@@ -20,6 +20,9 @@ fisheye_fgc(
   method = "expand",
   revolution = 0
 )
+
+# S3 method for class 'mapycus_fgc'
+print(object, ...)
 ```
 
 ## Arguments

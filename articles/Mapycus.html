@@ -59,7 +59,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Mapycus</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Alex-Nguyen-VN/mapycusmaximus/blob/v.1.0.0/vignettes/Mapycus.Rmd" class="external-link"><code>vignettes/Mapycus.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Alex-Nguyen-VN/mapycusmaximus/blob/main/vignettes/Mapycus.Rmd" class="external-link"><code>vignettes/Mapycus.Rmd</code></a></small>
       <div class="d-none name"><code>Mapycus.Rmd</code></div>
     </div>
 
@@ -131,7 +131,7 @@ unit-like space (approx fraction of the layer’s half-span).</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">vic_fisheye_demo</span>, fill <span class="op">=</span> <span class="st">"grey92"</span>, color <span class="op">=</span> <span class="st">"white"</span>, linewidth <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">melbourne</span>, fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="st">"tomato"</span>, linewidth <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"FGC fisheye: Melbourne focus within Victoria"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Mapycus_files/figure-html/quick-start-1.png" class="r-plt" width="672" style="display: block; margin: auto;"></p>
+<p><img src="Mapycus_files/figure-html/quick-start-1.png" class="r-plt" alt="" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="choosing-a-center">Choosing a center<a class="anchor" aria-label="anchor" href="#choosing-a-center"></a>
@@ -162,7 +162,7 @@ combined geometry)</li>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">vic_cbd</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"grey92"</span>, color <span class="op">=</span> <span class="st">"white"</span>, linewidth <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Center supplied as lon/lat (WGS84)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Mapycus_files/figure-html/centers-1.png" class="r-plt" width="672" style="display: block; margin: auto;"></p>
+<p><img src="Mapycus_files/figure-html/centers-1.png" class="r-plt" alt="" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="aligning-multiple-layers">Aligning multiple layers<a class="anchor" aria-label="anchor" href="#aligning-multiple-layers"></a>
@@ -190,7 +190,7 @@ normalization.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">both_fish</span><span class="op">[</span><span class="va">both_fish</span><span class="op">$</span><span class="va">layer</span> <span class="op">==</span> <span class="st">"centroid"</span>, <span class="op">]</span>,</span>
 <span>          color <span class="op">=</span> <span class="st">"#2b6cb0"</span>, size <span class="op">=</span> <span class="fl">0.6</span>, alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Aligned overlays: transform layers together, plot separately"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Mapycus_files/figure-html/multi-layer-1.png" class="r-plt" width="672" style="display: block; margin: auto;"></p>
+<p><img src="Mapycus_files/figure-html/multi-layer-1.png" class="r-plt" alt="" width="672" style="display: block; margin: auto;"></p>
 <p>If layers must be transformed separately, current per-layer
 normalization can lead to slight radius mismatches. A practical
 workaround is to compute a scale factor from a reference layer’s bbox
@@ -220,7 +220,7 @@ from GIS workflows.</p>
 <span><span class="va">warp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">grid</span>, r_in <span class="op">=</span> <span class="fl">0.34</span>, r_out <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>                    zoom_factor <span class="op">=</span> <span class="fl">1.3</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_fisheye_fgc.html">plot_fisheye_fgc</a></span><span class="op">(</span><span class="va">grid</span>, <span class="va">warp</span>, r_in <span class="op">=</span> <span class="fl">0.34</span>, r_out <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Mapycus_files/figure-html/diagnostics-1.png" class="r-plt" width="672" style="display: block; margin: auto;"></p>
+<p><img src="Mapycus_files/figure-html/diagnostics-1.png" class="r-plt" alt="" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="crs-and-reproducibility-tips">CRS and reproducibility tips<a class="anchor" aria-label="anchor" href="#crs-and-reproducibility-tips"></a>

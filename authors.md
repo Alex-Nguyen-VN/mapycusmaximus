@@ -13,9 +13,9 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/Alex-Nguyen-VN/mapycusmaximus/blob/v.1.0.0/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/Alex-Nguyen-VN/mapycusmaximus/blob/main/DESCRIPTION)
 
-Nguyen A, Cook D, Lydeamore M (2025). *mapycusmaximus:
+Nguyen A, Cook D, Lydeamore M (2026). *mapycusmaximus:
 Focus-Glue-Context Fisheye Transformations for Spatial Visualization*. R
 package version 1.0.0,
 <https://alex-nguyen-vn.github.io/mapycusmaximus/>.
@@ -23,7 +23,7 @@ package version 1.0.0,
     @Manual{,
       title = {mapycusmaximus: Focus-Glue-Context Fisheye Transformations for Spatial Visualization},
       author = {Alex Nguyen and Dianne Cook and Michael Lydeamore},
-      year = {2025},
+      year = {2026},
       note = {R package version 1.0.0},
       url = {https://alex-nguyen-vn.github.io/mapycusmaximus/},
     }

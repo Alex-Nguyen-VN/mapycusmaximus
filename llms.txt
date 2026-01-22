@@ -289,6 +289,7 @@ curse of dimensionality.
 ## Core Transformation Functions
 
 - [`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
+  [`print(`*`<mapycus_fgc>`*`)`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
   : Apply Focus–Glue–Context Fisheye Transformation
 
 - [`sf_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/sf_fisheye.md)
