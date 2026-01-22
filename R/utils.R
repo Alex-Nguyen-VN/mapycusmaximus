@@ -172,3 +172,14 @@ color = "blue", linetype = "dashed", inherit.aes = FALSE)
 return(p)
 }
 
+#' @export
+#' @rdname fisheye_fgc
+print.mapycus_fgc <- function(object, ...) {
+  dims <- dim(object)
+
+  attributes(object) <- NULL
+
+  dim(object) <- dims
+
+  print(object)
+}
