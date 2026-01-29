@@ -137,5 +137,7 @@ fisheye_fgc <- function(coords, cx = 0, cy = 0,
   attr(result, "original_radius") <- radius
   attr(result, "new_radius") <- radius_new
 
+  class(result) <- c("mapycus_fgc", class(result))
+
   return(result)
 }
