@@ -112,15 +112,7 @@ X and Y are independently scaled by \code{sx} and \code{sy}.
 The radial warp itself is delegated to \code{fisheye_fgc()} (which is not modified).
 
 The transformation may introduce self-intersections or other topology
-issues due to geometric warping. To ensure the output is suitable for
-plotting and spatial operations, the geometry is repaired using
-\code{lwgeom::lwgeom_make_valid()}. Users should be aware that:
-\itemize{
-\item geometry types may be promoted (e.g., POLYGON → MULTIPOLYGON),
-\item tiny sliver polygons may be removed,
-\item invalid rings or bow-tie shapes will be corrected,
-\item the repair step requires the \code{{lwgeom}} package.
-}
+issues due to geometric warping.
 }
 \examples{
 library(sf)
@@ -150,5 +142,4 @@ out4 <- sf_fisheye(poly, center = poly)
 \seealso{
 \code{\link[sf:st_transform]{sf::st_transform()}}, \code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}, \code{\link[sf:st_crs]{sf::st_crs()}},
 \code{\link[sf:st_coordinates]{sf::st_coordinates()}}, \code{st_transform_custom()}, \code{fisheye_fgc()}
-\code{\link[lwgeom:lwgeom_make_valid]{lwgeom::lwgeom_make_valid()}}, \code{\link[sf:valid]{sf::st_make_valid()}}
 }
