@@ -159,18 +159,7 @@ itself is delegated to
 (which is not modified).
 
 The transformation may introduce self-intersections or other topology
-issues due to geometric warping. To ensure the output is suitable for
-plotting and spatial operations, the geometry is repaired using
-[`lwgeom::lwgeom_make_valid()`](https://r-spatial.github.io/lwgeom/reference/lwgeom_make_valid.html).
-Users should be aware that:
-
-- geometry types may be promoted (e.g., POLYGON → MULTIPOLYGON),
-
-- tiny sliver polygons may be removed,
-
-- invalid rings or bow-tie shapes will be corrected,
-
-- the repair step requires the `{lwgeom}` package.
+issues due to geometric warping.
 
 ## See also
 
@@ -180,8 +169,6 @@ Users should be aware that:
 [`sf::st_coordinates()`](https://r-spatial.github.io/sf/reference/st_coordinates.html),
 [`st_transform_custom()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/st_transform_custom.md),
 [`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
-[`lwgeom::lwgeom_make_valid()`](https://r-spatial.github.io/lwgeom/reference/lwgeom_make_valid.html),
-[`sf::st_make_valid()`](https://r-spatial.github.io/sf/reference/valid.html)
 
 ## Examples
 

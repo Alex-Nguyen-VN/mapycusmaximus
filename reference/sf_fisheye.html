@@ -171,18 +171,12 @@ X and Y are independently scaled by <code>sx</code> and <code>sy</code>.</p>
 <code><a href="st_transform_custom.html">st_transform_custom()</a></code> which safely re-closes polygon rings and drops Z/M.
 The radial warp itself is delegated to <code><a href="fisheye_fgc.html">fisheye_fgc()</a></code> (which is not modified).</p>
 <p>The transformation may introduce self-intersections or other topology
-issues due to geometric warping. To ensure the output is suitable for
-plotting and spatial operations, the geometry is repaired using
-<code><a href="https://r-spatial.github.io/lwgeom/reference/lwgeom_make_valid.html" class="external-link">lwgeom::lwgeom_make_valid()</a></code>. Users should be aware that:</p><ul><li><p>geometry types may be promoted (e.g., POLYGON → MULTIPOLYGON),</p></li>
-<li><p>tiny sliver polygons may be removed,</p></li>
-<li><p>invalid rings or bow-tie shapes will be corrected,</p></li>
-<li><p>the repair step requires the <code>{lwgeom}</code> package.</p></li>
-</ul></div>
+issues due to geometric warping.</p>
+    </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">sf::st_transform()</a></code>, <code><a href="https://r-spatial.github.io/sf/reference/st_is_longlat.html" class="external-link">sf::st_is_longlat()</a></code>, <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs()</a></code>,
-<code><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">sf::st_coordinates()</a></code>, <code><a href="st_transform_custom.html">st_transform_custom()</a></code>, <code><a href="fisheye_fgc.html">fisheye_fgc()</a></code>
-<code><a href="https://r-spatial.github.io/lwgeom/reference/lwgeom_make_valid.html" class="external-link">lwgeom::lwgeom_make_valid()</a></code>, <code><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">sf::st_make_valid()</a></code></p></div>
+<code><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">sf::st_coordinates()</a></code>, <code><a href="st_transform_custom.html">st_transform_custom()</a></code>, <code><a href="fisheye_fgc.html">fisheye_fgc()</a></code></p></div>
     </div>
 
     <div class="section level2">
