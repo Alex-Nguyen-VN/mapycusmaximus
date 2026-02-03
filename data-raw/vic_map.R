@@ -46,4 +46,4 @@ ggplot(dplyr::filter(vic_lga, LGA_NAME == "ALPINE")) +
 
 vic <- vic_lga |>
   select(LGA_NAME)
-save(vic, file="data/vic.rda")
+save(vic, file="data/vic.rda", compress = "xz")

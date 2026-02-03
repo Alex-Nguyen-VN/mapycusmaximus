@@ -1,6 +1,6 @@
 Package: mapycusmaximus
 Title: Focus-Glue-Context Fisheye Transformations for Spatial Visualization
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: c(
     person("Alex", "Nguyen", , "thanhcuong10091992@gmail.com", role = c("aut", "cre", "cph")),
     person("Dianne", "Cook", , "dicook@monash.edu", role = "aut",

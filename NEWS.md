@@ -1,3 +1,6 @@
+# mapycusmaximus 1.0.2
+* Adding hospital name to the dataset. 
+
 # mapycusmaximus 1.0.1
 
 * vic data set not has no holes in the polygons that carve out the ski fields!

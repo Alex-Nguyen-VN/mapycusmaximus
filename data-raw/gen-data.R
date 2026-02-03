@@ -1,20 +1,9 @@
 library(sf)
 library(dplyr)
 library(ggplot2)
-vic <- read_sf(here::here("data-raw/map/LGA_POLYGON.shp")) |>
-  mutate(geometry = st_zm(geometry), drop = TRUE, what = "ZM") |>
-  # convert to GDA2020 to match with census data
-  mutate(geometry = st_transform(geometry, 7844))
+library(stringr)
 
-vic <- st_simplify(vic, dTolerance = 100) |>
-    st_make_valid() |>
-    mutate(LGA_NAME = toupper(LGA_NAME)) |>
-    select(LGA_NAME, geometry)
-
-save(vic, file = here::here("data/vic.rda"), compress = "xz")
-
-library(sf)
-library(dplyr)
+load("data/vic.rda")
 
 # Function to create sf LINESTRING connections
 make_connections <- function(df, 
@@ -41,9 +30,38 @@ make_connections <- function(df,
 }
 
 transfers <- read.csv("data-raw/transfers_coded.csv")
+data_name <- read.csv("data-raw/hospital_address.csv")
+k <- 5
+hosp_lookup <- data_name %>%
+  filter(str_to_lower(category) == "hospital") %>%
+  transmute(
+    long_hosp = round(longitude, k),
+    lat_hosp  = round(latitude,  k),
+    hosp_name = formal_name
+  ) %>%
+  distinct()
+
+racf_lookup <- data_name %>%
+  filter(str_to_lower(category) == "racf") %>%
+  transmute(
+    long_racf = round(longitude, k),
+    lat_racf  = round(latitude,  k),
+    racf_name = formal_name
+  ) %>%
+  distinct()
 
 # Build connections
 connections <- make_connections(transfers)
+
+connections <- connections %>%
+  mutate(
+    long_hosp = round(long_hosp, k),
+    lat_hosp  = round(lat_hosp,  k),
+    long_racf = round(long_racf, k),
+    lat_racf  = round(lat_racf,  k)
+  ) %>%
+  left_join(hosp_lookup, by = c("long_hosp", "lat_hosp")) %>%
+  left_join(racf_lookup, by = c("long_racf", "lat_racf"))
 
 # Plot
 plot(connections["weight"], lwd = 2)
@@ -79,7 +97,7 @@ crs_proj <- 3111
 vic_proj <- st_transform(vic, crs_proj)
 connections_proj <- st_transform(connections, 3111)
 center_pt_proj <- st_transform(center_pt, 3111)
-distances_m <- st_distance(st_line_sample(connections_proj, sample = 0), center_proj)
+distances_m <- st_distance(st_line_sample(connections_proj, sample = 0), center_pt_proj)
 distances_norm <- as.numeric(distances_m) / max(as.numeric(distances_m))
 connections_focus_proj <- connections_proj[as.numeric(distances_norm) <= r_in, ]
 connections_focus_proj_sum <- connections_focus_proj |>
@@ -88,13 +106,14 @@ connections_focus_proj_sum <- connections_focus_proj |>
   count() |> 
   arrange(desc(n)) 
 
+
 conn_fish_small <- connections_focus_proj |> 
   filter(source %in% connections_focus_proj_sum$source[1:20])
 
 
 vic_fish   <- sf_fisheye(vic_proj, center = center_pt_proj,
                          r_in = 0.34, r_out = 0.5, zoom_factor = 1)
-conn_fish  <- sf_fisheye(connections_focus_proj_small, center = center_pt_proj,
+conn_fish  <- sf_fisheye(conn_fish_small, center = center_pt_proj,
                          r_in = 0.428, r_out = 0.429, zoom_factor = 1)
 
 save(vic_fish, file = here::here("data/vic_fish.rda"), compress = "xz")
