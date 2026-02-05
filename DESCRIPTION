@@ -20,7 +20,7 @@ Suggests:
     testthat (>= 3.0.0),
     dplyr,
     knitr,
-    rmarkdown
+    rmarkdown,
     shiny,
     tidyr,        
     purrr,       
