@@ -174,14 +174,13 @@ return(p)
 
 #' @export
 #' @rdname fisheye_fgc
-print.mapycus_fgc <- function(object, ...) {
-  dims <- dim(object)
+print.mapycus_fgc <- function(x, ...) {
+  dims <- dim(x)
 
-  attributes(object) <- NULL
+  attributes(x) <- NULL
+  dim(x) <- dims
 
-  dim(object) <- dims
-
-  print(object)
+  print(x, ...)
 }
 
 # Helper functions for converting sf objects to plain coordinate lists
