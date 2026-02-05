@@ -77,7 +77,7 @@
 #' - [shiny::runApp()] for additional launch options
 #'
 #' @export
-shiny_fisheye() <- function(...) {
+shiny_fisheye <- function(...) {
   # Check for required packages
   required_pkgs <- c("shiny", "tidyr", "dplyr", "purrr", "ggthemes")
   missing_pkgs <- required_pkgs[!sapply(required_pkgs, requireNamespace, quietly = TRUE)]
