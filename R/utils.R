@@ -183,3 +183,209 @@ print.mapycus_fgc <- function(object, ...) {
 
   print(object)
 }
+
+# Helper functions for converting sf objects to plain coordinate lists
+# These are used internally by the Shiny app but could be exported if useful
+
+#' Extract Polygon Coordinates from sf Objects
+#'
+#' @description
+#' Converts `sf` polygon or multipolygon geometries into a list
+#' structure containing coordinate arrays, suitable for serialization
+#' to JSON or use in JavaScript visualizations. Preserves both
+#' exterior rings and holes.
+#'
+#' @param sf_obj An `sf` or `sfc` object containing `POLYGON` or
+#'   `MULTIPOLYGON` geometries.
+#' @param id_col Character. Optional column name to use as polygon IDs.
+#'   If `NULL`, IDs are generated as `"poly-1"`, `"poly-2"`, etc.
+#'   (default = `NULL`).
+#'
+#' @return A list of lists, each containing:
+#'   - `id`: Character identifier for the polygon
+#'   - `rings`: List of coordinate rings, where each ring is a list
+#'     of `[x, y]` coordinate pairs. The first ring is the exterior
+#'     boundary; subsequent rings (if present) are holes.
+#'
+#' @details
+#' This function is primarily used to prepare spatial data for
+#' client-side rendering in web applications. Each polygon may contain
+#' multiple rings (exterior + holes), and multipolygons are decomposed
+#' into separate ring lists.
+#'
+#' The output format is compatible with JavaScript mapping libraries
+#' and SVG path generation.
+#'
+#' @examples
+#' \dontrun{
+#' library(sf)
+#'
+#' # Create a simple polygon
+#' poly <- st_polygon(list(
+#'   matrix(c(0,0, 1,0, 1,1, 0,1, 0,0), ncol = 2, byrow = TRUE)
+#' ))
+#' sf_obj <- st_sf(id = "test", geometry = st_sfc(poly))
+#'
+#' # Extract coordinates
+#' coords <- polygons_from_sf(sf_obj, id_col = "id")
+#' str(coords)
+#' }
+#'
+#' @seealso [lines_from_sf()], [points_from_sf()], [run_fisheye_explorer()]
+#' @keywords internal
+polygons_from_sf <- function(sf_obj, id_col = NULL) {
+  geoms <- sf::st_geometry(sf_obj)
+  res <- lapply(seq_along(geoms), function(i) {
+    # Handle both POLYGON and MULTIPOLYGON
+    geom <- geoms[[i]]
+    geom_type <- sf::st_geometry_type(geom)
+    
+    rings <- list()
+    
+    if (geom_type == "POLYGON") {
+      coords_list <- sf::st_coordinates(geom)
+      # Group by ring (L2 column distinguishes exterior/holes)
+      ring_ids <- unique(coords_list[, "L2"])
+      rings <- lapply(ring_ids, function(rid) {
+        ring_coords <- coords_list[coords_list[, "L2"] == rid, c("X", "Y"), drop = FALSE]
+        lapply(seq_len(nrow(ring_coords)), function(j) as.numeric(ring_coords[j, ]))
+      })
+    } else if (geom_type == "MULTIPOLYGON") {
+      coords_list <- sf::st_coordinates(geom)
+      # Group by L3 (polygon part) and L2 (ring within polygon)
+      poly_ids <- unique(coords_list[, "L3"])
+      for (pid in poly_ids) {
+        poly_coords <- coords_list[coords_list[, "L3"] == pid, , drop = FALSE]
+        ring_ids <- unique(poly_coords[, "L2"])
+        for (rid in ring_ids) {
+          ring_coords <- poly_coords[poly_coords[, "L2"] == rid, c("X", "Y"), drop = FALSE]
+          rings[[length(rings) + 1]] <- lapply(seq_len(nrow(ring_coords)), function(j) as.numeric(ring_coords[j, ]))
+        }
+      }
+    }
+    
+    if (length(rings) == 0) return(NULL)
+    
+    list(
+      id = if (!is.null(id_col) && id_col %in% names(sf_obj)) {
+        as.character(sf_obj[[id_col]][i])
+      } else {
+        paste0("poly-", i)
+      },
+      rings = rings
+    )
+  })
+  purrr::compact(res)
+}
+
+
+#' Extract Line Coordinates from sf Objects
+#'
+#' @description
+#' Converts `sf` line or multiline geometries into a list structure
+#' containing coordinate arrays, suitable for serialization to JSON
+#' or use in JavaScript visualizations.
+#'
+#' @param sf_obj An `sf` or `sfc` object containing `LINESTRING` or
+#'   `MULTILINESTRING` geometries.
+#' @param id_col Character. Optional column name to use as line IDs.
+#'   If `NULL`, IDs are generated as `"ln-1"`, `"ln-2"`, etc.
+#'   (default = `NULL`).
+#'
+#' @return A list of lists, each containing:
+#'   - `id`: Character identifier for the line
+#'   - `coords`: List of `[x, y]` coordinate pairs representing the
+#'     line vertices in sequence
+#'
+#' @details
+#' This function prepares line geometries for client-side rendering.
+#' Multilinestrings are handled by extracting all coordinate points
+#' in order, which may or may not be appropriate depending on the
+#' use case.
+#'
+#' @examples
+#' \dontrun{
+#' library(sf)
+#'
+#' # Create a simple linestring
+#' line <- st_linestring(matrix(c(0,0, 1,1, 2,0), ncol = 2, byrow = TRUE))
+#' sf_obj <- st_sf(id = "route1", geometry = st_sfc(line))
+#'
+#' # Extract coordinates
+#' coords <- lines_from_sf(sf_obj, id_col = "id")
+#' str(coords)
+#' }
+#'
+#' @seealso [polygons_from_sf()], [points_from_sf()], [run_fisheye_explorer()]
+#' @keywords internal
+lines_from_sf <- function(sf_obj, id_col = NULL) {
+  geoms <- sf::st_geometry(sf_obj)
+  res <- lapply(seq_along(geoms), function(i) {
+    coords <- sf::st_coordinates(geoms[[i]])
+    if (nrow(coords) == 0) return(NULL)
+    xy <- coords[, c("X", "Y"), drop = FALSE]
+    list(
+      id = if (!is.null(id_col) && id_col %in% names(sf_obj)) {
+        as.character(sf_obj[[id_col]][i])
+      } else {
+        paste0("ln-", i)
+      },
+      coords = lapply(seq_len(nrow(xy)), function(j) as.numeric(xy[j, ]))
+    )
+  })
+  purrr::compact(res)
+}
+
+
+#' Extract Point Coordinates from sf Objects
+#'
+#' @description
+#' Converts `sf` point geometries into a list structure containing
+#' coordinate pairs, suitable for serialization to JSON or use in
+#' JavaScript visualizations.
+#'
+#' @param sf_obj An `sf` or `sfc` object containing `POINT` geometries.
+#' @param id_col Character. Optional column name to use as point IDs.
+#'   If `NULL`, IDs are generated as sequential integers.
+#'   (default = `NULL`).
+#'
+#' @return A list of lists, each containing:
+#'   - `id`: Character identifier for the point
+#'   - `x`: Numeric x-coordinate
+#'   - `y`: Numeric y-coordinate
+#'
+#' @details
+#' This function prepares point geometries for client-side rendering
+#' as circles or markers in SVG or Canvas visualizations.
+#'
+#' @examples
+#' \dontrun{
+#' library(sf)
+#'
+#' # Create simple points
+#' pts <- st_sfc(st_point(c(0, 0)), st_point(c(1, 1)))
+#' sf_obj <- st_sf(id = c("A", "B"), geometry = pts)
+#'
+#' # Extract coordinates
+#' coords <- points_from_sf(sf_obj, id_col = "id")
+#' str(coords)
+#' }
+#'
+#' @seealso [polygons_from_sf()], [lines_from_sf()], [run_fisheye_explorer()]
+#' @keywords internal
+points_from_sf <- function(sf_obj, id_col = NULL) {
+  coords <- sf::st_coordinates(sf_obj)
+  n <- nrow(coords)
+  ids <- if (!is.null(id_col) && id_col %in% names(sf_obj)) {
+    as.character(sf_obj[[id_col]])
+  } else {
+    as.character(seq_len(n))
+  }
+  lapply(seq_len(n), function(i) {
+    list(
+      id = ids[i],
+      x = as.numeric(coords[i, 1]),
+      y = as.numeric(coords[i, 2])
+    )
+  })
+}

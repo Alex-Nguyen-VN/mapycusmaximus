@@ -1,3 +1,6 @@
+# mapycusmaximus 1.0.4
+* Adding shiny app in description
+
 # mapycusmaximus 1.0.3
 * Adding shiny app to the package
 

@@ -21,6 +21,10 @@ Suggests:
     dplyr,
     knitr,
     rmarkdown
+    shiny,
+    tidyr,        
+    purrr,       
+    ggthemes    
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Depends: 
