@@ -45,6 +45,6 @@ str(coords)
 
 }
 \seealso{
-\code{\link[=polygons_from_sf]{polygons_from_sf()}}, \code{\link[=lines_from_sf]{lines_from_sf()}}, \code{\link[=run_fisheye_explorer]{run_fisheye_explorer()}}
+\code{\link[=polygons_from_sf]{polygons_from_sf()}}, \code{\link[=lines_from_sf]{lines_from_sf()}}, \code{\link[=shiny_fisheye]{shiny_fisheye()}}
 }
 \keyword{internal}
