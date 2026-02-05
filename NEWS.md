@@ -1,3 +1,6 @@
+# mapycusmaximus 1.0.5
+* Fixing link and description file
+
 # mapycusmaximus 1.0.4
 * Adding shiny app in description
 
