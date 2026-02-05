@@ -183,7 +183,7 @@ sf_fisheye <- function(
 
   # --- resolve center precedence ---
   if (!is.null(center)) {
-    cxy <- mapycusmaximus:::.resolve_center(center, center_crs, working_crs, bb,
+    cxy <- mapycusmaximus::.resolve_center(center, center_crs, working_crs, bb,
                            preserve_aspect, normalized_center)
   } else {
     if (is.null(cx) || is.null(cy)) {

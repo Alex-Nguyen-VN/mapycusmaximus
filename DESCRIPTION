@@ -14,8 +14,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports:
     ggplot2,
-    sf,
-    lwgeom
+    sf
 Suggests: 
     testthat (>= 3.0.0),
     dplyr,

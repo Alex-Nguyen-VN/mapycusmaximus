@@ -231,7 +231,7 @@ print.mapycus_fgc <- function(object, ...) {
 #' str(coords)
 #' }
 #'
-#' @seealso [lines_from_sf()], [points_from_sf()], [run_fisheye_explorer()]
+#' @seealso [lines_from_sf()], [points_from_sf()], [shiny_fisheye()]
 #' @keywords internal
 polygons_from_sf <- function(sf_obj, id_col = NULL) {
   geoms <- sf::st_geometry(sf_obj)
@@ -316,7 +316,7 @@ polygons_from_sf <- function(sf_obj, id_col = NULL) {
 #' str(coords)
 #' }
 #'
-#' @seealso [polygons_from_sf()], [points_from_sf()], [run_fisheye_explorer()]
+#' @seealso [polygons_from_sf()], [points_from_sf()], [shiny_fisheye()]
 #' @keywords internal
 lines_from_sf <- function(sf_obj, id_col = NULL) {
   geoms <- sf::st_geometry(sf_obj)
@@ -371,7 +371,7 @@ lines_from_sf <- function(sf_obj, id_col = NULL) {
 #' str(coords)
 #' }
 #'
-#' @seealso [polygons_from_sf()], [lines_from_sf()], [run_fisheye_explorer()]
+#' @seealso [polygons_from_sf()], [lines_from_sf()], [shiny_fisheye()]
 #' @keywords internal
 points_from_sf <- function(sf_obj, id_col = NULL) {
   coords <- sf::st_coordinates(sf_obj)
