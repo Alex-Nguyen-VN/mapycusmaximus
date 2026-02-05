@@ -1,3 +1,6 @@
+# mapycusmaximus 1.0.3
+* Adding shiny app to the package
+
 # mapycusmaximus 1.0.2
 * Adding hospital name to the dataset. 
 
