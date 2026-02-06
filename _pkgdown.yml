@@ -48,6 +48,9 @@ reference:
       - vic
       - conn_fish
       - vic_fish
+  - title: "Shiny"
+    contents:
+      - shiny_fisheye
   #- title: "Helper Functions"
     #contents:
       #- normalize_coords
