@@ -224,10 +224,10 @@ centroids <- st_centroid(vic)
 
 # Add a layer identifier to each
 vic_layer <- vic |> 
-  mutate(layer = "polygon")
+  dplyr::mutate(layer = "polygon")
 
 centroids_layer <- centroids |> 
-  mutate(layer = "centroid")
+  dplyr::mutate(layer = "centroid")
 
 # Combine layers before transformation
 both_layers <- rbind(
@@ -348,7 +348,7 @@ metro_center <- st_union(metro_region) |> st_centroid()
 
 # 2. Add a population indicator (example)
 vic_pop <- vic |> 
-  mutate(is_metro = LGA_NAME %in% metro_lgas)
+  dplyr::mutate(is_metro = LGA_NAME %in% metro_lgas)
 
 # 3. Apply fisheye
 vic_focused <- sf_fisheye(
