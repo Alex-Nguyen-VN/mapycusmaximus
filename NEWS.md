@@ -1,3 +1,6 @@
+# mapycusmaximus 1.0.6
+* Fixing print method
+
 # mapycusmaximus 1.0.5
 * Fixing link and description file
 

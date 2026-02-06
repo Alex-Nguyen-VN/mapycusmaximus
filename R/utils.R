@@ -174,6 +174,7 @@ return(p)
 
 #' @export
 #' @rdname fisheye_fgc
+#' @noRd
 print.mapycus_fgc <- function(x, ...) {
   dims <- dim(x)
 
