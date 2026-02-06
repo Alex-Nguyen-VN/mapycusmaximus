@@ -3,7 +3,6 @@
 ## Core Transformation Functions
 
 - [`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
-  [`print(`*`<mapycus_fgc>`*`)`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
   : Apply Focus–Glue–Context Fisheye Transformation
 
 - [`sf_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/sf_fisheye.md)
@@ -44,3 +43,8 @@
   :
 
   Fisheye-Distorted Victoria LGAs (`sf`)
+
+## Shiny
+
+- [`shiny_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/shiny_fisheye.md)
+  : Launch Interactive Fisheye Lens Explorer

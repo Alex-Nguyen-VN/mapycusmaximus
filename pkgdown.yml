@@ -2,8 +2,8 @@ pandoc: 3.1.11
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
-  Mapycus: Mapycus.html
-last_built: 2026-02-05T09:55Z
+  mapycusmaximus-vignette: mapycusmaximus-vignette.html
+last_built: 2026-02-06T07:37Z
 urls:
   reference: https://alex-nguyen-vn.github.io/mapycusmaximus/reference
   article: https://alex-nguyen-vn.github.io/mapycusmaximus/articles

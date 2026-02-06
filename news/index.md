@@ -1,5 +1,21 @@
 # Changelog
 
+## mapycusmaximus 1.0.7
+
+- Rewrite vignette and fix pkgdown yaml
+
+## mapycusmaximus 1.0.6
+
+- Fixing print method
+
+## mapycusmaximus 1.0.5
+
+- Fixing link and description file
+
+## mapycusmaximus 1.0.4
+
+- Adding shiny app in description
+
 ## mapycusmaximus 1.0.3
 
 - Adding shiny app to the package

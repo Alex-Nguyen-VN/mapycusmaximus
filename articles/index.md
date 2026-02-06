@@ -2,4 +2,5 @@
 
 ### All vignettes
 
-- [Mapycus](https://alex-nguyen-vn.github.io/mapycusmaximus/articles/Mapycus.md):
+- [Getting Started with
+  mapycusmaximus](https://alex-nguyen-vn.github.io/mapycusmaximus/articles/mapycusmaximus-vignette.md):

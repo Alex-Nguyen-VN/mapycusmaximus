@@ -289,7 +289,6 @@ curse of dimensionality.
 ## Core Transformation Functions
 
 - [`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
-  [`print(`*`<mapycus_fgc>`*`)`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
   : Apply Focus–Glue–Context Fisheye Transformation
 
 - [`sf_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/sf_fisheye.md)
@@ -331,8 +330,14 @@ curse of dimensionality.
 
   Fisheye-Distorted Victoria LGAs (`sf`)
 
+## Shiny
+
+- [`shiny_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/shiny_fisheye.md)
+  : Launch Interactive Fisheye Lens Explorer
+
 # Articles
 
 ### All vignettes
 
-- [Mapycus](https://alex-nguyen-vn.github.io/mapycusmaximus/articles/Mapycus.md):
+- [Getting Started with
+  mapycusmaximus](https://alex-nguyen-vn.github.io/mapycusmaximus/articles/mapycusmaximus-vignette.md):
