@@ -2,6 +2,8 @@
 
 ## mapycusmaximus 1.0.7
 
+CRAN release: 2026-02-06
+
 - Rewrite vignette and fix pkgdown yaml
 
 ## mapycusmaximus 1.0.6

@@ -13,7 +13,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/Alex-Nguyen-VN/mapycusmaximus/blob/v1.0.7/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/Alex-Nguyen-VN/mapycusmaximus/blob/main/DESCRIPTION)
 
 Nguyen A, Cook D, Lydeamore M (2026). *mapycusmaximus:
 Focus-Glue-Context Fisheye Transformations for Spatial Visualization*. R
