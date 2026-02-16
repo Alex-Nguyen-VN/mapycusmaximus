@@ -102,3 +102,18 @@
 #' plot(st_geometry(vic_fish), col = "grey95", border = "grey70")
 #' plot(st_geometry(conn_fish), add = TRUE, col = "black", lwd = 1)
 "conn_fish"
+
+
+#' Hospital names and locations in Victoria, Australia
+#' 
+#' @description
+#' Names, and latitude/longitude of hospitals in Victoria, Australia, taken from the Victorian Department of Health website
+#' 
+#' @format
+#' \describe{
+#'   \item{hosp_name}{Name of the hospital}
+#'   \item{latitude}{Latitude of the hospital}
+#'   \item{longitude}{Longitude of the hospital}
+#' }
+#' 
+"hospital_locations"

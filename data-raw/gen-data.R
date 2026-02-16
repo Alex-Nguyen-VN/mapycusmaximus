@@ -31,6 +31,11 @@ make_connections <- function(df,
 
 transfers <- read.csv("data-raw/transfers_coded.csv")
 data_name <- read.csv("data-raw/hospital_address.csv")
+
+hospital_locations <- data_name |>
+  select(hosp_name = formal_name, latitude, longitude)
+usethis::use_data(hospital_locations, overwrite = TRUE)
+
 k <- 5
 hosp_lookup <- data_name %>%
   filter(str_to_lower(category) == "hospital") %>%
