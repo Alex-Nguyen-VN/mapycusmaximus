@@ -78,7 +78,7 @@ poly <- st_sfc(st_polygon(list(rbind(
   c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)
 ))), crs = 3857)
 
-fisheye_poly <- sf_fisheye(
+fisheye_poly <- fisheye_fgc(
   poly,
   r_in = 0.3, r_out = 0.6,
   zoom_factor = 2.0,
@@ -115,7 +115,7 @@ The transformation divides space into three radial zones:
 
 ## Coordinate System Handling
 
-[`sf_fisheye()`](reference/sf_fisheye.html) automatically manages coordinate reference systems:
+[`fisheye_fgc()`](reference/fisheye_fgc.html) automatically manages coordinate reference systems:
 
 - **Geographic data:** projected to a suitable UTM/MGA zone (e.g. EPSG:7855 for Victoria, AU).  
 - **Projected data:** used directly.  
@@ -136,19 +136,19 @@ The transformation divides space into three radial zones:
 
 ```r
 melb_poly <- suburbs[suburbs$name == "Melbourne", ]
-fisheye_vic <- sf_fisheye(vic, center = melb_poly)
+fisheye_vic <- fisheye_fgc(vic, center = melb_poly)
 ```
 
 ### Normalized center input
 
 ```r
-fisheye_vic <- sf_fisheye(vic, center = c(0.2, -0.1), normalized_center = TRUE)
+fisheye_vic <- fisheye_fgc(vic, center = c(0.2, -0.1), normalized_center = TRUE)
 ```
 
 ### Geographic center
 
 ```r
-fisheye_cbd <- sf_fisheye(
+fisheye_cbd <- fisheye_fgc(
   vic,
   center = c(144.9631, -37.8136),
   center_crs = "EPSG:4326",

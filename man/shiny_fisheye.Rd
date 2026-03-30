@@ -73,7 +73,7 @@ If any are missing, install with:
 
 The app uses client-side JavaScript for smooth lens dragging without
 server round-trips. Fisheye transformations match the mathematical
-implementation in \code{\link[=fisheye_fgc]{fisheye_fgc()}} and \code{\link[=sf_fisheye]{sf_fisheye()}}, applied to
+implementation in \code{\link[=fisheye_fgc]{fisheye_fgc()}} and \code{\link[=fisheye_fgc]{fisheye_fgc()}}, applied to
 polygons, lines, and points in real-time using SVG rendering.
 }
 }
@@ -93,7 +93,7 @@ shiny_fisheye(launch.browser = rstudioapi::viewer)
 \seealso{
 \itemize{
 \item \code{\link[=fisheye_fgc]{fisheye_fgc()}} for the core transformation function
-\item \code{\link[=sf_fisheye]{sf_fisheye()}} for transforming spatial geometries
+\item \code{\link[=fisheye_fgc]{fisheye_fgc()}} for transforming spatial geometries
 \item \code{\link[=plot_fisheye_fgc]{plot_fisheye_fgc()}} for static visualizations
 \item \code{\link[shiny:runApp]{shiny::runApp()}} for additional launch options
 }

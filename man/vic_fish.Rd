@@ -28,7 +28,7 @@ Built from the base layer \code{vic} using:
 \enumerate{
 \item projection to VicGrid94 (\code{st_transform(vic, 3111)}),
 \item defining a focus center near Melbourne (\code{cx = 145.0}, \code{cy = -37.8}),
-\item applying \code{\link[=sf_fisheye]{sf_fisheye()}} with
+\item applying \code{\link[=fisheye_fgc]{fisheye_fgc()}} with
 \code{r_in = 0.34}, \code{r_out = 0.5}, and \code{zoom_factor = 1},
 \item preserving topology with \code{st_make_valid()} where needed.
 }
@@ -39,6 +39,6 @@ library(sf)
 plot(st_geometry(vic_fish), col = "grey90", border = "grey50")
 }
 \seealso{
-\code{\link[=sf_fisheye]{sf_fisheye()}}, \code{\link{conn_fish}}
+\code{\link[=fisheye_fgc]{fisheye_fgc()}}, \code{\link{conn_fish}}
 }
 \keyword{datasets}

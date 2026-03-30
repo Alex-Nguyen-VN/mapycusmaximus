@@ -1,7 +1,7 @@
 #' Radial fisheye warp for `sf`/`sfc` objects (auto-CRS + flexible centers)
 #'
 #' @description
-#' `sf_fisheye()` applies a **focus–glue–context** fisheye to vector data:
+#' `fisheye_fgc()` applies a **focus–glue–context** fisheye to vector data:
 #' it (1) ensures a sensible projected working CRS, (2) **normalizes**
 #' coordinates around a chosen center, (3) calls `fisheye_fgc()` to warp radii,
 #' (4) **denormalizes** back to map units, and (5) restores the original CRS.
@@ -230,7 +230,7 @@ fisheye_fgc.sfc <- function(x, ...) {
 #' @description
 #' Converts a flexible \emph{center} specification into a 2D coordinate
 #' (x, y) expressed in the map's **working projected CRS**. This helper is
-#' meant for internal use inside \code{sf_fisheye()}.
+#' meant for internal use inside \code{fisheye_fgc()}.
 #'
 #' @details
 #' The \code{center} argument can be:

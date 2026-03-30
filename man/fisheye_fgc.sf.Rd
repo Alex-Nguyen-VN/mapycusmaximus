@@ -70,7 +70,7 @@ with geometry coordinates warped by the fisheye and the \strong{original CRS}
 restored.
 }
 \description{
-\code{sf_fisheye()} applies a \strong{focus–glue–context} fisheye to vector data:
+\code{fisheye_fgc()} applies a \strong{focus–glue–context} fisheye to vector data:
 it (1) ensures a sensible projected working CRS, (2) \strong{normalizes}
 coordinates around a chosen center, (3) calls \code{fisheye_fgc()} to warp radii,
 (4) \strong{denormalizes} back to map units, and (5) restores the original CRS.

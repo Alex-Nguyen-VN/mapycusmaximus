@@ -116,9 +116,9 @@ conn_fish_small <- connections_focus_proj |>
   filter(source %in% connections_focus_proj_sum$source[1:20])
 
 
-vic_fish   <- sf_fisheye(vic_proj, center = center_pt_proj,
+vic_fish   <- fisheye_fgc(vic_proj, center = center_pt_proj,
                          r_in = 0.34, r_out = 0.5, zoom_factor = 1)
-conn_fish  <- sf_fisheye(conn_fish_small, center = center_pt_proj,
+conn_fish  <- fisheye_fgc(conn_fish_small, center = center_pt_proj,
                          r_in = 0.428, r_out = 0.429, zoom_factor = 1)
 
 save(vic_fish, file = here::here("data/vic_fish.rda"), compress = "xz")
@@ -133,18 +133,18 @@ library(purrr)
 
 
 ggplot() +
-  geom_sf(data = sf_fisheye(vic_proj, center = center_pt_proj,
+  geom_sf(data = fisheye_fgc(vic_proj, center = center_pt_proj,
                           r_in = 0.34, r_out = 0.4, zoom_factor = 3)) +
-  geom_sf(data = sf_fisheye(conn_fish_small, center = center_pt_proj,
+  geom_sf(data = fisheye_fgc(conn_fish_small, center = center_pt_proj,
                           r_in = 1.07, r_out = 2, zoom_factor = 3))
 
 zoom_seq <- seq(1, 20, by = 0.1)
 
 
 fisheye_frames <- map_dfr(zoom_seq, function(z) {
-  vic_fish  <- sf_fisheye(vic_proj, center = center_pt_proj,
+  vic_fish  <- fisheye_fgc(vic_proj, center = center_pt_proj,
                           r_in = 0.34, r_out = 0.5, zoom_factor = z)
-  conn_fish <- sf_fisheye(conn_fish_small, center = center_pt_proj,
+  conn_fish <- fisheye_fgc(conn_fish_small, center = center_pt_proj,
                           r_in = 1.07, r_out = 2, zoom_factor = z)
   
   tibble(
@@ -187,7 +187,7 @@ anim_save("fisheye_zoom_gganimate.gif", animation = anim)
 
 library(ggthemes)
 
-sf_fisheye(vic_fish, center = center_proj,
+fisheye_fgc(vic_fish, center = center_proj,
             r_in = 0.24, r_out = 0.3, zoom_factor = 5) |>
    ggplot() +
    geom_sf() +

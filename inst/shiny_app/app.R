@@ -202,7 +202,7 @@ ui <- fluidPage(
     return { xScale, yScale, xInv, yInv, k };
   }
 
-  // ---- fisheye warp (MATCHES mapycusmaximus::sf_fisheye + fisheye_fgc) ----
+  // ---- fisheye warp (MATCHES mapycusmaximus::fisheye_fgc + fisheye_fgc) ----
   function sFromBBox() {
     const sx = (base.bbox.xmax - base.bbox.xmin) / 2 || 1;
     const sy = (base.bbox.ymax - base.bbox.ymin) / 2 || 1;
