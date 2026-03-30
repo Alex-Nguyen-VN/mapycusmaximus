@@ -4,35 +4,12 @@
 \alias{fisheye_fgc}
 \title{Apply Focus-Glue-Context Fisheye transformations}
 \usage{
-fisheye_fgc(x, ...)
+fisheye_fgc(data, ...)
 }
 \arguments{
-\item{x}{An object on which to perform the fisheye transformation.
-If \code{x} is a matrix or data frame, it should have at least two columns representing x and y coordinates.}
+\item{data}{Data on which to perform a focus-glue-context transformation.}
 
-\item{cx, cy}{Numeric. The x and y coordinates of the fisheye center (default = 0, 0).}
-
-\item{r_in}{Numeric. Radius of the focus zone (default = 0.34)}
-
-\item{r_out}{Numeric. Radius of the glue zone boundary (default = 0.5)}
-
-\item{zoom_factor}{Numeric. Expansion factor applied within the focus zone (default = 1.5)}
-
-\item{squeeze_factor}{Numeric in (0,1]. Compression factor applied within the glue zone (smaller values = stronger compression, default = 0.3)}
-
-\item{method}{Character. "expand" or "outward" (default = "expand")}
-
-\item{revolution}{Numeric. Optional rotation factor applied in the glue zone. Positive values rotate counter-clockwise, negative values clockwise (default = 0.0)}
-
-\item{center}{Numeric vector specifying the center of the transformation for spatial objects. Format is \code{c(lon, lat)}.}
-
-\item{center_crs}{Character. CRS of the \code{center} coordinates (e.g., "EPSG:4326"). If NULL, the function will attempt to auto-guess based on coordinate values.}
-
-\item{normalized_center}{Logical. If TRUE, the \code{center} is interpreted as normalized coordinates (0 to 1) relative to the bounding box of the spatial object. Default is FALSE.}
-
-\item{target_crs}{Character. CRS to which the spatial object should be transformed before applying the fisheye transformation. If NULL, the function will attempt to auto-guess based on the \code{center} and the CRS of the spatial object.}
-
-\item{preserve_crs}{Logical. If TRUE, the output will retain the original CRS of the input spatial object. If FALSE, the output will have the CRS of \code{target_crs} (if specified) or the CRS used for transformation. Default is TRUE.}
+\item{...}{Additional arguments passed to specific methods. See \code{\link[=fisheye_fgc.matrix]{fisheye_fgc.matrix()}} and \code{\link[=fisheye_fgc.sf]{fisheye_fgc.sf()}} for details for the methods provided by this package.}
 }
 \description{
 Transforms 2D coordinates using a \strong{Focus–Glue–Context (FGC) fisheye transformation}.
@@ -41,6 +18,8 @@ and leaves the surrounding context unchanged. Optionally, a rotational "revoluti
 can be added to the glue region to produce a swirling effect.
 }
 \details{
+This is a generic S3 function to perform the focus-glue-context transformation on different types of data.
+
 This function operates in three radial zones around a chosen center:
 \itemize{
 \item \strong{Focus zone (r <= r_in)}: expands distances from the center using \code{zoom_factor},
@@ -51,6 +30,9 @@ by \code{squeeze_factor}, then remaps them to smoothly connect focus and context
 }
 
 Optionally, points in the glue zone can be rotated (\code{revolution}) to emphasize continuity.
+
+For the specifics of methods for spatial objects, see \code{\link[=fisheye_fgc.sf]{fisheye_fgc.sf()}}.
+For the underlying mathematical transformation, see \code{\link[=fisheye_fgc.matrix]{fisheye_fgc.matrix()}}.
 }
 \seealso{
 \code{\link[=fisheye_fgc.sf]{fisheye_fgc.sf()}}

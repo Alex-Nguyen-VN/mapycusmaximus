@@ -5,7 +5,7 @@
 \title{Apply Focus–Glue–Context Fisheye Transformation}
 \usage{
 \method{fisheye_fgc}{matrix}(
-  coords,
+  data,
   cx = 0,
   cy = 0,
   r_in = 0.34,
@@ -13,11 +13,12 @@
   zoom_factor = 1.5,
   squeeze_factor = 0.3,
   method = "expand",
-  revolution = 0
+  revolution = 0,
+  ...
 )
 }
 \arguments{
-\item{coords}{A matrix or data frame with at least two columns representing x and y coordinates.}
+\item{data}{A matrix or data frame with at least two columns representing x and y coordinates.}
 
 \item{cx, cy}{Numeric. The x and y coordinates of the fisheye center (default = 0, 0).}
 
@@ -34,6 +35,8 @@
 
 \item{revolution}{Numeric. Optional rotation factor applied in the glue zone. Positive values
 rotate counter-clockwise, negative values clockwise (default = 0.0).}
+
+\item{...}{Additional arguments from the S3 generic, currently ignored.}
 }
 \value{
 A numeric matrix with two columns (\code{x_new}, \code{y_new}) of transformed coordinates.

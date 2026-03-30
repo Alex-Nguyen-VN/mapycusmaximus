@@ -42,7 +42,7 @@
 #' `st_transform_custom()` which safely re-closes polygon rings and drops Z/M.
 #' The radial warp itself is delegated to `fisheye_fgc()` (which is not modified).
 #'
-#' @param sf_obj An [`sf`][sf::sf] or [`sfc`][sf::st_sfc] object. Supports
+#' @param data An [`sf`][sf::sf] or [`sfc`][sf::st_sfc] object. Supports
 #'   `POINT`, `LINESTRING`, `POLYGON`, and `MULTIPOLYGON`. Empty geometries
 #'   are removed before processing.
 #' @param center Flexible center specification (see **Center selection**):
@@ -72,6 +72,7 @@
 #'   auto-selected when the input is lon/lat; otherwise the input CRS is used.
 #' @param preserve_aspect Logical. If `TRUE` (default), use uniform scaling; if
 #'   `FALSE`, scale axes independently (may stretch shapes).
+#' @param ... Additional arguments from the S3 generic, currently ignored.
 #'
 #' @return An object of the same top-level class as `sf_obj` (`sf` or `sfc`),
 #'   with geometry coordinates warped by the fisheye and the **original CRS**
@@ -115,7 +116,7 @@
 
 
 fisheye_fgc.sf <- function(
-  sf_obj,
+  data,
   center = NULL,              # accepts c(lon,lat), c(x,y in map units), normalized pair, or sf/sfc POINT
   center_crs = NULL,          # e.g. "EPSG:4326"; if NULL we auto-guess (lon/lat vs map units)
   normalized_center = FALSE,  # TRUE if 'center' is in [-1,1] normalized coords
@@ -126,16 +127,17 @@ fisheye_fgc.sf <- function(
   method = "expand",
   revolution = 0.0,
   target_crs = NULL,
-  preserve_aspect = TRUE
+  preserve_aspect = TRUE,
+  ...
 ) {
   stopifnot(r_out > r_in)
-  stopifnot(inherits(sf_obj, c("sf", "sfc")))
+  stopifnot(inherits(data, c("sf", "sfc")))
 
-  if (inherits(sf_obj, "sf")) {
-    sf_obj <- sf_obj[!sf::st_is_empty(sf_obj), ]
+  if (inherits(data, "sf")) {
+    data <- data[!sf::st_is_empty(data), ]
   }
 
-  sf_obj <- sf::st_zm(sf_obj, drop = TRUE, what = "ZM")
+  sf_obj <- sf::st_zm(data, drop = TRUE, what = "ZM")
 
   # --- choose working CRS (projected) ---
   original_crs <- sf::st_crs(sf_obj)
@@ -220,9 +222,10 @@ fisheye_fgc.sf <- function(
   return(out)
 }
 
+#' @rdname fisheye_fgc.sf
 #' @export
-fisheye_fgc.sfc <- function(x, ...) {
-  fisheye_fgc.sf(x, ...)
+fisheye_fgc.sfc <- function(data, ...) {
+  fisheye_fgc.sf(data, ...)
 }
 
 #' Resolve a user-supplied center into the working CRS (internal)

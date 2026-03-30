@@ -2,10 +2,11 @@
 % Please edit documentation in R/sf_fisheye.R
 \name{fisheye_fgc.sf}
 \alias{fisheye_fgc.sf}
+\alias{fisheye_fgc.sfc}
 \title{Radial fisheye warp for \code{sf}/\code{sfc} objects (auto-CRS + flexible centers)}
 \usage{
 \method{fisheye_fgc}{sf}(
-  sf_obj,
+  data,
   center = NULL,
   center_crs = NULL,
   normalized_center = FALSE,
@@ -18,11 +19,14 @@
   method = "expand",
   revolution = 0,
   target_crs = NULL,
-  preserve_aspect = TRUE
+  preserve_aspect = TRUE,
+  ...
 )
+
+\method{fisheye_fgc}{sfc}(data, ...)
 }
 \arguments{
-\item{sf_obj}{An \code{\link[sf:sf]{sf}} or \code{\link[sf:sfc]{sfc}} object. Supports
+\item{data}{An \code{\link[sf:sf]{sf}} or \code{\link[sf:sfc]{sfc}} object. Supports
 \code{POINT}, \code{LINESTRING}, \code{POLYGON}, and \code{MULTIPOLYGON}. Empty geometries
 are removed before processing.}
 
@@ -63,6 +67,8 @@ auto-selected when the input is lon/lat; otherwise the input CRS is used.}
 
 \item{preserve_aspect}{Logical. If \code{TRUE} (default), use uniform scaling; if
 \code{FALSE}, scale axes independently (may stretch shapes).}
+
+\item{...}{Additional arguments from the S3 generic, currently ignored.}
 }
 \value{
 An object of the same top-level class as \code{sf_obj} (\code{sf} or \code{sfc}),

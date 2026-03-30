@@ -16,7 +16,7 @@
 #'
 #' Optionally, points in the glue zone can be rotated (`revolution`) to emphasize continuity.
 #'
-#' @param coords A matrix or data frame with at least two columns representing x and y coordinates.
+#' @param data A matrix or data frame with at least two columns representing x and y coordinates.
 #' @param cx,cy Numeric. The x and y coordinates of the fisheye center (default = 0, 0).
 #' @param r_in Numeric. Radius of the focus zone (default = 0.34).
 #' @param r_out Numeric. Radius of the glue zone boundary (default = 0.5).
@@ -26,6 +26,7 @@
 #' @param method Character. "expand" or "outward" (default = "expand").
 #' @param revolution Numeric. Optional rotation factor applied in the glue zone. Positive values
 #'   rotate counter-clockwise, negative values clockwise (default = 0.0).
+#' @param ... Additional arguments from the S3 generic, currently ignored.
 #'
 #' @return A numeric matrix with two columns (`x_new`, `y_new`) of transformed coordinates.
 #' Additional attributes:
@@ -46,7 +47,7 @@
 #' @export
 
 fisheye_fgc.matrix <- function(
-  coords,
+  data,
   cx = 0,
   cy = 0,
   r_in = 0.34,
@@ -54,11 +55,12 @@ fisheye_fgc.matrix <- function(
   zoom_factor = 1.5, # How much focus zone expands
   squeeze_factor = 0.3, # How much glue zone compresses
   method = "expand", # "expand" or "outward"
-  revolution = 0.0
+  revolution = 0.0,
+  ...
 ) {
   # Optional: add rotation to glue zone
 
-  coords <- as.matrix(coords[, 1:2, drop = FALSE])
+  coords <- as.matrix(data[, 1:2, drop = FALSE])
   # Center coordinates
   dx <- coords[, 1] - cx
   dy <- coords[, 2] - cy
@@ -160,6 +162,8 @@ fisheye_fgc.matrix <- function(
 #' can be added to the glue region to produce a swirling effect.
 #'
 #' @details
+#' This is a generic S3 function to perform the focus-glue-context transformation on different types of data.
+#' 
 #' This function operates in three radial zones around a chosen center:
 #' - **Focus zone (r <= r_in)**: expands distances from the center using `zoom_factor`,
 #'   but does not exceed the `r_in` boundary.
@@ -169,25 +173,16 @@ fisheye_fgc.matrix <- function(
 #'
 #' Optionally, points in the glue zone can be rotated (`revolution`) to emphasize continuity.
 #' 
-#' @param x An object on which to perform the fisheye transformation. 
-#' If `x` is a matrix or data frame, it should have at least two columns representing x and y coordinates.
-#' @param cx,cy Numeric. The x and y coordinates of the fisheye center (default = 0, 0).
-#' @param r_in Numeric. Radius of the focus zone (default = 0.34)
-#' @param r_out Numeric. Radius of the glue zone boundary (default = 0.5)
-#' @param zoom_factor Numeric. Expansion factor applied within the focus zone (default = 1.5)
-#' @param squeeze_factor Numeric in (0,1]. Compression factor applied within the glue zone (smaller values = stronger compression, default = 0.3)
-#' @param method Character. "expand" or "outward" (default = "expand")
-#' @param revolution Numeric. Optional rotation factor applied in the glue zone. Positive values rotate counter-clockwise, negative values clockwise (default = 0.0)
-#' @param center Numeric vector specifying the center of the transformation for spatial objects. Format is `c(lon, lat)`.
-#' @param center_crs Character. CRS of the `center` coordinates (e.g., "EPSG:4326"). If NULL, the function will attempt to auto-guess based on coordinate values.
-#' @param normalized_center Logical. If TRUE, the `center` is interpreted as normalized coordinates (0 to 1) relative to the bounding box of the spatial object. Default is FALSE.
-#' @param target_crs Character. CRS to which the spatial object should be transformed before applying the fisheye transformation. If NULL, the function will attempt to auto-guess based on the `center` and the CRS of the spatial object.
-#' @param preserve_crs Logical. If TRUE, the output will retain the original CRS of the input spatial object. If FALSE, the output will have the CRS of `target_crs` (if specified) or the CRS used for transformation. Default is TRUE.
+#' For the specifics of methods for spatial objects, see [fisheye_fgc.sf()].
+#' For the underlying mathematical transformation, see [fisheye_fgc.matrix()].
+#' 
+#' @param data Data on which to perform a focus-glue-context transformation.
+#' @param ... Additional arguments passed to specific methods. See [fisheye_fgc.matrix()] and [fisheye_fgc.sf()] for details for the methods provided by this package.
 #' 
 #' @seealso [fisheye_fgc.sf()]
 #' @seealso [fisheye_fgc.matrix()]
 #' 
 #' @export
-fisheye_fgc <- function(x, ...) {
+fisheye_fgc <- function(data, ...) {
   UseMethod("fisheye_fgc")
 }
