@@ -90,20 +90,20 @@
 #' ))), crs = 3857)
 #'
 #' # Default center (bbox midpoint), gentle magnification
-#' out1 <- sf_fisheye(poly, r_in = 0.3, r_out = 0.6,
+#' out1 <- fisheye_fgc(poly, r_in = 0.3, r_out = 0.6,
 #'                    zoom_factor = 1.5, squeeze_factor = 0.35)
 #'
 #' # Explicit map-unit center, stronger focus
-#' out2 <- sf_fisheye(poly, cx = 0.5, cy = 0.5,
+#' out2 <- fisheye_fgc(poly, cx = 0.5, cy = 0.5,
 #'                    r_in = 0.25, r_out = 0.55,
 #'                    zoom_factor = 2.0, squeeze_factor = 0.25)
 #'
 #' # Lon/lat point (auto-project to UTM/MGA), then fisheye around CBD (WGS84)
 #' pt_ll <- st_sfc(st_point(c(144.9631, -37.8136)), crs = 4326)  # Melbourne CBD
-#' out3  <- sf_fisheye(pt_ll, r_in = 0.2, r_out = 0.5)
+#' out3  <- fisheye_fgc(pt_ll, r_in = 0.2, r_out = 0.5)
 #'
 #' # Center supplied as an sf polygon: centroid is used as the warp center
-#' out4 <- sf_fisheye(poly, center = poly)
+#' out4 <- fisheye_fgc(poly, center = poly)
 #'
 #' @seealso
 #' [sf::st_transform()], [sf::st_is_longlat()], [sf::st_crs()],
@@ -114,7 +114,7 @@
 #' @export
 
 
-sf_fisheye <- function(
+fisheye_fgc.sf <- function(
   sf_obj,
   center = NULL,              # accepts c(lon,lat), c(x,y in map units), normalized pair, or sf/sfc POINT
   center_crs = NULL,          # e.g. "EPSG:4326"; if NULL we auto-guess (lon/lat vs map units)
@@ -218,6 +218,11 @@ sf_fisheye <- function(
   }
 
   return(out)
+}
+
+#' @export
+fisheye_fgc.sfc <- function(x, ...) {
+  fisheye_fgc.sf(x, ...)
 }
 
 #' Resolve a user-supplied center into the working CRS (internal)
