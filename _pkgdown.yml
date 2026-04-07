@@ -34,6 +34,8 @@ reference:
   - title: "Core Transformation Functions"
     contents:
       - fisheye_fgc
+      - fisheye_fgc.sf
+      - fisheye_fgc.sfc
       - fisheye_fgc.matrix
       - classify_zones
   - title: "Visualization Utilities"
