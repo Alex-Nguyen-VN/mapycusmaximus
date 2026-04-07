@@ -1,7 +1,7 @@
 #' Radial fisheye warp for `sf`/`sfc` objects (auto-CRS + flexible centers)
 #'
 #' @description
-#' `sf_fisheye()` applies a **focus–glue–context** fisheye to vector data:
+#' `fisheye_fgc()` applies a **focus–glue–context** fisheye to vector data:
 #' it (1) ensures a sensible projected working CRS, (2) **normalizes**
 #' coordinates around a chosen center, (3) calls `fisheye_fgc()` to warp radii,
 #' (4) **denormalizes** back to map units, and (5) restores the original CRS.
@@ -42,7 +42,7 @@
 #' `st_transform_custom()` which safely re-closes polygon rings and drops Z/M.
 #' The radial warp itself is delegated to `fisheye_fgc()` (which is not modified).
 #'
-#' @param sf_obj An [`sf`][sf::sf] or [`sfc`][sf::st_sfc] object. Supports
+#' @param data An [`sf`][sf::sf] or [`sfc`][sf::st_sfc] object. Supports
 #'   `POINT`, `LINESTRING`, `POLYGON`, and `MULTIPOLYGON`. Empty geometries
 #'   are removed before processing.
 #' @param center Flexible center specification (see **Center selection**):
@@ -72,6 +72,7 @@
 #'   auto-selected when the input is lon/lat; otherwise the input CRS is used.
 #' @param preserve_aspect Logical. If `TRUE` (default), use uniform scaling; if
 #'   `FALSE`, scale axes independently (may stretch shapes).
+#' @param ... Additional arguments from the S3 generic, currently ignored.
 #'
 #' @return An object of the same top-level class as `sf_obj` (`sf` or `sfc`),
 #'   with geometry coordinates warped by the fisheye and the **original CRS**
@@ -90,20 +91,20 @@
 #' ))), crs = 3857)
 #'
 #' # Default center (bbox midpoint), gentle magnification
-#' out1 <- sf_fisheye(poly, r_in = 0.3, r_out = 0.6,
+#' out1 <- fisheye_fgc(poly, r_in = 0.3, r_out = 0.6,
 #'                    zoom_factor = 1.5, squeeze_factor = 0.35)
 #'
 #' # Explicit map-unit center, stronger focus
-#' out2 <- sf_fisheye(poly, cx = 0.5, cy = 0.5,
+#' out2 <- fisheye_fgc(poly, cx = 0.5, cy = 0.5,
 #'                    r_in = 0.25, r_out = 0.55,
 #'                    zoom_factor = 2.0, squeeze_factor = 0.25)
 #'
 #' # Lon/lat point (auto-project to UTM/MGA), then fisheye around CBD (WGS84)
 #' pt_ll <- st_sfc(st_point(c(144.9631, -37.8136)), crs = 4326)  # Melbourne CBD
-#' out3  <- sf_fisheye(pt_ll, r_in = 0.2, r_out = 0.5)
+#' out3  <- fisheye_fgc(pt_ll, r_in = 0.2, r_out = 0.5)
 #'
 #' # Center supplied as an sf polygon: centroid is used as the warp center
-#' out4 <- sf_fisheye(poly, center = poly)
+#' out4 <- fisheye_fgc(poly, center = poly)
 #'
 #' @seealso
 #' [sf::st_transform()], [sf::st_is_longlat()], [sf::st_crs()],
@@ -114,8 +115,8 @@
 #' @export
 
 
-sf_fisheye <- function(
-  sf_obj,
+fisheye_fgc.sf <- function(
+  data,
   center = NULL,              # accepts c(lon,lat), c(x,y in map units), normalized pair, or sf/sfc POINT
   center_crs = NULL,          # e.g. "EPSG:4326"; if NULL we auto-guess (lon/lat vs map units)
   normalized_center = FALSE,  # TRUE if 'center' is in [-1,1] normalized coords
@@ -126,16 +127,17 @@ sf_fisheye <- function(
   method = "expand",
   revolution = 0.0,
   target_crs = NULL,
-  preserve_aspect = TRUE
+  preserve_aspect = TRUE,
+  ...
 ) {
   stopifnot(r_out > r_in)
-  stopifnot(inherits(sf_obj, c("sf", "sfc")))
+  stopifnot(inherits(data, c("sf", "sfc")))
 
-  if (inherits(sf_obj, "sf")) {
-    sf_obj <- sf_obj[!sf::st_is_empty(sf_obj), ]
+  if (inherits(data, "sf")) {
+    data <- data[!sf::st_is_empty(data), ]
   }
 
-  sf_obj <- sf::st_zm(sf_obj, drop = TRUE, what = "ZM")
+  sf_obj <- sf::st_zm(data, drop = TRUE, what = "ZM")
 
   # --- choose working CRS (projected) ---
   original_crs <- sf::st_crs(sf_obj)
@@ -220,12 +222,18 @@ sf_fisheye <- function(
   return(out)
 }
 
+#' @rdname fisheye_fgc.sf
+#' @export
+fisheye_fgc.sfc <- function(data, ...) {
+  fisheye_fgc.sf(data, ...)
+}
+
 #' Resolve a user-supplied center into the working CRS (internal)
 #'
 #' @description
 #' Converts a flexible \emph{center} specification into a 2D coordinate
 #' (x, y) expressed in the map's **working projected CRS**. This helper is
-#' meant for internal use inside \code{sf_fisheye()}.
+#' meant for internal use inside \code{fisheye_fgc()}.
 #'
 #' @details
 #' The \code{center} argument can be:

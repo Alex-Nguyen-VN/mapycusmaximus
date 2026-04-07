@@ -49,7 +49,7 @@
 #' \enumerate{
 #'   \item projection to VicGrid94 (`st_transform(vic, 3111)`),
 #'   \item defining a focus center near Melbourne (`cx = 145.0`, `cy = -37.8`),
-#'   \item applying [`sf_fisheye()`][mapycusmaximus::sf_fisheye] with
+#'   \item applying [`fisheye_fgc()`][mapycusmaximus::fisheye_fgc] with
 #'         \code{r_in = 0.34}, \code{r_out = 0.5}, and \code{zoom_factor = 1},
 #'   \item preserving topology with `st_make_valid()` where needed.
 #' }
@@ -57,7 +57,7 @@
 #'
 #' @source Prepared in \code{data-raw/gen-data.R} using the original `vic` polygon layer.
 #'
-#' @seealso [`sf_fisheye()`], [`conn_fish`]
+#' @seealso [`fisheye_fgc()`], [`conn_fish`]
 #'
 #' @examples
 #' library(sf)
@@ -86,7 +86,7 @@
 #'   \item projection to VicGrid94 (`EPSG:3111`),
 #'   \item distance-based filtering to keep only sources within \code{r_in = 0.34}
 #'         of the focus point (`cx = 145.0`, `cy = -37.8`),
-#'   \item fisheye transformation using [`sf_fisheye()`][mapycusmaximus::sf_fisheye]
+#'   \item fisheye transformation using [`fisheye_fgc()`][mapycusmaximus::fisheye_fgc]
 #'         with \code{r_in = 0.428}, \code{r_out = 0.429}, and \code{zoom_factor = 1}.
 #' }
 #' The resulting object aligns spatially with `vic_fish`, allowing
@@ -95,7 +95,7 @@
 #' @source Prepared in \code{data-raw/gen-data.R} from
 #' `transfers_coded.csv` and the `make_connections()` function.
 #'
-#' @seealso [`sf_fisheye()`], [`vic_fish`]
+#' @seealso [`fisheye_fgc()`], [`vic_fish`]
 #'
 #' @examples
 #' library(sf)

@@ -32,7 +32,7 @@ using:
 \item projection to VicGrid94 (\code{EPSG:3111}),
 \item distance-based filtering to keep only sources within \code{r_in = 0.34}
 of the focus point (\code{cx = 145.0}, \code{cy = -37.8}),
-\item fisheye transformation using \code{\link[=sf_fisheye]{sf_fisheye()}}
+\item fisheye transformation using \code{\link[=fisheye_fgc]{fisheye_fgc()}}
 with \code{r_in = 0.428}, \code{r_out = 0.429}, and \code{zoom_factor = 1}.
 }
 The resulting object aligns spatially with \code{vic_fish}, allowing
@@ -44,6 +44,6 @@ plot(st_geometry(vic_fish), col = "grey95", border = "grey70")
 plot(st_geometry(conn_fish), add = TRUE, col = "black", lwd = 1)
 }
 \seealso{
-\code{\link[=sf_fisheye]{sf_fisheye()}}, \code{\link{vic_fish}}
+\code{\link[=fisheye_fgc]{fisheye_fgc()}}, \code{\link{vic_fish}}
 }
 \keyword{datasets}

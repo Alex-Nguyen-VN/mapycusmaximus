@@ -349,6 +349,7 @@ make_ui <- function(debug_mode = FALSE) {
     }, {priority: 'event'});
   }
 
+  // ---- fisheye warp (MATCHES mapycusmaximus::fisheye_fgc + fisheye_fgc) ----
   function sFromBBox() {
     const sx = (base.bbox.xmax - base.bbox.xmin) / 2 || 1;
     const sy = (base.bbox.ymax - base.bbox.ymin) / 2 || 1;

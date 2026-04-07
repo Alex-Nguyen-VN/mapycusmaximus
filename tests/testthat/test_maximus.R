@@ -20,14 +20,14 @@ test_that("fisheye_fgc and plot_fisheye_fgc work together", {
   expect_true(is.matrix(transformed))
 })
 
-test_that("sf_fisheye and fisheye_fgc are consistent", {
+test_that("fisheye_fgc.matrix and fisheye_fgc.sf are consistent", {
   skip_if_not_installed("sf")
   
   # Create a simple point that should be in the focus zone
   pt <- st_sfc(st_point(c(0.1, 0.1)), crs = 3857)
   
-  # Apply sf_fisheye with known parameters
-  result_sf <- sf_fisheye(pt, cx = 0, cy = 0, r_in = 0.3, r_out = 0.5, 
+  # Apply fisheye_fgc with known parameters
+  result_sf <- fisheye_fgc(pt, cx = 0, cy = 0, r_in = 0.3, r_out = 0.5, 
                          zoom_factor = 2, preserve_aspect = TRUE)
   
   expect_s3_class(result_sf, "sfc")
@@ -56,11 +56,11 @@ test_that("functions handle degenerate sf geometries", {
   
   # Empty polygon
   empty_poly <- st_sfc(st_polygon(), crs = 3857)
-  expect_error(sf_fisheye(empty_poly))
+  expect_error(fisheye_fgc(empty_poly))
   
   # Very small polygon
   tiny_poly <- st_sfc(st_polygon(list(rbind(
     c(0, 0), c(0.001, 0), c(0.001, 0.001), c(0, 0.001), c(0, 0)
   ))), crs = 3857)
-  expect_no_error(sf_fisheye(tiny_poly))
+  expect_no_error(fisheye_fgc(tiny_poly))
 })

@@ -55,7 +55,7 @@
 #' ## Implementation Notes
 #' The app uses client-side JavaScript for smooth lens dragging without
 #' server round-trips. Fisheye transformations match the mathematical
-#' implementation in [fisheye_fgc()] and [sf_fisheye()], applied to
+#' implementation in [fisheye_fgc()] and [fisheye_fgc()], applied to
 #' polygons, lines, and points in real-time using SVG rendering.
 #'
 #' @examples
@@ -72,7 +72,7 @@
 #'
 #' @seealso
 #' - [fisheye_fgc()] for the core transformation function
-#' - [sf_fisheye()] for transforming spatial geometries
+#' - [fisheye_fgc()] for transforming spatial geometries
 #' - [plot_fisheye_fgc()] for static visualizations
 #' - [shiny::runApp()] for additional launch options
 #'
