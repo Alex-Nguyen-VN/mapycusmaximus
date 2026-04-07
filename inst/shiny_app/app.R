@@ -208,9 +208,10 @@ ui <- fluidPage(
   const gHosp = ensureG('hosp');
   const gUI = ensureG('ui');
 
-  function svgSize() {
+function svgSize() {
     const r = svg.getBoundingClientRect();
-    return { w: r.width || 900, h: r.height || 650 };
+    // Use fixed CSS height (650) to avoid tab-bar offset inflating getBoundingClientRect
+    return { w: r.width || 900, h: 650 };
   }
 
   function projector() {
@@ -492,6 +493,10 @@ ui <- fluidPage(
       lens.y = payload.centre.y;
       buildOnce();
       scheduleUpdate();
+      // Report actual SVG pixel size back to R so renderPlot can match exactly
+      const sz = svgSize();
+      Shiny.setInputValue('svg_px_w', sz.w, {priority: 'event'});
+      Shiny.setInputValue('svg_px_h', sz.h, {priority: 'event'});
     });
 
     Shiny.addCustomMessageHandler('lens-params', function (p) {
@@ -572,10 +577,28 @@ server <- function(input, output, session) {
     ))
   }, ignoreInit = FALSE)
 
-  output$original_plot <- renderPlot({
+output$original_plot <- renderPlot({
     layers <- sampled_layers()
     bb <- bbox_val()
     req(bb)
+
+    # Use the actual plotOutput panel width reported by the browser.
+    # Height is pinned at 650 to match the SVG's CSS height exactly.
+    plot_w_px <- session$clientData$output_original_plot_width
+    plot_h_px <- 650
+    req(!is.null(plot_w_px) && plot_w_px > 0)
+
+    dx <- as.numeric(bb["xmax"]) - as.numeric(bb["xmin"])
+    dy <- as.numeric(bb["ymax"]) - as.numeric(bb["ymin"])
+
+    # Replicate JS projector() letterbox math exactly (m = 20 px margin)
+    m <- 20
+    k <- min((plot_w_px - 2 * m) / dx, (plot_h_px - 2 * m) / dy)
+    padX_data <- ((plot_w_px - 2 * m) - k * dx) / 2 / k
+    padY_data <- ((plot_h_px - 2 * m) - k * dy) / 2 / k
+
+    xlim <- c(as.numeric(bb["xmin"]) - padX_data, as.numeric(bb["xmax"]) + padX_data)
+    ylim <- c(as.numeric(bb["ymin"]) - padY_data, as.numeric(bb["ymax"]) + padY_data)
 
     ggplot() +
       geom_sf(data = vic, fill = "#d9d9d9", color = "white", linewidth = 0.5) +
@@ -585,19 +608,18 @@ server <- function(input, output, session) {
       scale_linewidth(range = c(0.2, 1.2), guide = "none") +
       coord_sf(
         crs = st_crs(vic),
-        xlim = c(as.numeric(bb["xmin"]), as.numeric(bb["xmax"])),
-        ylim = c(as.numeric(bb["ymin"]), as.numeric(bb["ymax"])),
+        xlim = xlim,
+        ylim = ylim,
         expand = FALSE
       ) +
+      ggtitle("Original Victoria (matched framing)") +
       theme_map() +
       theme(
-        plot.title = element_blank(),
-        plot.margin = margin(0, 0, 0, 0),
+        plot.margin = margin(m, m, m, m, unit = "pt"),
         panel.background = element_rect(fill = "white", color = NA),
         plot.background  = element_rect(fill = "white", color = NA)
       )
-  }, res = 110)
-
+  }, height = 650, res = 110)
   output$debug_bbox <- renderPrint({
     bb <- bbox_val()
     req(bb)
