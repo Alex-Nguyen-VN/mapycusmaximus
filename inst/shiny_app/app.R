@@ -826,11 +826,13 @@ make_server <- function() {
   }
 }
 
-shiny_fisheye <- function(debug = "off") {
-  debug_mode <- isTRUE(debug) || identical(tolower(as.character(debug)), "on")
-
+fisheye_app <- function(debug = FALSE) {
   shinyApp(
-    ui = make_ui(debug_mode = debug_mode),
+    ui = make_ui(debug_mode = isTRUE(debug)),
     server = make_server()
   )
 }
+
+debug_opt <- getOption("mapycusmaximus.shiny_debug", FALSE)
+
+fisheye_app(debug = isTRUE(debug_opt))
