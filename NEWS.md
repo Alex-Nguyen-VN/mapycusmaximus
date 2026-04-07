@@ -1,3 +1,9 @@
+# mapycusmaximus 1.0.9
+* Fix CRS and Ratio for Shiny app
+
+# mapycusmaximus 1.0.8
+* Adding S3 method
+
 # mapycusmaximus 1.0.7
 * Rewrite vignette and fix pkgdown yaml
 
