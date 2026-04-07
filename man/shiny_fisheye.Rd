@@ -4,97 +4,18 @@
 \alias{shiny_fisheye}
 \title{Launch Interactive Fisheye Lens Explorer}
 \usage{
-shiny_fisheye(...)
+shiny_fisheye(debug = "off", ...)
 }
 \arguments{
-\item{...}{Additional arguments passed to \code{\link[shiny:runApp]{shiny::runApp()}}. Common
-options include:
-\itemize{
-\item \code{launch.browser}: Logical or function to handle app launch
-(default = \code{TRUE})
-\item \code{port}: Integer port number (default = random available port)
-\item \code{host}: Character host IP address (default = \code{"127.0.0.1"})
-\item \code{display.mode}: Character display mode, \code{"auto"}, \code{"normal"},
-or \code{"showcase"}
-}}
+\item{debug}{Controls whether the Debug tab is shown.
+Accepted values are \code{"off"} (default), \code{"on"}, \code{FALSE}, and \code{TRUE}.}
+
+\item{...}{Additional arguments passed to \code{\link[shiny:runApp]{shiny::runApp()}}.}
 }
 \value{
-Invisible \code{NULL}. The function is called for its side effect
-of launching the Shiny application. The R session will be blocked
-until the app is stopped (press Escape or close the browser window).
+The value returned by \code{\link[shiny:runApp]{shiny::runApp()}}, called primarily
+for its side effect of launching the application.
 }
 \description{
-Launches an interactive Shiny application for exploring
-Focus–Glue–Context (FGC) fisheye lens transformations on
-geographic data. The app provides real-time lens positioning,
-adjustable distortion parameters, and side-by-side comparison
-of transformed and original views.
-
-The application demonstrates fisheye effects on Victoria, Australia
-Local Government Areas (LGAs) with a network of healthcare facilities
-and aged care connections. Users can drag the lens to any position
-and adjust parameters without server-side re-rendering for smooth,
-responsive interaction.
-}
-\details{
-\subsection{Features}{
-\itemize{
-\item \strong{Interactive lens dragging}: Click and drag anywhere on the map
-to reposition the fisheye lens in real-time
-\item \strong{Parameter controls}: Adjust inner radius (focus), outer radius
-(glue), zoom factor, and squeeze factor
-\item \strong{Facility sampling}: Randomly sample healthcare facilities and
-residential aged care facilities (RACFs) with adjustable sample size
-\item \strong{Transfer visualization}: Toggle display of patient transfer
-connections between facilities
-\item \strong{Side-by-side comparison}: Compare fisheye-transformed and
-original static views
-}
-}
-
-\subsection{Requirements}{
-
-The Shiny app requires the following suggested packages:
-\itemize{
-\item \code{shiny}
-\item \code{tidyr}
-\item \code{dplyr}
-\item \code{purrr}
-\item \code{ggthemes}
-}
-
-If any are missing, install with:
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{install.packages(c("shiny", "tidyr", "dplyr", "purrr", "ggthemes"))
-}\if{html}{\out{</div>}}
-}
-
-\subsection{Implementation Notes}{
-
-The app uses client-side JavaScript for smooth lens dragging without
-server round-trips. Fisheye transformations match the mathematical
-implementation in \code{\link[=fisheye_fgc]{fisheye_fgc()}} and \code{\link[=fisheye_fgc]{fisheye_fgc()}}, applied to
-polygons, lines, and points in real-time using SVG rendering.
-}
-}
-\examples{
-\dontrun{
-# Launch the app with default settings
-shiny_fisheye()
-
-# Launch in browser on specific port
-shiny_fisheye(launch.browser = TRUE, port = 8080)
-
-# Launch in RStudio Viewer pane
-shiny_fisheye(launch.browser = rstudioapi::viewer)
-}
-
-}
-\seealso{
-\itemize{
-\item \code{\link[=fisheye_fgc]{fisheye_fgc()}} for the core transformation function
-\item \code{\link[=fisheye_fgc]{fisheye_fgc()}} for transforming spatial geometries
-\item \code{\link[=plot_fisheye_fgc]{plot_fisheye_fgc()}} for static visualizations
-\item \code{\link[shiny:runApp]{shiny::runApp()}} for additional launch options
-}
+Launch Interactive Fisheye Lens Explorer
 }
