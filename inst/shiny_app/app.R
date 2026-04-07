@@ -74,7 +74,11 @@ polygons_from_sf <- function(sf_obj, id_col = NULL) {
     if (length(rings) == 0) return(NULL)
 
     list(
-      id = if (!is.null(id_col) && id_col %in% names(sf_obj)) as.character(sf_obj[[id_col]][i]) else paste0("poly-", i),
+      id = if (!is.null(id_col) && id_col %in% names(sf_obj)) {
+        as.character(sf_obj[[id_col]][i])
+      } else {
+        paste0("poly-", i)
+      },
       rings = rings
     )
   })
@@ -86,9 +90,14 @@ lines_from_sf <- function(sf_obj, id_col = NULL) {
   res <- lapply(seq_along(geoms), function(i) {
     coords <- sf::st_coordinates(geoms[[i]])
     if (nrow(coords) == 0) return(NULL)
+
     xy <- coords[, c("X", "Y"), drop = FALSE]
     list(
-      id = if (!is.null(id_col) && id_col %in% names(sf_obj)) as.character(sf_obj[[id_col]][i]) else paste0("ln-", i),
+      id = if (!is.null(id_col) && id_col %in% names(sf_obj)) {
+        as.character(sf_obj[[id_col]][i])
+      } else {
+        paste0("ln-", i)
+      },
       coords = lapply(seq_len(nrow(xy)), function(j) as.numeric(xy[j, ]))
     )
   })
@@ -98,7 +107,13 @@ lines_from_sf <- function(sf_obj, id_col = NULL) {
 points_from_sf <- function(sf_obj, id_col = NULL) {
   coords <- sf::st_coordinates(sf_obj)
   n <- nrow(coords)
-  ids <- if (!is.null(id_col) && id_col %in% names(sf_obj)) as.character(sf_obj[[id_col]]) else as.character(seq_len(n))
+
+  ids <- if (!is.null(id_col) && id_col %in% names(sf_obj)) {
+    as.character(sf_obj[[id_col]])
+  } else {
+    as.character(seq_len(n))
+  }
+
   lapply(seq_len(n), function(i) {
     list(
       id = ids[i],
@@ -108,9 +123,11 @@ points_from_sf <- function(sf_obj, id_col = NULL) {
   })
 }
 
-ui <- fluidPage(
-  titlePanel("FGC lens explorer - debug canvas"),
-  tags$script(HTML("
+make_ui <- function(debug_mode = FALSE) {
+  fluidPage(
+    titlePanel("FGC lens explorer"),
+
+    tags$script(HTML("
 (function () {
   function reportStaticDebug() {
     var wrap = document.getElementById('staticWrap');
@@ -142,35 +159,35 @@ ui <- fluidPage(
   });
 })();
 ")),
-  sidebarLayout(
-    sidebarPanel(
-      selectInput("centre", "Initial lens centre (LGA)", choices = sort(unique(vic$LGA_NAME)), selected = "MELBOURNE"),
-      sliderInput("r_out", "Outer radius (glue)", min = 0.2, max = 0.95, value = 0.6, step = 0.01),
-      sliderInput("r_in", "Inner radius (focus)", min = 0.05, max = 0.59, value = 0.33, step = 0.01),
-      sliderInput("zoom", "Zoom factor", min = 1, max = 25, value = 12, step = 1),
-      sliderInput("squeeze", "Squeeze", min = 0.05, max = 0.95, value = 0.35, step = 0.01),
-      sliderInput("n_fac", "Sample size per layer", min = 5, max = 40, value = 10, step = 1),
-      actionButton("resample", "Resample facilities"),
-      checkboxInput("show_lines", "Show transfer lines", value = TRUE),
-      tags$hr(),
-      h4("Debug outputs"),
-      verbatimTextOutput("debug_bbox"),
-      verbatimTextOutput("debug_svg"),
-      verbatimTextOutput("debug_projector"),
-      verbatimTextOutput("debug_static_dom"),
-      verbatimTextOutput("debug_clientdata")
-    ),
-    mainPanel(
-      tabsetPanel(
-        tabPanel(
-          "Fisheye (drag lens)",
-          tags$h4("Fisheye view (drag lens)", style = "margin-top:0; margin-bottom:10px;"),
-          tags$div(
-            id = "lensWrap",
-            style = "width:100%; height:650px; border:1px solid red;"
-          ),
-          tags$script(HTML(
-"(function () {
+
+    sidebarLayout(
+      sidebarPanel(
+        selectInput(
+          "centre",
+          "Initial lens centre (LGA)",
+          choices = sort(unique(vic$LGA_NAME)),
+          selected = "MELBOURNE"
+        ),
+        sliderInput("r_out", "Outer radius (glue)", min = 0.20, max = 0.95, value = 0.60, step = 0.01),
+        sliderInput("r_in",  "Inner radius (focus)", min = 0.05, max = 0.60, value = 0.33, step = 0.01),
+        sliderInput("zoom", "Zoom factor", min = 1, max = 25, value = 12, step = 1),
+        sliderInput("squeeze", "Squeeze", min = 0.05, max = 0.95, value = 0.35, step = 0.01),
+        sliderInput("n_fac", "Sample size per layer", min = 5, max = 40, value = 10, step = 1),
+        actionButton("resample", "Resample facilities"),
+        checkboxInput("show_lines", "Show transfer lines", value = TRUE)
+      ),
+
+      mainPanel(
+        tabsetPanel(
+          tabPanel(
+            "Fisheye",
+            tags$h4("Fisheye view (drag lens)", style = "margin-top:0; margin-bottom:10px;"),
+            tags$div(
+              id = "lensWrap",
+              style = "width:100%; height:650px; border:1px solid red;"
+            ),
+            tags$script(HTML("
+(function () {
   const wrap = document.getElementById('lensWrap');
   const svgNS = 'http://www.w3.org/2000/svg';
 
@@ -208,15 +225,13 @@ ui <- fluidPage(
   const gHosp = ensureG('hosp');
   const gUI = ensureG('ui');
 
-function svgSize() {
+  function svgSize() {
     const r = svg.getBoundingClientRect();
-    // Use fixed CSS height (650) to avoid tab-bar offset inflating getBoundingClientRect
     return { w: r.width || 900, h: 650 };
   }
 
   function projector() {
     const { w, h } = svgSize();
-    const m = 0;
 
     const dx = base.bbox.xmax - base.bbox.xmin;
     const dy = base.bbox.ymax - base.bbox.ymin;
@@ -284,7 +299,10 @@ function svgSize() {
       const expanded_r = norm_r * zoom_factor;
       radius_new = Math.min(expanded_r, 1.0) * r_in;
     } else if (radius <= r_out) {
-      const u = (radius - r_in) / (r_out - r_in);
+      const denom = r_out - r_in;
+      if (denom <= 0) return [nx, ny];
+
+      const u = (radius - r_in) / denom;
 
       if (method === 'outward') {
         const u_compressed = Math.pow(u, 1 / squeeze_factor);
@@ -484,6 +502,7 @@ function svgSize() {
 
   svg.addEventListener('pointerup', () => { dragging = false; });
   svg.addEventListener('pointercancel', () => { dragging = false; });
+
   function reportSvgWidth() {
     if (window.Shiny) {
       const sz = svgSize();
@@ -496,179 +515,260 @@ function svgSize() {
     reportSvgWidth();
   });
 
-  // Shiny message handlers
   if (window.Shiny) {
-    Shiny.addCustomMessageHandler('lens-base', function (payload) {
+    Shiny.addCustomMessageHandler('lens-base', function(payload) {
       base = payload;
       base.bbox = payload.bbox;
       lens.x = payload.centre.x;
       lens.y = payload.centre.y;
       buildOnce();
       scheduleUpdate();
-      // Report the exact SVG pixel width so renderPlot can match it
-      setTimeout(reportSvgWidth, 50); // slight delay ensures DOM is laid out
+      setTimeout(reportSvgWidth, 50);
+    });
+
+    Shiny.addCustomMessageHandler('lens-params', function(payload) {
+      params = Object.assign({}, params, payload);
+      scheduleUpdate();
     });
   }
-})();"
-          ))
-        ),
-        tabPanel(
-          "Original (static)",
-          tags$h4("Original Victoria (matched framing)", style = "margin-top:0; margin-bottom:10px;"),
-          div(
-            id = "staticWrap",
-            style = "border:1px solid blue; display:inline-block; width:100%;",
-            plotOutput("original_plot", height = "650px")
-          )
+})();
+"))
+          ),
+
+          tabPanel(
+            "Original",
+            tags$h4("Original Victoria (matched framing)", style = "margin-top:0; margin-bottom:10px;"),
+            div(
+              id = "staticWrap",
+              style = "border:1px solid blue; display:inline-block; width:100%;",
+              plotOutput("original_plot", height = "650px")
+            )
+          ),
+
+          if (debug_mode) {
+            tabPanel(
+              "Debug",
+              fluidRow(
+                column(
+                  6,
+                  h4("BBox"),
+                  verbatimTextOutput("debug_bbox"),
+                  h4("SVG"),
+                  verbatimTextOutput("debug_svg"),
+                  h4("Projector"),
+                  verbatimTextOutput("debug_projector")
+                ),
+                column(
+                  6,
+                  h4("Static DOM"),
+                  verbatimTextOutput("debug_static_dom"),
+                  h4("Client data"),
+                  verbatimTextOutput("debug_clientdata")
+                )
+              )
+            )
+          }
         )
       )
     )
   )
-)
-
-server <- function(input, output, session) {
-  bbox_val <- reactiveVal(NULL)
-  sampled_layers <- reactiveVal(prepare_network(n_hosp = 10, n_racf = 10))
-
-  observeEvent(list(input$resample, input$n_fac), {
-    sampled_layers(prepare_network(n_hosp = input$n_fac, n_racf = input$n_fac))
-  }, ignoreInit = TRUE)
-
-  centre_point <- reactive({
-    req(input$centre)
-    coords <- vic |>
-      dplyr::filter(LGA_NAME == input$centre) |>
-      sf::st_point_on_surface() |>
-      sf::st_geometry() |>
-      sf::st_coordinates()
-    list(x = as.numeric(coords[1, 1]), y = as.numeric(coords[1, 2]), label = input$centre)
-  })
-
-  observeEvent(list(input$centre, input$resample, input$n_fac), {
-    layers <- sampled_layers()
-
-    hosp <- layers$hospitals |> mutate(type = "hospital", id = destination)
-    racf <- layers$racfs |> mutate(type = "racf", id = source)
-    pts <- bind_rows(hosp, racf)
-
-    bind0 <- dplyr::bind_rows(
-      vic |> dplyr::mutate(.layer = "vic"),
-      pts |> dplyr::mutate(.layer = "pts"),
-      layers$transfers |> dplyr::mutate(.layer = "transfers")
-    )
-
-    bb <- sf::st_bbox(bind0)
-    bbox_val(bb)
-
-    payload <- list(
-      bbox = as.list(bb),
-      centre = centre_point(),
-      vic = polygons_from_sf(vic, id_col = "LGA_NAME"),
-      transfers = lines_from_sf(layers$transfers),
-      hospitals = points_from_sf(hosp, id_col = "id"),
-      racfs = points_from_sf(racf, id_col = "id")
-    )
-
-    session$sendCustomMessage("lens-base", payload)
-  }, ignoreInit = FALSE)
-
-  observeEvent(list(input$r_in, input$r_out, input$zoom, input$squeeze, input$show_lines), {
-    session$sendCustomMessage("lens-params", list(
-      r_in = input$r_in,
-      r_out = input$r_out,
-      zoom = input$zoom,
-      squeeze = input$squeeze,
-      show_lines = isTRUE(input$show_lines)
-    ))
-  }, ignoreInit = FALSE)
-
-output$original_plot <- renderPlot({
-    layers <- sampled_layers()
-    bb <- bbox_val()
-    req(bb)
-
-    # Use the SVG's actual pixel width reported by JS (same element, same measurement).
-    # Fall back to clientData width only if JS value not yet available.
-    svg_w_px <- input$svg_w_px
-    if (is.null(svg_w_px) || svg_w_px <= 0) {
-      svg_w_px <- session$clientData$output_original_plot_width
-    }
-    req(!is.null(svg_w_px) && svg_w_px > 0)
-
-    plot_h_px <- 650  # matches SVG CSS height exactly
-
-    dx <- as.numeric(bb["xmax"]) - as.numeric(bb["xmin"])
-    dy <- as.numeric(bb["ymax"]) - as.numeric(bb["ymin"])
-
-    # Replicate JS projector() with m = 0 (confirmed by k = h/dy = 126.12)
-    m <- 0
-    k        <- min((svg_w_px - 2*m) / dx, (plot_h_px - 2*m) / dy)
-    padX_data <- ((svg_w_px  - 2*m) - k * dx) / 2 / k
-    padY_data <- ((plot_h_px - 2*m) - k * dy) / 2 / k
-
-    xlim <- c(as.numeric(bb["xmin"]) - padX_data, as.numeric(bb["xmax"]) + padX_data)
-    ylim <- c(as.numeric(bb["ymin"]) - padY_data, as.numeric(bb["ymax"]) + padY_data)
-
-    ggplot() +
-      geom_sf(data = vic, fill = "#d9d9d9", color = "white", linewidth = 0.5) +
-      { if (isTRUE(input$show_lines)) geom_sf(data = layers$transfers, aes(linewidth = transfer_n), color = "grey50", alpha = 0.45) } +
-      geom_sf(data = layers$racfs, color = "#2c7fb8", size = 1, alpha = 0.9) +
-      geom_sf(data = layers$hospitals, color = "#d7191c", size = 1.2, alpha = 0.9) +
-      scale_linewidth(range = c(0.2, 1.2), guide = "none") +
-      coord_sf(
-        crs    = st_crs(vic),
-        xlim   = xlim,
-        ylim   = ylim,
-        expand = FALSE
-      ) +
-      theme_map() +
-      theme(
-        plot.margin      = margin(0, 0, 0, 0),
-        panel.background = element_rect(fill = "white", color = NA),
-        plot.background  = element_rect(fill = "white", color = NA)
-      )
-  }, height = 650, res = 110)
-
-  output$debug_bbox <- renderPrint({
-    bb <- bbox_val()
-    req(bb)
-
-    dx <- as.numeric(bb["xmax"] - bb["xmin"])
-    dy <- as.numeric(bb["ymax"] - bb["ymin"])
-
-    list(
-      xmin = as.numeric(bb["xmin"]),
-      xmax = as.numeric(bb["xmax"]),
-      ymin = as.numeric(bb["ymin"]),
-      ymax = as.numeric(bb["ymax"]),
-      dx = dx,
-      dy = dy,
-      bbox_ratio = dx / dy
-    )
-  })
-
-  output$debug_svg <- renderPrint({
-    input$svg_debug
-  })
-
-  output$debug_projector <- renderPrint({
-    input$projector_debug
-  })
-
-  output$debug_static_dom <- renderPrint({
-    input$static_dom_debug
-  })
-
-  output$debug_clientdata <- renderPrint({
-    w <- session$clientData$output_original_plot_width
-    h <- session$clientData$output_original_plot_height
-
-    list(
-      original_plot_width = w,
-      original_plot_height = h,
-      original_plot_ratio = if (!is.null(w) && !is.null(h) && h != 0) w / h else NULL
-    )
-  })
 }
 
-shinyApp(ui, server)
+make_server <- function() {
+  function(input, output, session) {
+    bbox_val <- reactiveVal(NULL)
+    sampled_layers <- reactiveVal(prepare_network(n_hosp = 10, n_racf = 10))
+
+    observeEvent(list(input$resample, input$n_fac), {
+      sampled_layers(prepare_network(n_hosp = input$n_fac, n_racf = input$n_fac))
+    }, ignoreInit = TRUE)
+
+    centre_point <- reactive({
+      req(input$centre)
+      coords <- vic |>
+        dplyr::filter(LGA_NAME == input$centre) |>
+        sf::st_point_on_surface() |>
+        sf::st_geometry() |>
+        sf::st_coordinates()
+
+      list(
+        x = as.numeric(coords[1, 1]),
+        y = as.numeric(coords[1, 2]),
+        label = input$centre
+      )
+    })
+
+    observeEvent(input$r_out, {
+      req(!is.null(input$r_out), !is.null(input$r_in))
+
+      new_rin_max <- input$r_out
+      new_rin_val <- min(input$r_in, new_rin_max)
+
+      updateSliderInput(
+        session = session,
+        inputId = "r_in",
+        min = 0.05,
+        max = new_rin_max,
+        value = new_rin_val,
+        step = 0.01
+      )
+    }, ignoreInit = FALSE)
+
+    observeEvent(list(input$centre, input$resample, input$n_fac), {
+      layers <- sampled_layers()
+
+      hosp <- layers$hospitals |> mutate(type = "hospital", id = destination)
+      racf <- layers$racfs |> mutate(type = "racf", id = source)
+      pts  <- bind_rows(hosp, racf)
+
+      bind0 <- dplyr::bind_rows(
+        vic |> dplyr::mutate(.layer = "vic"),
+        pts |> dplyr::mutate(.layer = "pts"),
+        layers$transfers |> dplyr::mutate(.layer = "transfers")
+      )
+
+      bb <- sf::st_bbox(bind0)
+      bbox_val(bb)
+
+      payload <- list(
+        bbox = as.list(bb),
+        centre = centre_point(),
+        vic = polygons_from_sf(vic, id_col = "LGA_NAME"),
+        transfers = lines_from_sf(layers$transfers),
+        hospitals = points_from_sf(hosp, id_col = "id"),
+        racfs = points_from_sf(racf, id_col = "id")
+      )
+
+      session$sendCustomMessage("lens-base", payload)
+    }, ignoreInit = FALSE)
+
+    observeEvent(
+      list(input$r_in, input$r_out, input$zoom, input$squeeze, input$show_lines),
+      {
+        req(
+          !is.null(input$r_in),
+          !is.null(input$r_out),
+          input$r_in <= input$r_out
+        )
+
+        session$sendCustomMessage("lens-params", list(
+          r_in = input$r_in,
+          r_out = input$r_out,
+          zoom = input$zoom,
+          squeeze = input$squeeze,
+          show_lines = isTRUE(input$show_lines)
+        ))
+      },
+      ignoreInit = FALSE
+    )
+
+    output$original_plot <- renderPlot({
+      layers <- sampled_layers()
+      bb <- bbox_val()
+      req(bb)
+
+      svg_w_px <- input$svg_w_px
+      if (is.null(svg_w_px) || svg_w_px <= 0) {
+        svg_w_px <- session$clientData$output_original_plot_width
+      }
+      req(!is.null(svg_w_px) && svg_w_px > 0)
+
+      plot_h_px <- 650
+
+      dx <- as.numeric(bb["xmax"]) - as.numeric(bb["xmin"])
+      dy <- as.numeric(bb["ymax"]) - as.numeric(bb["ymin"])
+
+      k <- min(svg_w_px / dx, plot_h_px / dy)
+      padX_data <- (svg_w_px - k * dx) / 2 / k
+      padY_data <- (plot_h_px - k * dy) / 2 / k
+
+      xlim <- c(as.numeric(bb["xmin"]) - padX_data, as.numeric(bb["xmax"]) + padX_data)
+      ylim <- c(as.numeric(bb["ymin"]) - padY_data, as.numeric(bb["ymax"]) + padY_data)
+
+      ggplot() +
+        geom_sf(data = vic, fill = "#d9d9d9", color = "white", linewidth = 0.5) +
+        {
+          if (isTRUE(input$show_lines)) {
+            geom_sf(
+              data = layers$transfers,
+              aes(linewidth = transfer_n),
+              color = "grey50",
+              alpha = 0.45
+            )
+          }
+        } +
+        geom_sf(data = layers$racfs, color = "#2c7fb8", size = 1, alpha = 0.9) +
+        geom_sf(data = layers$hospitals, color = "#d7191c", size = 1.2, alpha = 0.9) +
+        scale_linewidth(range = c(0.2, 1.2), guide = "none") +
+        coord_sf(
+          crs = st_crs(vic),
+          xlim = xlim,
+          ylim = ylim,
+          expand = FALSE
+        ) +
+        theme_map() +
+        theme(
+          plot.margin = margin(0, 0, 0, 0),
+          panel.background = element_rect(fill = "white", color = NA),
+          plot.background = element_rect(fill = "white", color = NA)
+        )
+    }, height = 650, res = 110)
+
+    output$debug_bbox <- renderPrint({
+      bb <- bbox_val()
+      req(bb)
+
+      dx <- as.numeric(bb["xmax"] - bb["xmin"])
+      dy <- as.numeric(bb["ymax"] - bb["ymin"])
+
+      list(
+        xmin = as.numeric(bb["xmin"]),
+        xmax = as.numeric(bb["xmax"]),
+        ymin = as.numeric(bb["ymin"]),
+        ymax = as.numeric(bb["ymax"]),
+        dx = dx,
+        dy = dy,
+        bbox_ratio = dx / dy
+      )
+    })
+
+    output$debug_svg <- renderPrint({
+      input$svg_debug
+    })
+
+    output$debug_projector <- renderPrint({
+      input$projector_debug
+    })
+
+    output$debug_static_dom <- renderPrint({
+      input$static_dom_debug
+    })
+
+    output$debug_clientdata <- renderPrint({
+      w <- session$clientData$output_original_plot_width
+      h <- session$clientData$output_original_plot_height
+
+      list(
+        original_plot_width = w,
+        original_plot_height = h,
+        original_plot_ratio = if (!is.null(w) && !is.null(h) && h != 0) w / h else NULL
+      )
+    })
+  }
+}
+
+shiny_fisheye <- function(debug = "off", launch = TRUE) {
+  debug_mode <- isTRUE(debug) || identical(tolower(as.character(debug)), "on")
+
+  app <- shinyApp(
+    ui = make_ui(debug_mode = debug_mode),
+    server = make_server()
+  )
+
+  if (isTRUE(launch)) {
+    message("Launching Fisheye Lens Explorer...")
+    shiny::runApp(app)
+  } else {
+    app
+  }
+}
