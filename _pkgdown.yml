@@ -48,6 +48,7 @@ reference:
       - vic
       - conn_fish
       - vic_fish
+      - hospital_locations
   - title: "Shiny"
     contents:
       - shiny_fisheye
