@@ -33,8 +33,8 @@ navbar:
 reference:
   - title: "Core Transformation Functions"
     contents:
-      - fisheye_fgc
-      - sf_fisheye
+      - fisheye_fgc.sf
+      - fisheye_fgc.sfc
       - classify_zones
   - title: "Visualization Utilities"
     contents:
