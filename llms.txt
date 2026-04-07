@@ -330,6 +330,9 @@ curse of dimensionality.
 
   Fisheye-Distorted Victoria LGAs (`sf`)
 
+- [`hospital_locations`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/hospital_locations.md)
+  : Hospital names and locations in Victoria, Australia
+
 ## Shiny
 
 - [`shiny_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/shiny_fisheye.md)
