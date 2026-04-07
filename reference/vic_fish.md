@@ -38,7 +38,7 @@ Built from the base layer `vic` using:
 2.  defining a focus center near Melbourne (`cx = 145.0`, `cy = -37.8`),
 
 3.  applying
-    [`sf_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/sf_fisheye.md)
+    [`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
     with `r_in = 0.34`, `r_out = 0.5`, and `zoom_factor = 1`,
 
 4.  preserving topology with
@@ -50,7 +50,7 @@ zone.
 
 ## See also
 
-[`sf_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/sf_fisheye.md),
+[`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md),
 [`conn_fish`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/conn_fish.md)
 
 ## Examples

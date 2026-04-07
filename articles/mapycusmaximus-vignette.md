@@ -61,7 +61,7 @@ center:
 
 ``` r
 # Apply fisheye transformation
-vic_warped <- sf_fisheye(
+vic_warped <- fisheye_fgc(
   vic,
   r_in = 0.3,        # Focus radius
   r_out = 0.6,       # Glue boundary
@@ -97,7 +97,7 @@ its centroid:
 # Extract Melbourne CBD as the focus
 melbourne <- vic[vic$LGA_NAME == "MELBOURNE", ]
 
-vic_melbourne <- sf_fisheye(
+vic_melbourne <- fisheye_fgc(
   vic,
   center = melbourne,      # Centroid becomes the warp center
   r_in = 0.34,
@@ -126,7 +126,7 @@ Specify coordinates directly in WGS84:
 # Melbourne CBD coordinates (WGS84)
 melb_coords <- c(144.9631, -37.8136)
 
-vic_coords <- sf_fisheye(
+vic_coords <- fisheye_fgc(
   vic,
   center = melb_coords,
   center_crs = "EPSG:4326",   # Explicitly state CRS
@@ -153,7 +153,7 @@ If you’re already working in a projected CRS, pass coordinates directly:
 
 ``` r
 # Example: coordinates in the working CRS (meters)
-vic_projected <- sf_fisheye(
+vic_projected <- fisheye_fgc(
   vic,
   cx = 321000,      # Easting (meters)
   cy = 5813000,     # Northing (meters)
@@ -175,11 +175,11 @@ space** (roughly -1 to 1):
 
 ``` r
 # Small focus, narrow glue
-vic_tight <- sf_fisheye(vic, center = melbourne, r_in = 0.2, r_out = 0.3, 
+vic_tight <- fisheye_fgc(vic, center = melbourne, r_in = 0.2, r_out = 0.3, 
                         zoom_factor = 8, squeeze_factor = 0.35)
 
 # Large focus, wide glue
-vic_wide <- sf_fisheye(vic, center = melbourne, r_in = 0.4, r_out = 0.7, 
+vic_wide <- fisheye_fgc(vic, center = melbourne, r_in = 0.4, r_out = 0.7, 
                        zoom_factor = 8, squeeze_factor = 0.35)
 
 p1 <- ggplot(vic_tight) + 
@@ -215,11 +215,11 @@ Controls magnification strength inside the focus:
 
 ``` r
 # Gentle zoom
-vic_gentle <- sf_fisheye(vic, center = melbourne, r_in = 0.3, r_out = 0.5, 
+vic_gentle <- fisheye_fgc(vic, center = melbourne, r_in = 0.3, r_out = 0.5, 
                          zoom_factor = 3, squeeze_factor = 0.35)
 
 # Aggressive zoom
-vic_aggressive <- sf_fisheye(vic, center = melbourne, r_in = 0.3, r_out = 0.5, 
+vic_aggressive <- fisheye_fgc(vic, center = melbourne, r_in = 0.3, r_out = 0.5, 
                              zoom_factor = 20, squeeze_factor = 0.35)
 
 ggplot(vic_gentle) + 
@@ -250,11 +250,11 @@ Controls compression in the glue zone (0 to 1):
 
 ``` r
 # Minimal squeeze (wider glue transition)
-vic_loose <- sf_fisheye(vic, center = melbourne, r_in = 0.3, r_out = 0.5, 
+vic_loose <- fisheye_fgc(vic, center = melbourne, r_in = 0.3, r_out = 0.5, 
                         zoom_factor = 8, squeeze_factor = 0.1)
 
 # Strong squeeze (narrow glue transition)
-vic_tight_squeeze <- sf_fisheye(vic, center = melbourne, r_in = 0.3, r_out = 0.5, 
+vic_tight_squeeze <- fisheye_fgc(vic, center = melbourne, r_in = 0.3, r_out = 0.5, 
                                 zoom_factor = 8, squeeze_factor = 0.8)
 
 ggplot(vic_loose) + 
@@ -296,7 +296,7 @@ both_layers <- rbind(
 )
 
 # Apply fisheye once to combined data
-both_warped <- sf_fisheye(
+both_warped <- fisheye_fgc(
   both_layers,
   center = melbourne,
   r_in = 0.34,
@@ -344,7 +344,7 @@ st_crs(vic_lonlat)$proj4string
 #> [1] "+proj=longlat +datum=WGS84 +no_defs"
 
 # Apply fisheye - auto-projects to GDA2020/MGA55 for Victoria
-vic_auto <- sf_fisheye(
+vic_auto <- fisheye_fgc(
   vic_lonlat,
   center = melbourne,
   r_in = 0.3,
@@ -366,7 +366,7 @@ The package uses sensible defaults: - Victoria region → **EPSG:7855**
 Override the automatic selection with `target_crs`:
 
 ``` r
-vic_custom <- sf_fisheye(
+vic_custom <- fisheye_fgc(
   vic_lonlat,
   center = melbourne,
   target_crs = "EPSG:3111",  # VicGrid
@@ -428,7 +428,7 @@ vic_pop <- vic |>
   dplyr::mutate(is_metro = LGA_NAME %in% metro_lgas)
 
 # 3. Apply fisheye
-vic_focused <- sf_fisheye(
+vic_focused <- fisheye_fgc(
   vic_pop,
   center = metro_center,
   r_in = 0.25,
@@ -471,13 +471,13 @@ Start conservative and iterate:
 
 ``` r
 # Start here
-sf_fisheye(data, r_in = 0.3, r_out = 0.5, zoom_factor = 5, squeeze_factor = 0.35)
+fisheye_fgc(data, r_in = 0.3, r_out = 0.5, zoom_factor = 5, squeeze_factor = 0.35)
 
 # Too distorted? Reduce zoom or widen glue
-sf_fisheye(data, r_in = 0.3, r_out = 0.6, zoom_factor = 3, squeeze_factor = 0.35)
+fisheye_fgc(data, r_in = 0.3, r_out = 0.6, zoom_factor = 3, squeeze_factor = 0.35)
 
 # Need more magnification? Increase zoom gradually
-sf_fisheye(data, r_in = 0.3, r_out = 0.5, zoom_factor = 10, squeeze_factor = 0.35)
+fisheye_fgc(data, r_in = 0.3, r_out = 0.5, zoom_factor = 10, squeeze_factor = 0.35)
 ```
 
 ### Layer Alignment
@@ -487,11 +487,11 @@ Always combine layers before transformation:
 ``` r
 # Good: Single transformation
 combined <- rbind(layer1, layer2, layer3)
-warped <- sf_fisheye(combined, ...)
+warped <- fisheye_fgc(combined, ...)
 
 # Avoid: Separate transformations
-layer1_warped <- sf_fisheye(layer1, ...)  # Different normalization
-layer2_warped <- sf_fisheye(layer2, ...)  # May not align perfectly
+layer1_warped <- fisheye_fgc(layer1, ...)  # Different normalization
+layer2_warped <- fisheye_fgc(layer2, ...)  # May not align perfectly
 ```
 
 ### Reproducibility
@@ -500,7 +500,7 @@ Be explicit about parameters for reproducible analyses:
 
 ``` r
 # Explicit and reproducible
-result <- sf_fisheye(
+result <- fisheye_fgc(
   data,
   center = st_point(c(144.9631, -37.8136)),
   center_crs = "EPSG:4326",
@@ -530,7 +530,7 @@ data_clean <- data |>
   st_simplify(dTolerance = 100)  # Adjust tolerance as needed
 
 # Transform once
-data_warped <- sf_fisheye(data_clean, ...)
+data_warped <- fisheye_fgc(data_clean, ...)
 ```
 
 ## Common Issues
@@ -568,7 +568,6 @@ problematic.
 ## Getting Help
 
 - Package documentation:
-  [`?sf_fisheye`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/sf_fisheye.md),
   [`?fisheye_fgc`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
 - GitHub issues: \[Report bugs or request features\]
 - Examples: See

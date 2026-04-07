@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mapycusmaximus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -126,7 +126,7 @@ magnify Melbourne while keeping the rest of Victoria visible.</p>
 center:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Apply fisheye transformation</span></span>
-<span><span class="va">vic_warped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span></span>
+<span><span class="va">vic_warped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span></span>
 <span>  <span class="va">vic</span>,</span>
 <span>  r_in <span class="op">=</span> <span class="fl">0.3</span>,        <span class="co"># Focus radius</span></span>
 <span>  r_out <span class="op">=</span> <span class="fl">0.6</span>,       <span class="co"># Glue boundary</span></span>
@@ -160,7 +160,7 @@ mapycusmaximus uses its centroid:</p>
 <code class="sourceCode R"><span><span class="co"># Extract Melbourne CBD as the focus</span></span>
 <span><span class="va">melbourne</span> <span class="op">&lt;-</span> <span class="va">vic</span><span class="op">[</span><span class="va">vic</span><span class="op">$</span><span class="va">LGA_NAME</span> <span class="op">==</span> <span class="st">"MELBOURNE"</span>, <span class="op">]</span></span>
 <span></span>
-<span><span class="va">vic_melbourne</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span></span>
+<span><span class="va">vic_melbourne</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span></span>
 <span>  <span class="va">vic</span>,</span>
 <span>  center <span class="op">=</span> <span class="va">melbourne</span>,      <span class="co"># Centroid becomes the warp center</span></span>
 <span>  r_in <span class="op">=</span> <span class="fl">0.34</span>,</span>
@@ -188,7 +188,7 @@ Fisheye centered on Melbourne CBD
 <code class="sourceCode R"><span><span class="co"># Melbourne CBD coordinates (WGS84)</span></span>
 <span><span class="va">melb_coords</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">144.9631</span>, <span class="op">-</span><span class="fl">37.8136</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">vic_coords</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span></span>
+<span><span class="va">vic_coords</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span></span>
 <span>  <span class="va">vic</span>,</span>
 <span>  center <span class="op">=</span> <span class="va">melb_coords</span>,</span>
 <span>  center_crs <span class="op">=</span> <span class="st">"EPSG:4326"</span>,   <span class="co"># Explicitly state CRS</span></span>
@@ -215,7 +215,7 @@ Fisheye using lon/lat coordinates
 directly:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example: coordinates in the working CRS (meters)</span></span>
-<span><span class="va">vic_projected</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span></span>
+<span><span class="va">vic_projected</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span></span>
 <span>  <span class="va">vic</span>,</span>
 <span>  cx <span class="op">=</span> <span class="fl">321000</span>,      <span class="co"># Easting (meters)</span></span>
 <span>  cy <span class="op">=</span> <span class="fl">5813000</span>,     <span class="co"># Northing (meters)</span></span>
@@ -237,11 +237,11 @@ directly:</p>
 zones in <strong>normalized space</strong> (roughly -1 to 1):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Small focus, narrow glue</span></span>
-<span><span class="va">vic_tight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="va">melbourne</span>, r_in <span class="op">=</span> <span class="fl">0.2</span>, r_out <span class="op">=</span> <span class="fl">0.3</span>, </span>
+<span><span class="va">vic_tight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="va">melbourne</span>, r_in <span class="op">=</span> <span class="fl">0.2</span>, r_out <span class="op">=</span> <span class="fl">0.3</span>, </span>
 <span>                        zoom_factor <span class="op">=</span> <span class="fl">8</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Large focus, wide glue</span></span>
-<span><span class="va">vic_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="va">melbourne</span>, r_in <span class="op">=</span> <span class="fl">0.4</span>, r_out <span class="op">=</span> <span class="fl">0.7</span>, </span>
+<span><span class="va">vic_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="va">melbourne</span>, r_in <span class="op">=</span> <span class="fl">0.4</span>, r_out <span class="op">=</span> <span class="fl">0.7</span>, </span>
 <span>                       zoom_factor <span class="op">=</span> <span class="fl">8</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">vic_tight</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -274,11 +274,11 @@ Effect of different radius settings
 <p>Controls magnification strength inside the focus:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Gentle zoom</span></span>
-<span><span class="va">vic_gentle</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="va">melbourne</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.5</span>, </span>
+<span><span class="va">vic_gentle</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="va">melbourne</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.5</span>, </span>
 <span>                         zoom_factor <span class="op">=</span> <span class="fl">3</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Aggressive zoom</span></span>
-<span><span class="va">vic_aggressive</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="va">melbourne</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.5</span>, </span>
+<span><span class="va">vic_aggressive</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="va">melbourne</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.5</span>, </span>
 <span>                             zoom_factor <span class="op">=</span> <span class="fl">20</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">vic_gentle</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -306,11 +306,11 @@ Effect of zoom factor
 <p>Controls compression in the glue zone (0 to 1):</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Minimal squeeze (wider glue transition)</span></span>
-<span><span class="va">vic_loose</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="va">melbourne</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.5</span>, </span>
+<span><span class="va">vic_loose</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="va">melbourne</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.5</span>, </span>
 <span>                        zoom_factor <span class="op">=</span> <span class="fl">8</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Strong squeeze (narrow glue transition)</span></span>
-<span><span class="va">vic_tight_squeeze</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="va">melbourne</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.5</span>, </span>
+<span><span class="va">vic_tight_squeeze</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="va">melbourne</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.5</span>, </span>
 <span>                                zoom_factor <span class="op">=</span> <span class="fl">8</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">vic_loose</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -348,7 +348,7 @@ them together to ensure alignment:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Apply fisheye once to combined data</span></span>
-<span><span class="va">both_warped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span></span>
+<span><span class="va">both_warped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span></span>
 <span>  <span class="va">both_layers</span>,</span>
 <span>  center <span class="op">=</span> <span class="va">melbourne</span>,</span>
 <span>  r_in <span class="op">=</span> <span class="fl">0.34</span>,</span>
@@ -394,7 +394,7 @@ selects an appropriate projected CRS:</p>
 <span><span class="co">#&gt; [1] "+proj=longlat +datum=WGS84 +no_defs"</span></span>
 <span></span>
 <span><span class="co"># Apply fisheye - auto-projects to GDA2020/MGA55 for Victoria</span></span>
-<span><span class="va">vic_auto</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span></span>
+<span><span class="va">vic_auto</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span></span>
 <span>  <span class="va">vic_lonlat</span>,</span>
 <span>  center <span class="op">=</span> <span class="va">melbourne</span>,</span>
 <span>  r_in <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -415,7 +415,7 @@ selects an appropriate projected CRS:</p>
 </h3>
 <p>Override the automatic selection with <code>target_crs</code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vic_custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">vic_custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span></span>
 <span>  <span class="va">vic_lonlat</span>,</span>
 <span>  center <span class="op">=</span> <span class="va">melbourne</span>,</span>
 <span>  target_crs <span class="op">=</span> <span class="st">"EPSG:3111"</span>,  <span class="co"># VicGrid</span></span>
@@ -474,7 +474,7 @@ while maintaining state context:</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>is_metro <span class="op">=</span> <span class="va">LGA_NAME</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">metro_lgas</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 3. Apply fisheye</span></span>
-<span><span class="va">vic_focused</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span></span>
+<span><span class="va">vic_focused</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span></span>
 <span>  <span class="va">vic_pop</span>,</span>
 <span>  center <span class="op">=</span> <span class="va">metro_center</span>,</span>
 <span>  r_in <span class="op">=</span> <span class="fl">0.25</span>,</span>
@@ -517,13 +517,13 @@ Complete workflow: Metropolitan Melbourne in Victorian context
 <p>Start conservative and iterate:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Start here</span></span>
-<span><span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">data</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.5</span>, zoom_factor <span class="op">=</span> <span class="fl">5</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">data</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.5</span>, zoom_factor <span class="op">=</span> <span class="fl">5</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Too distorted? Reduce zoom or widen glue</span></span>
-<span><span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">data</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.6</span>, zoom_factor <span class="op">=</span> <span class="fl">3</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">data</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.6</span>, zoom_factor <span class="op">=</span> <span class="fl">3</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Need more magnification? Increase zoom gradually</span></span>
-<span><span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">data</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.5</span>, zoom_factor <span class="op">=</span> <span class="fl">10</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">data</span>, r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.5</span>, zoom_factor <span class="op">=</span> <span class="fl">10</span>, squeeze_factor <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="layer-alignment">Layer Alignment<a class="anchor" aria-label="anchor" href="#layer-alignment"></a>
@@ -532,11 +532,11 @@ Complete workflow: Metropolitan Melbourne in Victorian context
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Good: Single transformation</span></span>
 <span><span class="va">combined</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">layer1</span>, <span class="va">layer2</span>, <span class="va">layer3</span><span class="op">)</span></span>
-<span><span class="va">warped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">combined</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="va">warped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">combined</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Avoid: Separate transformations</span></span>
-<span><span class="va">layer1_warped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">layer1</span>, <span class="va">...</span><span class="op">)</span>  <span class="co"># Different normalization</span></span>
-<span><span class="va">layer2_warped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">layer2</span>, <span class="va">...</span><span class="op">)</span>  <span class="co"># May not align perfectly</span></span></code></pre></div>
+<span><span class="va">layer1_warped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">layer1</span>, <span class="va">...</span><span class="op">)</span>  <span class="co"># Different normalization</span></span>
+<span><span class="va">layer2_warped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">layer2</span>, <span class="va">...</span><span class="op">)</span>  <span class="co"># May not align perfectly</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="reproducibility">Reproducibility<a class="anchor" aria-label="anchor" href="#reproducibility"></a>
@@ -544,7 +544,7 @@ Complete workflow: Metropolitan Melbourne in Victorian context
 <p>Be explicit about parameters for reproducible analyses:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Explicit and reproducible</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  center <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">144.9631</span>, <span class="op">-</span><span class="fl">37.8136</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  center_crs <span class="op">=</span> <span class="st">"EPSG:4326"</span>,</span>
@@ -579,7 +579,7 @@ pre-filtering helps)</li>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_simplify</a></span><span class="op">(</span>dTolerance <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>  <span class="co"># Adjust tolerance as needed</span></span>
 <span></span>
 <span><span class="co"># Transform once</span></span>
-<span><span class="va">data_warped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">data_clean</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">data_warped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">data_clean</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="common-issues">Common Issues<a class="anchor" aria-label="anchor" href="#common-issues"></a>
@@ -626,8 +626,7 @@ in analysis pipelines</li>
 <h2 id="getting-help">Getting Help<a class="anchor" aria-label="anchor" href="#getting-help"></a>
 </h2>
 <ul>
-<li>Package documentation: <code><a href="../reference/sf_fisheye.html">?sf_fisheye</a></code>,
-<code><a href="../reference/fisheye_fgc.html">?fisheye_fgc</a></code>
+<li>Package documentation: <code><a href="../reference/fisheye_fgc.html">?fisheye_fgc</a></code>
 </li>
 <li>GitHub issues: [Report bugs or request features]</li>
 <li>Examples: See <code><a href="../reference/vic.html">?vic</a></code> for built-in datasets</li>

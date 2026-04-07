@@ -13,7 +13,7 @@ focus point while maintaining geographic context across the state."><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">mapycusmaximus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,14 +68,14 @@ focus point while maintaining geographic context across the state.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Built from the base layer <code>vic</code> using:</p><ol><li><p>projection to VicGrid94 (<code>st_transform(vic, 3111)</code>),</p></li>
 <li><p>defining a focus center near Melbourne (<code>cx = 145.0</code>, <code>cy = -37.8</code>),</p></li>
-<li><p>applying <code><a href="sf_fisheye.html">sf_fisheye()</a></code> with
+<li><p>applying <code><a href="fisheye_fgc.html">fisheye_fgc()</a></code> with
 <code>r_in = 0.34</code>, <code>r_out = 0.5</code>, and <code>zoom_factor = 1</code>,</p></li>
 <li><p>preserving topology with <code><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">st_make_valid()</a></code> where needed.</p></li>
 </ol><p>The result is a smoothly warped map emphasizing the metropolitan focus zone.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="sf_fisheye.html">sf_fisheye()</a></code>, <code><a href="conn_fish.html">conn_fish</a></code></p></div>
+    <div class="dont-index"><p><code><a href="fisheye_fgc.html">fisheye_fgc()</a></code>, <code><a href="conn_fish.html">conn_fish</a></code></p></div>
     </div>
 
     <div class="section level2">

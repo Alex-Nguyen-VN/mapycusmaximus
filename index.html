@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="index.html">mapycusmaximus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -143,7 +143,7 @@ These transformations facilitate detailed local inspection while maintaining ove
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">3857</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fisheye_poly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span></span>
+<span><span class="va">fisheye_poly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span></span>
 <span>  <span class="va">poly</span>,</span>
 <span>  r_in <span class="op">=</span> <span class="fl">0.3</span>, r_out <span class="op">=</span> <span class="fl">0.6</span>,</span>
 <span>  zoom_factor <span class="op">=</span> <span class="fl">2.0</span>,</span>
@@ -243,7 +243,7 @@ These transformations facilitate detailed local inspection while maintaining ove
 <div class="section level2">
 <h2 id="coordinate-system-handling">Coordinate System Handling<a class="anchor" aria-label="anchor" href="#coordinate-system-handling"></a>
 </h2>
-<p><a href="reference/sf_fisheye.html"><code>sf_fisheye()</code></a> automatically manages coordinate reference systems:</p>
+<p><a href="reference/fisheye_fgc.html"><code>fisheye_fgc()</code></a> automatically manages coordinate reference systems:</p>
 <ul>
 <li>
 <strong>Geographic data:</strong> projected to a suitable UTM/MGA zone (e.g. EPSG:7855 for Victoria, AU).<br>
@@ -277,19 +277,19 @@ These transformations facilitate detailed local inspection while maintaining ove
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">melb_poly</span> <span class="op">&lt;-</span> <span class="va">suburbs</span><span class="op">[</span><span class="va">suburbs</span><span class="op">$</span><span class="va">name</span> <span class="op">==</span> <span class="st">"Melbourne"</span>, <span class="op">]</span></span>
-<span><span class="va">fisheye_vic</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="va">melb_poly</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">fisheye_vic</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="va">melb_poly</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="normalized-center-input">Normalized center input<a class="anchor" aria-label="anchor" href="#normalized-center-input"></a>
 </h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fisheye_vic</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="op">-</span><span class="fl">0.1</span><span class="op">)</span>, normalized_center <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fisheye_vic</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span><span class="va">vic</span>, center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="op">-</span><span class="fl">0.1</span><span class="op">)</span>, normalized_center <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="geographic-center">Geographic center<a class="anchor" aria-label="anchor" href="#geographic-center"></a>
 </h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fisheye_cbd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sf_fisheye.html">sf_fisheye</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">fisheye_cbd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fisheye_fgc.html">fisheye_fgc</a></span><span class="op">(</span></span>
 <span>  <span class="va">vic</span>,</span>
 <span>  center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">144.9631</span>, <span class="op">-</span><span class="fl">37.8136</span><span class="op">)</span>,</span>
 <span>  center_crs <span class="op">=</span> <span class="st">"EPSG:4326"</span>,</span>

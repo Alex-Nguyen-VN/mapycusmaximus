@@ -42,7 +42,7 @@ Built from hospital–RACF coordinate pairs in
     of the focus point (`cx = 145.0`, `cy = -37.8`),
 
 4.  fisheye transformation using
-    [`sf_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/sf_fisheye.md)
+    [`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
     with `r_in = 0.428`, `r_out = 0.429`, and `zoom_factor = 1`.
 
 The resulting object aligns spatially with `vic_fish`, allowing
@@ -51,7 +51,7 @@ region.
 
 ## See also
 
-[`sf_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/sf_fisheye.md),
+[`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md),
 [`vic_fish`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/vic_fish.md)
 
 ## Examples

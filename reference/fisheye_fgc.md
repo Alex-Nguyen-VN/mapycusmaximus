@@ -1,4 +1,4 @@
-# Apply Focus–Glue–Context Fisheye Transformation
+# Apply Focus-Glue-Context Fisheye transformations
 
 Transforms 2D coordinates using a **Focus–Glue–Context (FGC) fisheye
 transformation**. The function expands points inside a focus region,
@@ -9,72 +9,27 @@ glue region to produce a swirling effect.
 ## Usage
 
 ``` r
-fisheye_fgc(
-  coords,
-  cx = 0,
-  cy = 0,
-  r_in = 0.34,
-  r_out = 0.5,
-  zoom_factor = 1.5,
-  squeeze_factor = 0.3,
-  method = "expand",
-  revolution = 0
-)
+fisheye_fgc(data, ...)
 ```
 
 ## Arguments
 
-- coords:
+- data:
 
-  A matrix or data frame with at least two columns representing x and y
-  coordinates.
+  Data on which to perform a focus-glue-context transformation.
 
-- cx, cy:
+- ...:
 
-  Numeric. The x and y coordinates of the fisheye center (default = 0,
-  0).
-
-- r_in:
-
-  Numeric. Radius of the focus zone (default = 0.34).
-
-- r_out:
-
-  Numeric. Radius of the glue zone boundary (default = 0.5).
-
-- zoom_factor:
-
-  Numeric. Expansion factor applied within the focus zone (default =
-  1.5).
-
-- squeeze_factor:
-
-  Numeric in (0,1\]. Compression factor applied within the glue zone
-  (smaller values = stronger compression, default = 0.3).
-
-- method:
-
-  Character. "expand" or "outward" (default = "expand").
-
-- revolution:
-
-  Numeric. Optional rotation factor applied in the glue zone. Positive
-  values rotate counter-clockwise, negative values clockwise (default =
-  0.0).
-
-## Value
-
-A numeric matrix with two columns (`x_new`, `y_new`) of transformed
-coordinates. Additional attributes:
-
-- `"zones"`: character vector classifying each point as `"focus"`,
-  `"glue"`, or `"context"`.
-
-- `"original_radius"`: numeric vector of original radial distances.
-
-- `"new_radius"`: numeric vector of transformed radial distances.
+  Additional arguments passed to specific methods. See
+  [`fisheye_fgc.matrix()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.matrix.md)
+  and
+  [`fisheye_fgc.sf()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.sf.md)
+  for details for the methods provided by this package.
 
 ## Details
+
+This is a generic S3 function to perform the focus-glue-context
+transformation on different types of data.
 
 This function operates in three radial zones around a chosen center:
 
@@ -90,16 +45,13 @@ This function operates in three radial zones around a chosen center:
 Optionally, points in the glue zone can be rotated (`revolution`) to
 emphasize continuity.
 
-## Examples
+For the specifics of methods for spatial objects, see
+[`fisheye_fgc.sf()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.sf.md).
+For the underlying mathematical transformation, see
+[`fisheye_fgc.matrix()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.matrix.md).
 
-``` r
-# Create a set of example coordinates
-grid <- create_test_grid(range = c(-1, 1), spacing = 0.1)
+## See also
 
-# Apply FGC fisheye with expansion and compression
-transformed <- fisheye_fgc(grid, r_in = 0.34, r_out = 0.5, zoom_factor = 1.3, squeeze_factor = 0.5)
+[`fisheye_fgc.sf()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.sf.md)
 
-# Plot original vs transformed
-plot_fisheye_fgc(grid, transformed, r_in = 0.34, r_out = 0.5)
-
-```
+[`fisheye_fgc.matrix()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.matrix.md)

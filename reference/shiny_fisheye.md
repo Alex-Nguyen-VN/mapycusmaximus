@@ -86,7 +86,7 @@ server round-trips. Fisheye transformations match the mathematical
 implementation in
 [`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
 and
-[`sf_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/sf_fisheye.md),
+[`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md),
 applied to polygons, lines, and points in real-time using SVG rendering.
 
 ## See also
@@ -94,7 +94,7 @@ applied to polygons, lines, and points in real-time using SVG rendering.
 - [`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
   for the core transformation function
 
-- [`sf_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/sf_fisheye.md)
+- [`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
   for transforming spatial geometries
 
 - [`plot_fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/plot_fisheye_fgc.md)

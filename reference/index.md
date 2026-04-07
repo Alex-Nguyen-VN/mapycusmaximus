@@ -3,13 +3,17 @@
 ## Core Transformation Functions
 
 - [`fisheye_fgc()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.md)
-  : Apply Focus–Glue–Context Fisheye Transformation
+  : Apply Focus-Glue-Context Fisheye transformations
 
-- [`sf_fisheye()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/sf_fisheye.md)
+- [`fisheye_fgc(`*`<sf>`*`)`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.sf.md)
+  [`fisheye_fgc(`*`<sfc>`*`)`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.sf.md)
   :
 
   Radial fisheye warp for `sf`/`sfc` objects (auto-CRS + flexible
   centers)
+
+- [`fisheye_fgc(`*`<matrix>`*`)`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.matrix.md)
+  : Apply Focus–Glue–Context Fisheye Transformation
 
 - [`classify_zones()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/classify_zones.md)
   : Classify Coordinates into Focus, Glue, or Context Zones

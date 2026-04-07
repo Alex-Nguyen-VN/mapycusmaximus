@@ -13,7 +13,7 @@ with polygon layers to visualize flow patterns within the magnified focus zone."
 
     <a class="navbar-brand me-2" href="../index.html">mapycusmaximus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,14 +72,14 @@ using:</p><ol><li><p>connection creation via <code>make_connections()</code> to 
 <li><p>projection to VicGrid94 (<code>EPSG:3111</code>),</p></li>
 <li><p>distance-based filtering to keep only sources within <code>r_in = 0.34</code>
 of the focus point (<code>cx = 145.0</code>, <code>cy = -37.8</code>),</p></li>
-<li><p>fisheye transformation using <code><a href="sf_fisheye.html">sf_fisheye()</a></code>
+<li><p>fisheye transformation using <code><a href="fisheye_fgc.html">fisheye_fgc()</a></code>
 with <code>r_in = 0.428</code>, <code>r_out = 0.429</code>, and <code>zoom_factor = 1</code>.</p></li>
 </ol><p>The resulting object aligns spatially with <code>vic_fish</code>, allowing
 co-visualization of regional flow intensity within the distorted focus region.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="sf_fisheye.html">sf_fisheye()</a></code>, <code><a href="vic_fish.html">vic_fish</a></code></p></div>
+    <div class="dont-index"><p><code><a href="fisheye_fgc.html">fisheye_fgc()</a></code>, <code><a href="vic_fish.html">vic_fish</a></code></p></div>
     </div>
 
     <div class="section level2">
