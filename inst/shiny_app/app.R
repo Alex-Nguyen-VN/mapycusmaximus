@@ -4,10 +4,13 @@ library(sf)
 library(ggthemes)
 library(mapycusmaximus)
 
-vic  <- mapycusmaximus::vic
-conn <- mapycusmaximus::conn_fish
+map_crs <- 3111
 
-prepare_network <- function(n_hosp = 10, n_racf = 10) {
+vic      <- mapycusmaximus::vic
+vic_proj <- sf::st_transform(vic, map_crs)
+conn     <- mapycusmaximus::conn_fish
+
+prepare_network <- function(n_hosp = 10, n_racf = 10, target_crs = st_crs(vic_proj)) {
   conn_sample <- conn |>
     st_drop_geometry() |>
     select(source, destination, long_racf, lat_racf, long_hosp, lat_hosp) |>
@@ -20,7 +23,7 @@ prepare_network <- function(n_hosp = 10, n_racf = 10) {
     distinct() |>
     slice_head(n = n_hosp) |>
     st_as_sf(coords = c("long_hosp", "lat_hosp"), crs = 4326) |>
-    st_transform(st_crs(vic)) |>
+    st_transform(target_crs) |>
     mutate(type = "hospital")
 
   racfs <- conn_sample |>
@@ -28,7 +31,7 @@ prepare_network <- function(n_hosp = 10, n_racf = 10) {
     distinct() |>
     slice_head(n = n_racf) |>
     st_as_sf(coords = c("long_racf", "lat_racf"), crs = 4326) |>
-    st_transform(st_crs(vic)) |>
+    st_transform(target_crs) |>
     mutate(type = "racf")
 
   transfers <- conn_sample |>
@@ -39,7 +42,7 @@ prepare_network <- function(n_hosp = 10, n_racf = 10) {
       )
     ) |>
     st_as_sf(crs = 4326) |>
-    st_transform(st_crs(vic))
+    st_transform(target_crs)
 
   list(hospitals = hospitals, racfs = racfs, transfers = transfers)
 }
@@ -90,7 +93,6 @@ lines_from_sf <- function(sf_obj, id_col = NULL) {
   res <- lapply(seq_along(geoms), function(i) {
     coords <- sf::st_coordinates(geoms[[i]])
     if (nrow(coords) == 0) return(NULL)
-
     xy <- coords[, c("X", "Y"), drop = FALSE]
     list(
       id = if (!is.null(id_col) && id_col %in% names(sf_obj)) {
@@ -107,7 +109,6 @@ lines_from_sf <- function(sf_obj, id_col = NULL) {
 points_from_sf <- function(sf_obj, id_col = NULL) {
   coords <- sf::st_coordinates(sf_obj)
   n <- nrow(coords)
-
   ids <- if (!is.null(id_col) && id_col %in% names(sf_obj)) {
     as.character(sf_obj[[id_col]])
   } else {
@@ -125,8 +126,7 @@ points_from_sf <- function(sf_obj, id_col = NULL) {
 
 make_ui <- function(debug_mode = FALSE) {
   fluidPage(
-    titlePanel("FGC lens explorer"),
-
+    titlePanel("FGC lens explorer (projected CRS)"),
     tags$script(HTML("
 (function () {
   function reportStaticDebug() {
@@ -148,7 +148,6 @@ make_ui <- function(debug_mode = FALSE) {
   }
 
   window.addEventListener('resize', reportStaticDebug);
-
   setTimeout(reportStaticDebug, 500);
   setTimeout(reportStaticDebug, 1200);
 
@@ -159,24 +158,22 @@ make_ui <- function(debug_mode = FALSE) {
   });
 })();
 ")),
-
     sidebarLayout(
       sidebarPanel(
         selectInput(
           "centre",
           "Initial lens centre (LGA)",
-          choices = sort(unique(vic$LGA_NAME)),
+          choices = sort(unique(vic_proj$LGA_NAME)),
           selected = "MELBOURNE"
         ),
         sliderInput("r_out", "Outer radius (glue)", min = 0.20, max = 0.95, value = 0.60, step = 0.01),
-        sliderInput("r_in",  "Inner radius (focus)", min = 0.05, max = 0.60, value = 0.33, step = 0.01),
+        sliderInput("r_in", "Inner radius (focus)", min = 0.05, max = 0.60, value = 0.33, step = 0.01),
         sliderInput("zoom", "Zoom factor", min = 1, max = 25, value = 12, step = 1),
         sliderInput("squeeze", "Squeeze", min = 0.05, max = 0.95, value = 0.35, step = 0.01),
         sliderInput("n_fac", "Sample size per layer", min = 5, max = 40, value = 10, step = 1),
         actionButton("resample", "Resample facilities"),
         checkboxInput("show_lines", "Show transfer lines", value = TRUE)
       ),
-
       mainPanel(
         tabsetPanel(
           tabPanel(
@@ -277,6 +274,77 @@ make_ui <- function(debug_mode = FALSE) {
       k: P.k,
       padX: P.padX,
       padY: P.padY,
+      time: Date.now()
+    }, {priority: 'event'});
+  }
+
+  function updateBBoxWithPoint(bb, x, y) {
+    if (x < bb.xmin) bb.xmin = x;
+    if (x > bb.xmax) bb.xmax = x;
+    if (y < bb.ymin) bb.ymin = y;
+    if (y > bb.ymax) bb.ymax = y;
+  }
+
+  function computeWarpedBBox() {
+    if (!base) return null;
+
+    const bb = {
+      xmin: Infinity,
+      xmax: -Infinity,
+      ymin: Infinity,
+      ymax: -Infinity
+    };
+
+    base.vic.forEach((poly) => {
+      poly.rings.forEach((ring) => {
+        ring.forEach((pt) => {
+          const wpt = warpPoint(pt[0], pt[1]);
+          updateBBoxWithPoint(bb, wpt[0], wpt[1]);
+        });
+      });
+    });
+
+    base.transfers.forEach((ln) => {
+      ln.coords.forEach((pt) => {
+        const wpt = warpPoint(pt[0], pt[1]);
+        updateBBoxWithPoint(bb, wpt[0], wpt[1]);
+      });
+    });
+
+    base.racfs.forEach((pt) => {
+      const wpt = warpPoint(pt.x, pt.y);
+      updateBBoxWithPoint(bb, wpt[0], wpt[1]);
+    });
+
+    base.hospitals.forEach((pt) => {
+      const wpt = warpPoint(pt.x, pt.y);
+      updateBBoxWithPoint(bb, wpt[0], wpt[1]);
+    });
+
+    if (!isFinite(bb.xmin) || !isFinite(bb.xmax) || !isFinite(bb.ymin) || !isFinite(bb.ymax)) {
+      return null;
+    }
+
+    return bb;
+  }
+
+  function reportTransformedBBoxDebug() {
+    if (!base || !window.Shiny) return;
+
+    const bb = computeWarpedBBox();
+    if (!bb) return;
+
+    const dx = bb.xmax - bb.xmin;
+    const dy = bb.ymax - bb.ymin;
+
+    Shiny.setInputValue('transformed_bbox_debug', {
+      xmin: bb.xmin,
+      xmax: bb.xmax,
+      ymin: bb.ymin,
+      ymax: bb.ymax,
+      dx: dx,
+      dy: dy,
+      bbox_ratio: dy > 0 ? dx / dy : null,
       time: Date.now()
     }, {priority: 'event'});
   }
@@ -469,6 +537,7 @@ make_ui <- function(debug_mode = FALSE) {
 
     reportSvgDebug();
     reportProjectorDebug();
+    reportTransformedBBoxDebug();
   }
 
   function scheduleUpdate() {
@@ -534,17 +603,15 @@ make_ui <- function(debug_mode = FALSE) {
 })();
 "))
           ),
-
           tabPanel(
             "Original",
-            tags$h4("Original Victoria (matched framing)", style = "margin-top:0; margin-bottom:10px;"),
+            tags$h4("Original Victoria (matched framing, projected CRS)", style = "margin-top:0; margin-bottom:10px;"),
             div(
               id = "staticWrap",
               style = "border:1px solid blue; display:inline-block; width:100%;",
               plotOutput("original_plot", height = "650px")
             )
           ),
-
           if (debug_mode) {
             tabPanel(
               "Debug",
@@ -556,7 +623,11 @@ make_ui <- function(debug_mode = FALSE) {
                   h4("SVG"),
                   verbatimTextOutput("debug_svg"),
                   h4("Projector"),
-                  verbatimTextOutput("debug_projector")
+                  verbatimTextOutput("debug_projector"),
+                  h4("Transformed bbox"),
+                  verbatimTextOutput("debug_transformed_bbox"),
+                  h4("CRS"),
+                  verbatimTextOutput("debug_crs")
                 ),
                 column(
                   6,
@@ -577,15 +648,21 @@ make_ui <- function(debug_mode = FALSE) {
 make_server <- function() {
   function(input, output, session) {
     bbox_val <- reactiveVal(NULL)
-    sampled_layers <- reactiveVal(prepare_network(n_hosp = 10, n_racf = 10))
+    sampled_layers <- reactiveVal(prepare_network(n_hosp = 10, n_racf = 10, target_crs = st_crs(vic_proj)))
 
     observeEvent(list(input$resample, input$n_fac), {
-      sampled_layers(prepare_network(n_hosp = input$n_fac, n_racf = input$n_fac))
+      sampled_layers(
+        prepare_network(
+          n_hosp = input$n_fac,
+          n_racf = input$n_fac,
+          target_crs = st_crs(vic_proj)
+        )
+      )
     }, ignoreInit = TRUE)
 
     centre_point <- reactive({
       req(input$centre)
-      coords <- vic |>
+      coords <- vic_proj |>
         dplyr::filter(LGA_NAME == input$centre) |>
         sf::st_point_on_surface() |>
         sf::st_geometry() |>
@@ -601,15 +678,12 @@ make_server <- function() {
     observeEvent(input$r_out, {
       req(!is.null(input$r_out), !is.null(input$r_in))
 
-      new_rin_max <- input$r_out
-      new_rin_val <- min(input$r_in, new_rin_max)
-
       updateSliderInput(
         session = session,
         inputId = "r_in",
         min = 0.05,
-        max = new_rin_max,
-        value = new_rin_val,
+        max = input$r_out,
+        value = min(input$r_in, input$r_out),
         step = 0.01
       )
     }, ignoreInit = FALSE)
@@ -622,7 +696,7 @@ make_server <- function() {
       pts  <- bind_rows(hosp, racf)
 
       bind0 <- dplyr::bind_rows(
-        vic |> dplyr::mutate(.layer = "vic"),
+        vic_proj |> dplyr::mutate(.layer = "vic"),
         pts |> dplyr::mutate(.layer = "pts"),
         layers$transfers |> dplyr::mutate(.layer = "transfers")
       )
@@ -633,7 +707,7 @@ make_server <- function() {
       payload <- list(
         bbox = as.list(bb),
         centre = centre_point(),
-        vic = polygons_from_sf(vic, id_col = "LGA_NAME"),
+        vic = polygons_from_sf(vic_proj, id_col = "LGA_NAME"),
         transfers = lines_from_sf(layers$transfers),
         hospitals = points_from_sf(hosp, id_col = "id"),
         racfs = points_from_sf(racf, id_col = "id")
@@ -642,25 +716,17 @@ make_server <- function() {
       session$sendCustomMessage("lens-base", payload)
     }, ignoreInit = FALSE)
 
-    observeEvent(
-      list(input$r_in, input$r_out, input$zoom, input$squeeze, input$show_lines),
-      {
-        req(
-          !is.null(input$r_in),
-          !is.null(input$r_out),
-          input$r_in <= input$r_out
-        )
+    observeEvent(list(input$r_in, input$r_out, input$zoom, input$squeeze, input$show_lines), {
+      req(!is.null(input$r_in), !is.null(input$r_out), input$r_in <= input$r_out)
 
-        session$sendCustomMessage("lens-params", list(
-          r_in = input$r_in,
-          r_out = input$r_out,
-          zoom = input$zoom,
-          squeeze = input$squeeze,
-          show_lines = isTRUE(input$show_lines)
-        ))
-      },
-      ignoreInit = FALSE
-    )
+      session$sendCustomMessage("lens-params", list(
+        r_in = input$r_in,
+        r_out = input$r_out,
+        zoom = input$zoom,
+        squeeze = input$squeeze,
+        show_lines = isTRUE(input$show_lines)
+      ))
+    }, ignoreInit = FALSE)
 
     output$original_plot <- renderPlot({
       layers <- sampled_layers()
@@ -686,7 +752,7 @@ make_server <- function() {
       ylim <- c(as.numeric(bb["ymin"]) - padY_data, as.numeric(bb["ymax"]) + padY_data)
 
       ggplot() +
-        geom_sf(data = vic, fill = "#d9d9d9", color = "white", linewidth = 0.5) +
+        geom_sf(data = vic_proj, fill = "#d9d9d9", color = "white", linewidth = 0.5) +
         {
           if (isTRUE(input$show_lines)) {
             geom_sf(
@@ -701,10 +767,11 @@ make_server <- function() {
         geom_sf(data = layers$hospitals, color = "#d7191c", size = 1.2, alpha = 0.9) +
         scale_linewidth(range = c(0.2, 1.2), guide = "none") +
         coord_sf(
-          crs = st_crs(vic),
+          crs = st_crs(vic_proj),
           xlim = xlim,
           ylim = ylim,
-          expand = FALSE
+          expand = FALSE,
+          datum = NA
         ) +
         theme_map() +
         theme(
@@ -732,17 +799,18 @@ make_server <- function() {
       )
     })
 
-    output$debug_svg <- renderPrint({
-      input$svg_debug
+    output$debug_svg <- renderPrint(input$svg_debug)
+    output$debug_projector <- renderPrint(input$projector_debug)
+    output$debug_transformed_bbox <- renderPrint(input$transformed_bbox_debug)
+
+    output$debug_crs <- renderPrint({
+      list(
+        map_crs_epsg = map_crs,
+        map_crs_wkt_name = st_crs(vic_proj)$Name %||% st_crs(vic_proj)$input
+      )
     })
 
-    output$debug_projector <- renderPrint({
-      input$projector_debug
-    })
-
-    output$debug_static_dom <- renderPrint({
-      input$static_dom_debug
-    })
+    output$debug_static_dom <- renderPrint(input$static_dom_debug)
 
     output$debug_clientdata <- renderPrint({
       w <- session$clientData$output_original_plot_width
@@ -757,18 +825,11 @@ make_server <- function() {
   }
 }
 
-shiny_fisheye <- function(debug = "off", launch = TRUE) {
+shiny_fisheye <- function(debug = "off") {
   debug_mode <- isTRUE(debug) || identical(tolower(as.character(debug)), "on")
 
-  app <- shinyApp(
+  shinyApp(
     ui = make_ui(debug_mode = debug_mode),
     server = make_server()
   )
-
-  if (isTRUE(launch)) {
-    message("Launching Fisheye Lens Explorer...")
-    shiny::runApp(app)
-  } else {
-    app
-  }
 }
