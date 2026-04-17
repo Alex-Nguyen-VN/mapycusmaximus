@@ -22,6 +22,9 @@ fisheye_fgc(
   revolution = 0,
   ...
 )
+
+# S3 method for class 'data.frame'
+fisheye_fgc(data, ...)
 ```
 
 ## Arguments

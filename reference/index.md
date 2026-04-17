@@ -13,6 +13,7 @@
   centers)
 
 - [`fisheye_fgc(`*`<matrix>`*`)`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.matrix.md)
+  [`fisheye_fgc(`*`<data.frame>`*`)`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/fisheye_fgc.matrix.md)
   : Apply Focus–Glue–Context Fisheye Transformation
 
 - [`classify_zones()`](https://alex-nguyen-vn.github.io/mapycusmaximus/reference/classify_zones.md)

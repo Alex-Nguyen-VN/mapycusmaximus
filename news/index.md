@@ -1,5 +1,15 @@
 # Changelog
 
+## mapycusmaximus 1.1.1
+
+- Add data frame method to `fisheye_fgc`
+
+## mapycusmaximus 1.1.0
+
+- Add S3 object system
+- Remove legacy `sf_fisheye` function, which can now call `fisheye_fgc`
+  as a drop-in replacement
+
 ## mapycusmaximus 1.0.9
 
 - Fix CRS and Ratio for Shiny app
