@@ -2,6 +2,7 @@
 % Please edit documentation in R/fisheye_fgc.R
 \name{fisheye_fgc.matrix}
 \alias{fisheye_fgc.matrix}
+\alias{fisheye_fgc.data.frame}
 \title{Apply Focus–Glue–Context Fisheye Transformation}
 \usage{
 \method{fisheye_fgc}{matrix}(
@@ -16,6 +17,8 @@
   revolution = 0,
   ...
 )
+
+\method{fisheye_fgc}{data.frame}(data, ...)
 }
 \arguments{
 \item{data}{A matrix or data frame with at least two columns representing x and y coordinates.}

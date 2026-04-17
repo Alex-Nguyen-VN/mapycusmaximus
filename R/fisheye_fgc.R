@@ -153,6 +153,14 @@ fisheye_fgc.matrix <- function(
   return(result)
 }
 
+#' @rdname fisheye_fgc.matrix
+#' @export
+fisheye_fgc.data.frame <- function(data, ...) {
+  # Convert to matrix and call matrix method
+  data <- as.data.frame(data)[, 1:2, drop = FALSE]
+  fisheye_fgc.matrix(data, ...)
+}
+
 #' Apply Focus-Glue-Context Fisheye transformations
 #' 
 #' @description
