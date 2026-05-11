@@ -60,6 +60,7 @@ in an appropriate projected CRS before calling this function.
 
 ## Expected signature of `transform_fun`
 
+
     transform_fun <- function(coords, ...) {  ## coords: n x 2 matrix (X, Y)
       ## return an n x 2 matrix with transformed (X, Y)}
 

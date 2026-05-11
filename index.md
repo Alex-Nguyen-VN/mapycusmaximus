@@ -53,12 +53,14 @@ visualization grammar.
 Install the stable version from CRAN:
 
 ``` r
+
 install.packages("mapycusmaximus")
 ```
 
 or install the development version from GitHub:
 
 ``` r
+
 # install.packages("devtools")
 devtools::install_github("Alex-Nguyen-VN/mapycusmaximus")
 ```
@@ -70,6 +72,7 @@ devtools::install_github("Alex-Nguyen-VN/mapycusmaximus")
 ### Basic coordinate transformation
 
 ``` r
+
 library(mapycusmaximus)
 
 grid <- create_test_grid(range = c(-1, 1), spacing = 0.1)
@@ -87,6 +90,7 @@ plot_fisheye_fgc(grid, transformed, r_in = 0.34, r_out = 0.5)
 ### Spatial data integration
 
 ``` r
+
 library(sf)
 library(ggplot2)
 
@@ -112,11 +116,11 @@ ggplot() +
 
 The transformation divides space into three radial zones:
 
-| Zone        | Definition         | Effect                                            |
-|-------------|--------------------|---------------------------------------------------|
-| **Focus**   | `r ≤ r_in`         | Enlarged by `zoom_factor`                         |
-| **Glue**    | `r_in < r ≤ r_out` | Smooth compression controlled by `squeeze_factor` |
-| **Context** | `r > r_out`        | Retains original geometry                         |
+| Zone | Definition | Effect |
+|----|----|----|
+| **Focus** | `r ≤ r_in` | Enlarged by `zoom_factor` |
+| **Glue** | `r_in < r ≤ r_out` | Smooth compression controlled by `squeeze_factor` |
+| **Context** | `r > r_out` | Retains original geometry |
 
 | Parameter        | Description                         | Default    | Range     |
 |------------------|-------------------------------------|------------|-----------|
@@ -153,6 +157,7 @@ automatically manages coordinate reference systems:
 ### Using an `sf` object as the center
 
 ``` r
+
 melb_poly <- suburbs[suburbs$name == "Melbourne", ]
 fisheye_vic <- fisheye_fgc(vic, center = melb_poly)
 ```
@@ -160,12 +165,14 @@ fisheye_vic <- fisheye_fgc(vic, center = melb_poly)
 ### Normalized center input
 
 ``` r
+
 fisheye_vic <- fisheye_fgc(vic, center = c(0.2, -0.1), normalized_center = TRUE)
 ```
 
 ### Geographic center
 
 ``` r
+
 fisheye_cbd <- fisheye_fgc(
   vic,
   center = c(144.9631, -37.8136),
@@ -177,6 +184,7 @@ fisheye_cbd <- fisheye_fgc(
 ### Custom coordinate transformation
 
 ``` r
+
 shift_and_scale <- function(coords, scale = 2, shift_x = 100) {
   cbind(coords[,1] * scale + shift_x, coords[,2] * scale)
 }
@@ -239,6 +247,7 @@ transformed <- st_transform_custom(
 ## Citation
 
 ``` r
+
 citation("mapycusmaximus")
 ```
 

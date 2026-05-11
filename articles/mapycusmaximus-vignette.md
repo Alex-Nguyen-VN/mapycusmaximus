@@ -20,6 +20,7 @@ This vignette will show you how to use mapycusmaximus with real spatial
 data, following tidyverse principles of working with data.
 
 ``` r
+
 library(mapycusmaximus)
 library(sf)
 library(ggplot2)
@@ -34,6 +35,7 @@ Let’s start with the built-in Victoria LGA dataset. The goal is to
 magnify Melbourne while keeping the rest of Victoria visible.
 
 ``` r
+
 # Examine the data
 data(vic)
 vic
@@ -60,6 +62,7 @@ The simplest fisheye uses defaults and automatically determines the
 center:
 
 ``` r
+
 # Apply fisheye transformation
 vic_warped <- fisheye_fgc(
   vic,
@@ -94,6 +97,7 @@ The most natural approach—pass an `sf` object and mapycusmaximus uses
 its centroid:
 
 ``` r
+
 # Extract Melbourne CBD as the focus
 melbourne <- vic[vic$LGA_NAME == "MELBOURNE", ]
 
@@ -123,6 +127,7 @@ Fisheye centered on Melbourne CBD
 Specify coordinates directly in WGS84:
 
 ``` r
+
 # Melbourne CBD coordinates (WGS84)
 melb_coords <- c(144.9631, -37.8136)
 
@@ -152,6 +157,7 @@ Fisheye using lon/lat coordinates
 If you’re already working in a projected CRS, pass coordinates directly:
 
 ``` r
+
 # Example: coordinates in the working CRS (meters)
 vic_projected <- fisheye_fgc(
   vic,
@@ -174,6 +180,7 @@ The transformation is controlled by four key parameters:
 space** (roughly -1 to 1):
 
 ``` r
+
 # Small focus, narrow glue
 vic_tight <- fisheye_fgc(vic, center = melbourne, r_in = 0.2, r_out = 0.3, 
                         zoom_factor = 8, squeeze_factor = 0.35)
@@ -201,6 +208,7 @@ settings](mapycusmaximus-vignette_files/figure-html/parameter-demo-radii-1.png)
 Effect of different radius settings
 
 ``` r
+
 p2
 ```
 
@@ -214,6 +222,7 @@ Effect of different radius settings
 Controls magnification strength inside the focus:
 
 ``` r
+
 # Gentle zoom
 vic_gentle <- fisheye_fgc(vic, center = melbourne, r_in = 0.3, r_out = 0.5, 
                          zoom_factor = 3, squeeze_factor = 0.35)
@@ -234,6 +243,7 @@ Effect of zoom factor
 
 ``` r
 
+
 ggplot(vic_aggressive) + 
   geom_sf(fill = "grey90", color = "white", linewidth = 0.2) +
   labs(title = "Strong Magnification (zoom = 20)")
@@ -249,6 +259,7 @@ Effect of zoom factor
 Controls compression in the glue zone (0 to 1):
 
 ``` r
+
 # Minimal squeeze (wider glue transition)
 vic_loose <- fisheye_fgc(vic, center = melbourne, r_in = 0.3, r_out = 0.5, 
                         zoom_factor = 8, squeeze_factor = 0.1)
@@ -266,6 +277,7 @@ ggplot(vic_loose) +
 
 ``` r
 
+
 ggplot(vic_tight_squeeze) + 
   geom_sf(fill = "grey90", color = "white", linewidth = 0.2) +
   labs(title = "Tight Squeeze (0.8)")
@@ -279,6 +291,7 @@ When you have multiple layers (points, lines, polygons), transform them
 together to ensure alignment:
 
 ``` r
+
 # Create centroids as a point layer
 centroids <- st_centroid(vic)
 
@@ -338,6 +351,7 @@ If your data is in longitude/latitude, the package automatically selects
 an appropriate projected CRS:
 
 ``` r
+
 # Create data in WGS84
 vic_lonlat <- st_transform(vic, "EPSG:4326")
 st_crs(vic_lonlat)$proj4string
@@ -366,6 +380,7 @@ The package uses sensible defaults: - Victoria region → **EPSG:7855**
 Override the automatic selection with `target_crs`:
 
 ``` r
+
 vic_custom <- fisheye_fgc(
   vic_lonlat,
   center = melbourne,
@@ -384,6 +399,7 @@ For understanding the transformation itself, use the low-level
 function with test grids:
 
 ``` r
+
 # Create a regular grid
 grid <- create_test_grid(range = c(-1, 1), spacing = 0.1)
 
@@ -415,6 +431,7 @@ Here’s a complete workflow showing how to emphasize a metro area while
 maintaining state context:
 
 ``` r
+
 # 1. Define the metropolitan region
 metro_lgas <- c("MELBOURNE", "PORT PHILLIP", "STONNINGTON", "YARRA", 
                 "MARIBYRNONG", "MOONEE VALLEY", "BOROONDARA", 
@@ -470,6 +487,7 @@ Complete workflow: Metropolitan Melbourne in Victorian context
 Start conservative and iterate:
 
 ``` r
+
 # Start here
 fisheye_fgc(data, r_in = 0.3, r_out = 0.5, zoom_factor = 5, squeeze_factor = 0.35)
 
@@ -485,6 +503,7 @@ fisheye_fgc(data, r_in = 0.3, r_out = 0.5, zoom_factor = 10, squeeze_factor = 0.
 Always combine layers before transformation:
 
 ``` r
+
 # Good: Single transformation
 combined <- rbind(layer1, layer2, layer3)
 warped <- fisheye_fgc(combined, ...)
@@ -499,6 +518,7 @@ layer2_warped <- fisheye_fgc(layer2, ...)  # May not align perfectly
 Be explicit about parameters for reproducible analyses:
 
 ``` r
+
 # Explicit and reproducible
 result <- fisheye_fgc(
   data,
@@ -524,6 +544,7 @@ For large datasets:
 3.  **Transform once**, not repeatedly in a loop
 
 ``` r
+
 # Pre-process large data
 data_clean <- data |>
   filter(!st_is_empty(geometry)) |>

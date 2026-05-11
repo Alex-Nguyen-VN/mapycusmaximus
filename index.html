@@ -166,25 +166,25 @@ These transformations facilitate detailed local inspection while maintaining ove
 <col width="48%">
 <col width="29%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Zone</th>
 <th>Definition</th>
 <th>Effect</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Focus</strong></td>
 <td><code>r ≤ r_in</code></td>
 <td>Enlarged by <code>zoom_factor</code>
 </td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Glue</strong></td>
 <td><code>r_in &lt; r ≤ r_out</code></td>
 <td>Smooth compression controlled by <code>squeeze_factor</code>
 </td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Context</strong></td>
 <td><code>r &gt; r_out</code></td>
 <td>Retains original geometry</td>
@@ -192,45 +192,45 @@ These transformations facilitate detailed local inspection while maintaining ove
 </tbody>
 </table>
 <table class="table">
-<thead><tr class="header">
+<thead><tr>
 <th>Parameter</th>
 <th>Description</th>
 <th>Default</th>
 <th>Range</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>r_in</code></td>
 <td>Focus radius</td>
 <td>0.34</td>
 <td>&gt; 0</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>r_out</code></td>
 <td>Outer radius</td>
 <td>0.50</td>
 <td>&gt; <code>r_in</code>
 </td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>zoom_factor</code></td>
 <td>Magnification factor</td>
 <td>1.5</td>
 <td>&gt; 1</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>squeeze_factor</code></td>
 <td>Glue compression</td>
 <td>0.3</td>
 <td>(0, 1]</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>method</code></td>
 <td>Strategy (<code>"expand"</code> / <code>"outward"</code>)</td>
 <td><code>"expand"</code></td>
 <td>string</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>revolution</code></td>
 <td>Angular twist (radians)</td>
 <td>0</td>

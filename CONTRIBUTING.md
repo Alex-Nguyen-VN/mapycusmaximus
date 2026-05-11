@@ -64,12 +64,14 @@ git remote add upstream https://github.com/Alex-Nguyen-VN/mapycusmaximus.git
 4.  **Install the package dependencies**:
 
 ``` r
+
 devtools::install_deps()
 ```
 
 5.  **Load the package for development**:
 
 ``` r
+
 devtools::load_all()
 ```
 
@@ -123,6 +125,7 @@ OS: macOS 14.0
 
 **Additional Context:** Any other relevant information
 
+
     ### Suggesting Enhancements
 
     For feature requests:
@@ -162,6 +165,7 @@ git checkout -b fix/bug-description
 Run the following checks locally:
 
 ``` r
+
 # Load all package functions
 devtools::load_all()
 
@@ -205,6 +209,7 @@ We follow the **tidyverse style guide** with some modifications:
 - **Functions**: Use snake_case
 
   ``` r
+
   fisheye_fgc()
   sf_fisheye()
   plot_fisheye_fgc()
@@ -213,6 +218,7 @@ We follow the **tidyverse style guide** with some modifications:
 - **Variables**: Use snake_case
 
   ``` r
+
   zoom_factor <- 1.5
   r_in <- 0.34
   ```
@@ -220,6 +226,7 @@ We follow the **tidyverse style guide** with some modifications:
 - **Constants**: Use UPPER_SNAKE_CASE
 
   ``` r
+
   DEFAULT_ZOOM <- 1.5
   MAX_ITERATIONS <- 100
   ```
@@ -233,6 +240,7 @@ We follow the **tidyverse style guide** with some modifications:
 - **Spacing**:
 
   ``` r
+
   # Good
   x <- 1 + 2
   my_function(arg1 = value1, arg2 = value2)
@@ -245,6 +253,7 @@ We follow the **tidyverse style guide** with some modifications:
 - **Braces**:
 
   ``` r
+
   # Good
   if (condition) {
     do_something()
@@ -264,6 +273,7 @@ We follow the **tidyverse style guide** with some modifications:
 All exported functions must have roxygen2 documentation:
 
 ``` r
+
 #' Apply FGC Fisheye Transformation
 #'
 #' Transforms coordinates using the Focus-Glue-Context model
@@ -296,6 +306,7 @@ fisheye_fgc <- function(coords, r_in = 0.34, r_out = 0.50,
 - Import specific functions in NAMESPACE using roxygen2:
 
   ``` r
+
   #' @importFrom sf st_transform st_crs
   ```
 
@@ -311,6 +322,7 @@ We use `testthat` for unit testing. Tests should be placed in
 #### Test Structure
 
 ``` r
+
 # tests/testthat/test-fisheye_fgc.R
 
 test_that("fisheye_fgc preserves input dimensions", {
@@ -351,6 +363,7 @@ test_that("fisheye_fgc validates parameters", {
 #### Running Tests
 
 ``` r
+
 # Run all tests
 devtools::test()
 
@@ -378,6 +391,7 @@ covr::package_coverage()
 When adding new features, consider creating a vignette:
 
 ``` r
+
 usethis::use_vignette("new-feature-name")
 ```
 
@@ -459,18 +473,21 @@ Ensure your pull request:
 1.  **Passes all checks**:
 
     ``` r
+
     devtools::check()
     ```
 
 2.  **Has appropriate test coverage**:
 
     ``` r
+
     covr::package_coverage()
     ```
 
 3.  **Updates documentation**:
 
     ``` r
+
     devtools::document()
     ```
 
