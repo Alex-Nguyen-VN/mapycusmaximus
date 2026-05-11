@@ -10,7 +10,9 @@ vic      <- mapycusmaximus::vic
 vic_proj <- sf::st_transform(vic, map_crs)
 conn     <- mapycusmaximus::conn_fish
 
-prepare_network <- function(n_hosp = 10, n_racf = 10, target_crs = st_crs(vic_proj)) {
+prepare_network <- function(n_hosp = 10, 
+  n_racf = 10, target_crs = st_crs(vic_proj), seed = 1235) {
+  set.seed(seed)
   conn_sample <- conn |>
     st_drop_geometry() |>
     select(source, destination, long_racf, lat_racf, long_hosp, lat_hosp) |>
@@ -171,6 +173,7 @@ make_ui <- function(debug_mode = FALSE) {
         sliderInput("zoom", "Zoom factor", min = 1, max = 25, value = 3, step = 1),
         sliderInput("squeeze", "Squeeze", min = 0.05, max = 0.95, value = 0.05, step = 0.01),
         sliderInput("n_fac", "Sample size per layer", min = 5, max = 40, value = 10, step = 1),
+        numericInput("sample_seed", "Sample seed", value = 123),
         actionButton("resample", "Resample facilities"),
         checkboxInput("show_lines", "Show transfer lines", value = TRUE)
       ),
@@ -649,14 +652,16 @@ make_ui <- function(debug_mode = FALSE) {
 make_server <- function() {
   function(input, output, session) {
     bbox_val <- reactiveVal(NULL)
-    sampled_layers <- reactiveVal(prepare_network(n_hosp = 10, n_racf = 10, target_crs = st_crs(vic_proj)))
+    sampled_layers <- reactiveVal(prepare_network(n_hosp = 10, 
+      n_racf = 10, target_crs = st_crs(vic_proj), seed = 123))
 
     observeEvent(list(input$resample, input$n_fac), {
       sampled_layers(
         prepare_network(
           n_hosp = input$n_fac,
           n_racf = input$n_fac,
-          target_crs = st_crs(vic_proj)
+          target_crs = st_crs(vic_proj),
+          seed = input$sample_seed
         )
       )
     }, ignoreInit = TRUE)
