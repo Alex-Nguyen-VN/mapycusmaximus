@@ -166,8 +166,8 @@ make_ui <- function(debug_mode = FALSE) {
           choices = sort(unique(vic_proj$LGA_NAME)),
           selected = "MELBOURNE"
         ),
-        sliderInput("r_out", "Outer radius (glue)", min = 0.20, max = 0.35, value = 0.35, step = 0.01),
-        sliderInput("r_in", "Inner radius (focus)", min = 0.05, max = 0.23, value = 0.23, step = 0.01),
+        sliderInput("r_out", "Outer radius (glue)", min = 0.20, max = 1, value = 0.35, step = 0.01),
+        sliderInput("r_in", "Inner radius (focus)", min = 0.05, max = 1, value = 0.23, step = 0.01),
         sliderInput("zoom", "Zoom factor", min = 1, max = 25, value = 3, step = 1),
         sliderInput("squeeze", "Squeeze", min = 0.05, max = 0.95, value = 0.05, step = 0.01),
         sliderInput("n_fac", "Sample size per layer", min = 5, max = 40, value = 10, step = 1),
