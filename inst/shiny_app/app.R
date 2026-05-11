@@ -166,10 +166,10 @@ make_ui <- function(debug_mode = FALSE) {
           choices = sort(unique(vic_proj$LGA_NAME)),
           selected = "MELBOURNE"
         ),
-        sliderInput("r_out", "Outer radius (glue)", min = 0.20, max = 0.95, value = 0.60, step = 0.01),
-        sliderInput("r_in", "Inner radius (focus)", min = 0.05, max = 0.60, value = 0.33, step = 0.01),
-        sliderInput("zoom", "Zoom factor", min = 1, max = 25, value = 12, step = 1),
-        sliderInput("squeeze", "Squeeze", min = 0.05, max = 0.95, value = 0.35, step = 0.01),
+        sliderInput("r_out", "Outer radius (glue)", min = 0.20, max = 0.35, value = 0.35, step = 0.01),
+        sliderInput("r_in", "Inner radius (focus)", min = 0.05, max = 0.23, value = 0.23, step = 0.01),
+        sliderInput("zoom", "Zoom factor", min = 1, max = 25, value = 3, step = 1),
+        sliderInput("squeeze", "Squeeze", min = 0.05, max = 0.95, value = 0.05, step = 0.01),
         sliderInput("n_fac", "Sample size per layer", min = 5, max = 40, value = 10, step = 1),
         actionButton("resample", "Resample facilities"),
         checkboxInput("show_lines", "Show transfer lines", value = TRUE)
@@ -201,7 +201,7 @@ make_ui <- function(debug_mode = FALSE) {
   }
 
   let base = null;
-  let params = { r_in: 0.33, r_out: 0.6, zoom: 12, squeeze: 0.35, show_lines: true };
+  let params = { r_in: 0.23, r_out: 0.35, zoom: 3, squeeze: 0.05, show_lines: true };
   let lens = { x: 0, y: 0 };
   let dragging = false;
   let rafPending = false;
